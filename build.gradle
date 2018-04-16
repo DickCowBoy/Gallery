@@ -1,0 +1,32 @@
+apply plugin: 'maven'
+buildscript {
+    repositories {
+        maven {
+            url 'http://source.tp-link.net:8081/nexus/content/groups/public/'
+        }
+    }
+    dependencies {
+        //本次使用的gradle版本是2.14.1,对应gradle-android-plugin插件是2.1.2
+        classpath 'com.android.tools.build:gradle:3.0.1'
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url 'http://source.tp-link.net:8081/nexus/content/groups/public/'
+        }
+    }
+}
+
+ext {
+    // Sdk and tools
+    minSdkVersion = 23
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+    buildToolsVersion = '26.0.2'
+
+    // App dependencies
+    tp_version = '27.1.+'
+    support_version = '27.1.+'
+}
