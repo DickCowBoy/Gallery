@@ -1,0 +1,1 @@
+buildType:mtk/qualcomm/aosp

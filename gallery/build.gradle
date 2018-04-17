@@ -32,7 +32,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.tplink.gallery"
+        applicationId "com.tplink.gallery1"
         minSdkVersion rootProject.ext.minSdkVersion as int
         targetSdkVersion rootProject.ext.targetSdkVersion as int
         versionCode 10001
@@ -45,26 +45,19 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    //读取keystore文件
-    File propFile = file('/var/lib/jenkins/gradle_env/keystore/signing.properties');
-    if (propFile.exists()) {
-        def Properties props = new Properties()
-        props.load(new FileInputStream(propFile))
-        if (props.containsKey('key.store') && props.containsKey('key.store.password') &&
-                props.containsKey('key.alias') && props.containsKey('key.alias.password')) {
-            android.signingConfigs.release.storeFile = file(props['key.store'])
-            android.signingConfigs.release.storePassword = props['key.store.password']
-            android.signingConfigs.release.keyAlias = props['key.alias']
-            android.signingConfigs.release.keyPassword = props['key.alias.password']
-        } else {
-            android.buildTypes.release.signingConfig = null
+    //签名
+    signingConfigs {
+        release {
+            storeFile file("/home/w8782/.android/debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
         }
-    } else {
-        android.buildTypes.release.signingConfig = null
     }
 
+
     buildTypes {
-        debug {
+        mtkdebug {
             // 显示Log
             buildConfigField "boolean", "LOG_DEBUG", "true"
             //不去除无用代码
@@ -73,9 +66,10 @@ android {
             zipAlignEnabled false
             //不去除无用资源
             shrinkResources false
+            signingConfig signingConfigs.release
         }
 
-        release {
+        mtkrelease {
             // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
             // 去除无用代码
@@ -87,12 +81,84 @@ android {
             // 配置混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.flags'
             // 配置签名（本地编译时可以先注释这句）
-            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
+            lintOptions {
+                disable 'MissingTranslation'
+            }
+        }
+
+        qualcommdebug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            //不去除无用代码
+            minifyEnabled false
+            //不进行对齐
+            zipAlignEnabled false
+            //不去除无用资源
+            shrinkResources false
+            signingConfig signingConfigs.release
+        }
+
+        qualcommrelease {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            // 去除无用代码
+            minifyEnabled true
+            // 进行对齐
+            zipAlignEnabled true
+            // 移除无用的资源
+            shrinkResources true
+            // 配置混淆
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.flags'
+            // 配置签名（本地编译时可以先注释这句）
+            signingConfig signingConfigs.release
+            lintOptions {
+                disable 'MissingTranslation'
+            }
+        }
+
+       aospdebug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            //不去除无用代码
+            minifyEnabled false
+            //不进行对齐
+            zipAlignEnabled false
+            //不去除无用资源
+            shrinkResources false
+            signingConfig signingConfigs.release
+        }
+
+        aosprelease {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            // 去除无用代码
+            minifyEnabled true
+            // 进行对齐
+            zipAlignEnabled true
+            // 移除无用的资源
+            shrinkResources true
+            // 配置混淆
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.flags'
+            // 配置签名（本地编译时可以先注释这句）
+            signingConfig signingConfigs.release
             lintOptions {
                 disable 'MissingTranslation'
             }
         }
     }
+
+    sourceSets {
+        mtkdebug.setRoot('src/mtk')
+        mtkrelease.setRoot('src/mtk')
+
+        qualcommdebug.setRoot('src/qualcomm')
+        qualcommrelease.setRoot('src/qualcomm')
+
+        aospdebug.setRoot('src/aosp')
+        aosprelease.setRoot('src/aosp')
+    }
+
     flavorDimensions "api", "dpi"
     productFlavors {
 
