@@ -23,4 +23,8 @@ public class DataCacheManager {
         }
         return dataManager;
     }
+
+    public void cache(CacheKey key) {
+
+    }
 }

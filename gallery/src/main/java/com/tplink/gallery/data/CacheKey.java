@@ -12,4 +12,7 @@
 package com.tplink.gallery.data;
 
 public class CacheKey {
+
+    public long loadTime;// 加载时间和监听到变化对比
+    public String key;
 }
