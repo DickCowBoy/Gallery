@@ -13,6 +13,9 @@
  */
 package com.tplink.gallery.bean;
 
+/**
+ * 这里不区分video或image
+ */
 public class MediaBean {
 
     public static final int SUPPORT_DELETE = 1 << 0;
