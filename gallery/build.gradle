@@ -23,7 +23,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
     implementation 'com.google.guava:guava:22.0-android'
     implementation 'com.tplink.support:support-tpwidgets-release:27.1.+'
-
+    implementation project(':common')
 }
 
 android {
@@ -57,7 +57,7 @@ android {
 
 
     buildTypes {
-        mtkdebug {
+        debug {
             // 显示Log
             buildConfigField "boolean", "LOG_DEBUG", "true"
             //不去除无用代码
@@ -66,70 +66,9 @@ android {
             zipAlignEnabled false
             //不去除无用资源
             shrinkResources false
-            signingConfig signingConfigs.release
         }
 
-        mtkrelease {
-            // 不显示Log
-            buildConfigField "boolean", "LOG_DEBUG", "false"
-            // 去除无用代码
-            minifyEnabled true
-            // 进行对齐
-            zipAlignEnabled true
-            // 移除无用的资源
-            shrinkResources true
-            // 配置混淆
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.flags'
-            // 配置签名（本地编译时可以先注释这句）
-            signingConfig signingConfigs.release
-            lintOptions {
-                disable 'MissingTranslation'
-            }
-        }
-
-        qualcommdebug {
-            // 显示Log
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-            //不去除无用代码
-            minifyEnabled false
-            //不进行对齐
-            zipAlignEnabled false
-            //不去除无用资源
-            shrinkResources false
-            signingConfig signingConfigs.release
-        }
-
-        qualcommrelease {
-            // 不显示Log
-            buildConfigField "boolean", "LOG_DEBUG", "false"
-            // 去除无用代码
-            minifyEnabled true
-            // 进行对齐
-            zipAlignEnabled true
-            // 移除无用的资源
-            shrinkResources true
-            // 配置混淆
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.flags'
-            // 配置签名（本地编译时可以先注释这句）
-            signingConfig signingConfigs.release
-            lintOptions {
-                disable 'MissingTranslation'
-            }
-        }
-
-       aospdebug {
-            // 显示Log
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-            //不去除无用代码
-            minifyEnabled false
-            //不进行对齐
-            zipAlignEnabled false
-            //不去除无用资源
-            shrinkResources false
-            signingConfig signingConfigs.release
-        }
-
-        aosprelease {
+        release {
             // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
             // 去除无用代码
@@ -148,18 +87,7 @@ android {
         }
     }
 
-    sourceSets {
-        mtkdebug.setRoot('src/mtk')
-        mtkrelease.setRoot('src/mtk')
-
-        qualcommdebug.setRoot('src/qualcomm')
-        qualcommrelease.setRoot('src/qualcomm')
-
-        aospdebug.setRoot('src/aosp')
-        aosprelease.setRoot('src/aosp')
-    }
-
-    flavorDimensions "api", "dpi"
+    flavorDimensions "api", "dpi", "platform"
     productFlavors {
 
         api27 {
@@ -186,6 +114,18 @@ android {
             //只保留xxhdpi资源
             resConfigs  "xxhdpi"
         }
+
+        mtk {
+            dimension "platform"
+        }
+
+        qualcomm {
+            dimension "platform"
+        }
+
+        aosp {
+            dimension "platform"
+        }
     }
 
     //重命名apk
@@ -209,9 +149,13 @@ android {
     // debug包不需要按分辨率打包
     variantFilter { variant ->
         if (variant.buildType.name == 'debug') {
+            def ignore = true;
             variant.getFlavors().each() { flavor ->
-                variant.setIgnore(flavor.name != 'alldpi')
+                if (flavor.name == 'alldpi') {
+                   ignore = false;
+                }
             }
+            variant.setIgnore(ignore)
         }
     }
 
