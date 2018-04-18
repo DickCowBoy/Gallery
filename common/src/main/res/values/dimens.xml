@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_empty_view_margin">16dp</dimen>
+    <dimen name="common_text_size_30pt">20sp</dimen>
+    <dimen name="common_text_size_27pt">18sp</dimen>
+    <dimen name="common_text_size_24pt">16sp</dimen>
+    <dimen name="common_text_size_21pt">14sp</dimen>
+    <dimen name="common_text_size_18pt">12sp</dimen>
+</resources>

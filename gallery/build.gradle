@@ -24,6 +24,7 @@ dependencies {
     implementation 'com.google.guava:guava:22.0-android'
     implementation 'com.tplink.support:support-tpwidgets-release:27.1.+'
     implementation project(':common')
+    implementation project(':refocus')
 }
 
 android {

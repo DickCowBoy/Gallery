@@ -1,0 +1,13 @@
+<resources>
+
+    <dimen name="common_default_item_height">72dp</dimen>
+    <dimen name="common_default_item_padding">16dp</dimen>
+    <dimen name="common_default_image_width">40dp</dimen>
+    <dimen name="common_grid_album_width">322dp</dimen>
+    <dimen name="common_grid_album_detail_width">322dp</dimen>
+    <dimen name="common_grid_album_detail_image_width">96dp</dimen>
+    <dimen name="common_empty_icon_padding_top">150dp</dimen>
+    <dimen name="common_empty_icon_to_text_top_gap">15dp</dimen>
+    <dimen name="common_search_content_width">220dp</dimen>
+
+</resources>

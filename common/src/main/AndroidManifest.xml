@@ -1,2 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tplink.gallery.mylibrary" />
+    package="com.tplink.common" />

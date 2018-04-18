@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">My Library</string>
+    <string name="app_name">tp_photo_selector</string>
+
+    <string name="common_no_file">No files.</string>
 </resources>
