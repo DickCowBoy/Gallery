@@ -42,7 +42,7 @@ public class MediaBean {
     public static final int SUPPORT_ALL = 0xffffffff;
 
     // 查询直接加载字段
-    public long _id;
+    public int _id;
     public long bucketId;
     public int width;
     public int height;
@@ -55,4 +55,6 @@ public class MediaBean {
 
 
     public int supportOperation = 0;
+
+    public MediaBean() {}
 }

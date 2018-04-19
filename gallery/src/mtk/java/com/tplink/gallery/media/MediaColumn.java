@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 
 import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.data.DataCacheManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +35,20 @@ public class MediaColumn {
         List<MediaBean> result = new ArrayList<>();
         if (cursor != null) {
             MediaBean bean = null;
+            int anInt;
+            DataCacheManager dataCacheManager = DataCacheManager.getDataCacheManager();
             while (cursor.moveToNext()) {
-                bean = new MediaBean();
-                bean._id = cursor.getLong(0);
+                anInt = cursor.getInt(0);
+                // 检查是否存在
+                MediaBean cacheMediaBean = dataCacheManager.getCacheMediaBean(anInt);
+                if (cacheMediaBean != null) {
+                    bean = cacheMediaBean;
+                } else {
+                    bean = new MediaBean();
+                    bean._id = anInt;
+                    dataCacheManager.cacheMediaBean(bean);
+                }
+
                 bean.bucketId = cursor.getLong(1);
                 bean.width = cursor.getInt(2);
                 bean.height = cursor.getInt(3);
@@ -53,9 +65,19 @@ public class MediaColumn {
         List<MediaBean> result = new ArrayList<>();
         if (cursor != null) {
             MediaBean bean = null;
+            int anInt;
+            DataCacheManager dataCacheManager = DataCacheManager.getDataCacheManager();
             while (cursor.moveToNext()) {
-                bean = new MediaBean();
-                bean._id = cursor.getLong(0);
+                anInt = cursor.getInt(0);
+                // 检查是否存在
+                MediaBean cacheMediaBean = dataCacheManager.getCacheMediaBean(anInt);
+                if (cacheMediaBean != null) {
+                    bean = cacheMediaBean;
+                } else {
+                    bean = new MediaBean();
+                    bean._id = anInt;
+                    dataCacheManager.cacheMediaBean(bean);
+                }
                 bean.bucketId = cursor.getLong(1);
                 bean.width = cursor.getInt(2);
                 bean.height = cursor.getInt(3);

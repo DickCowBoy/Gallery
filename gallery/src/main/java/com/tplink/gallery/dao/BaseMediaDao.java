@@ -47,7 +47,7 @@ public class BaseMediaDao extends BaseDao {
 
         return query(MediaUtils.getFileUri(), MediaColumn.QUERY_PROJECTION,
                 selection, selectionArgs,
-                MediaStore.Files.FileColumns.DATE_MODIFIED +" DESC",
+                DATA_MODIFY_DESC,
                 cursor->MediaColumn.parseVideo(cursor)
         );
     }
@@ -64,7 +64,7 @@ public class BaseMediaDao extends BaseDao {
 
         return query(MediaUtils.getImageUri(), MediaColumn.QUERY_IMAGE_PROJECTION,
                 selection, selectionArgs,
-                MediaStore.Files.FileColumns.DATE_MODIFIED +" DESC",
+                DATA_MODIFY_DESC,
                 cursor->MediaColumn.parseImage(cursor)
         );
     }
@@ -80,7 +80,7 @@ public class BaseMediaDao extends BaseDao {
 
         return query(MediaUtils.getVideoUri(), MediaColumn.QUERY_IMAGE_PROJECTION,
                 selection, selectionArgs,
-                MediaStore.Files.FileColumns.DATE_MODIFIED +" DESC",
+                DATA_MODIFY_DESC,
                 cursor->MediaColumn.parseImage(cursor)
         );
     }

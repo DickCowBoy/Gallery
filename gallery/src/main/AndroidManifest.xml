@@ -10,6 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name="com.tplink.gallery.GalleryApplication"
         android:theme="@style/AppTheme">
         <activity android:name="com.tplink.gallery.MainActivity">
             <intent-filter>

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.dao.AllMediaDao;
+import com.tplink.gallery.dao.MediaDao;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TextView textView = new TextView(this);
-        List<MediaBean> mediaBeans = new AllMediaDao(this).queryAllMedia(true, true, true);
+        List<MediaBean> mediaBeans = new MediaDao(this).queryAllMedia(true, true, true);
 
         textView.setText(mediaBeans == null ? "0" : mediaBeans.size()+"");
         setContentView(textView);

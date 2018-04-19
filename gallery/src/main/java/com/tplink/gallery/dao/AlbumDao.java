@@ -13,6 +13,7 @@ package com.tplink.gallery.dao;
 
 import android.content.Context;
 import android.provider.MediaStore;
+import android.util.SparseIntArray;
 
 import com.tplink.gallery.bean.MediaBean;
 
@@ -31,6 +32,4 @@ public class AlbumDao extends BaseMediaDao{
                         new String[]{String.valueOf(bucketId)}, true);
     }
 
-
-    
 }
