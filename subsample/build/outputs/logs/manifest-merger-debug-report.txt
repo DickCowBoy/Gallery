@@ -1,0 +1,29 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:2:1-7:12
+	package
+		ADDED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:3:11-56
+		INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml
+		INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:5:11-36
+		INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml
+		INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:4:11-34
+		INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml
+		INJECTED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml
+uses-sdk
+ADDED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:6:5-73
+	android:targetSdkVersion
+		ADDED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:6:42-71
+	android:minSdkVersion
+		ADDED from /home/w8782/android_work_space/Gallery/subsample/src/main/AndroidManifest.xml:6:15-41

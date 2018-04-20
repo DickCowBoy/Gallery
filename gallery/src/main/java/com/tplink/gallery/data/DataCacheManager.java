@@ -112,9 +112,9 @@ public class DataCacheManager {
             }
             synchronized(updateImageIds) {
                 if (pathSegments.size() == 4) {
-                    if ("image".equals(pathSegments.get(2))) {
+                    if ("images".equals(pathSegments.get(1))) {
                         updateImageIds.add(pathSegments.get(3));
-                    } else if ("video".equals(pathSegments.get(2))) {
+                    } else if ("video".equals(pathSegments.get(1))) {
                         updateVideoIds.add(pathSegments.get(3));
                     }
                 } else {

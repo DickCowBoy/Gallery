@@ -31,10 +31,15 @@ import com.tplink.view.CommonDataViewProxy;
 
 public class MediaAdapter extends CommonDataViewProxy<MediaBean, MediaAdapter.MediaViewHolder> {
     private Context mContext;
+    private boolean awaysInSelectMode = false;
 
-    public MediaAdapter(Context context, CommonDataView commonDataView) {
+    public MediaAdapter(Context context, CommonDataView commonDataView, boolean awaysInSelectMode) {
         super(context, commonDataView);
         mContext = context;
+        awaysInSelectMode = awaysInSelectMode;
+        if (awaysInSelectMode) {
+            mSelector.enterSelectionMode();
+        }
     }
 
     @Override

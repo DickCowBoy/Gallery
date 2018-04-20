@@ -25,6 +25,7 @@ dependencies {
     implementation 'com.tplink.support:support-tpwidgets-release:27.1.+'
     implementation project(':common')
     implementation project(':refocus')
+    implementation project(':subsample')
 }
 
 android {
