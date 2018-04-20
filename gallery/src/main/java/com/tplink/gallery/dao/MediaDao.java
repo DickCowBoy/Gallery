@@ -42,7 +42,7 @@ public class MediaDao extends BaseMediaDao {
     }
 
     public List<MediaBean> queryVideoById(List<String> ids) {
-        return queryVideo(MediaStore.Files.FileColumns._ID + " in " + buildInCondition(ids), null, true);
+        return queryVideo(MediaStore.Files.FileColumns._ID + " in " + buildInCondition(ids), null);
     }
 
     public List<MediaBean> queryImageById(List<String> ids) {

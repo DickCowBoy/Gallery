@@ -13,6 +13,9 @@
  */
 package com.tplink.gallery.bean;
 
+import android.net.Uri;
+import android.provider.MediaStore;
+
 /**
  * 这里不区分video或image
  */
@@ -41,6 +44,10 @@ public class MediaBean {
     public static final int SUPPORT_TP_LINK_REFOCUS = 1 << 20;
     public static final int SUPPORT_ALL = 0xffffffff;
 
+    public static final String VIDEO = "video";
+    public static final String IMAGE = "image";
+    public static final String GIF = "image/gif";
+
     // 查询直接加载字段
     public int _id;
     public long bucketId;
@@ -57,4 +64,26 @@ public class MediaBean {
     public int supportOperation = 0;
 
     public MediaBean() {}
+
+    public Uri getContentUri() {
+        if (isVideo()) {
+            return MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                    .buildUpon().appendPath(String.valueOf(_id)).build();
+        } else {
+            return MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    .buildUpon().appendPath(String.valueOf(_id)).build();
+        }
+    }
+
+    public boolean isGif() {
+        return GIF.equals(mimeType);
+    }
+
+    public boolean isImage() {
+        return mimeType.startsWith(IMAGE);
+    }
+
+    public boolean isVideo() {
+        return mimeType.startsWith(VIDEO);
+    }
 }

@@ -18,8 +18,18 @@ import com.tplink.gallery.bean.MediaBean;
 import java.util.List;
 
 public abstract class MediaBeanCollection {
+
+    private OnContentChanged onContentChanged;
     public String key;
 
     public abstract void updateMediaBeans(List<MediaBean> beans);
     public abstract void delMediaBeans(SparseIntArray ids);
+
+    public interface OnContentChanged {
+        void onContentChanged();
+    }
+
+    public void setOnContentChanged(OnContentChanged onContentChanged) {
+        this.onContentChanged = onContentChanged;
+    }
 }

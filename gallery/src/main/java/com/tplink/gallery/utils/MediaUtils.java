@@ -28,4 +28,5 @@ public class MediaUtils {
         return MediaStore.Files.getContentUri("external");
     }
 
+    public static ImageEngine imageEngine = null;
 }

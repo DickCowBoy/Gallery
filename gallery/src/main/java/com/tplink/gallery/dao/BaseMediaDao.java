@@ -1,8 +1,6 @@
 package com.tplink.gallery.dao;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
@@ -69,14 +67,7 @@ public class BaseMediaDao extends BaseDao {
         );
     }
 
-    public List<MediaBean> queryVideo(String selection, String[] selectionArgs, boolean queryGif) {
-        if (!queryGif) {
-            if (TextUtils.isEmpty(selection)) {
-                selection = MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
-            } else {
-                selection += " AND " + MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
-            }
-        }
+    public List<MediaBean> queryVideo(String selection, String[] selectionArgs) {
 
         return query(MediaUtils.getVideoUri(), MediaColumn.QUERY_IMAGE_PROJECTION,
                 selection, selectionArgs,

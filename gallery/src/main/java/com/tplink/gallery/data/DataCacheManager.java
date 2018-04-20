@@ -105,9 +105,7 @@ public class DataCacheManager {
             // content://media/external/images/media/123 增加图片
             // content://media/external/video/media/125  增加视频
             // content://media/external // 图片或者视频被删除
-            if (selfChange) {
-                return;
-            }
+            // 自己触发的删除自己处理不通过内容观察着处理
             List<String> pathSegments = uri.getPathSegments();
             if (pathSegments == null || (pathSegments.size() !=4 && pathSegments.size() != 1)) {
                 return;
