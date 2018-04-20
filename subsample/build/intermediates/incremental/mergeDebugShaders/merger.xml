@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/w8782/gallery/RecyclerViewCardGallery-master/subsample/src/main/shaders"/></dataSet><dataSet config="debug"><source path="/home/w8782/gallery/RecyclerViewCardGallery-master/subsample/src/debug/shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/home/w8782/android_work_space/Gallery/subsample/src/main/shaders"/></dataSet><dataSet config="debug"><source path="/home/w8782/android_work_space/Gallery/subsample/src/debug/shaders"/></dataSet></merger>
