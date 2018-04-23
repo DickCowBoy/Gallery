@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name" msgid="1928079047368929634">"แกลเลอรี"</string>
+    <string name="details_ms" msgid="940634969189855292">"%1$02d:%2$02d"</string>
+    <string name="details_hms" msgid="3215779248094151255">"%1$d:%2$02d:%3$02d"</string>
+    <string name="no_thumbnail" msgid="284723185546429750">"ไม่มีภาพขนาดย่อ"</string>
+    <string name="set_image" msgid="2331476809308010401">"ตั้งค่าภาพเป็น"</string>
+    <string name="delete" msgid="2839695998251824487">"ลบ"</string>
+    <string name="cancel" msgid="3637516880917356226">"ยกเลิก"</string>
+    <string name="deleted" msgid="6795433049119073871">"ลบแล้ว"</string>
+    <string name="undo" msgid="2930873956446586313">"เลิกทำ"</string>
+    <string name="details_title" msgid="2611396603977441273">"%1$d จาก %2$d รายการ:"</string>
+    <string name="close" msgid="5585646033158453043">"ปิด"</string>
+    <string name="no_such_item" msgid="5315144556325243400">"ไม่พบรายการ"</string>
+    <string name="edit" msgid="1502273844748580847">"แก้ไข"</string>
+    <string name="set_as" msgid="3636764710790507868">"ตั้งค่าเป็น"</string>
+    <string name="video_mute_err" msgid="6392457611270600908">"ไม่สามารถปิดเสียงวิดีโอ"</string>
+    <string name="video_err" msgid="7003051631792271009">"ไม่สามารถเล่นวิดีโอ"</string>
+    <string name="title" msgid="7622928349908052569">"ชื่อ"</string>
+    <string name="description" msgid="3016729318096557520">"คำอธิบาย"</string>
+    <string name="time" msgid="1367953006052876956">"เวลา"</string>
+    <string name="location" msgid="3432705876921618314">"สถานที่"</string>
+    <string name="path" msgid="4725740395885105824">"เส้นทาง"</string>
+    <string name="width" msgid="9215847239714321097">"ความกว้าง"</string>
+    <string name="height" msgid="3648885449443787772">"ความสูง"</string>
+    <string name="orientation" msgid="4958327983165245513">"การวางแนว"</string>
+    <string name="duration" msgid="8160058911218541616">"ระยะเวลา"</string>
+    <string name="mimetype" msgid="8024168704337990470">"ประเภท MIME"</string>
+    <string name="file_size" msgid="8486169301588318915">"ขนาดไฟล์"</string>
+    <string name="maker" msgid="7921835498034236197">"ยี่ห้อ"</string>
+    <string name="model" msgid="8240207064064337366">"รุ่น"</string>
+    <string name="flash" msgid="2816779031261147723">"แฟลช"</string>
+    <string name="aperture" msgid="5920657630303915195">"รูรับแสง"</string>
+    <string name="focal_length" msgid="1291383769749877010">"ระยะโฟกัส"</string>
+    <string name="white_balance" msgid="1582509289994216078">"สมดุลแสงขาว"</string>
+    <string name="exposure_time" msgid="3990163680281058826">"เวลารับแสง"</string>
+    <string name="iso" msgid="5028296664327335940">"ISO"</string>
+    <string name="unit_mm" msgid="1125768433254329136">"มม."</string>
+    <string name="manual" msgid="6608905477477607865">"ปรับเอง"</string>
+    <string name="auto" msgid="4296941368722892821">"อัตโนมัติ"</string>
+    <string name="flash_on" msgid="7891556231891837284">"แฟลชทำงาน"</string>
+    <string name="flash_off" msgid="1445443413822680010">"ไม่เปิดแฟลช"</string>
+    <string name="unknown" msgid="3506693015896912952">"ไม่ทราบ"</string>
+    <string name="set_label_local_albums" msgid="6698133661656266702">"อัลบั้มในเครื่อง"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"ไม่มีที่เก็บข้อมูล"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"ไม่มีที่จัดเก็บข้อมูลภายนอกที่สามารถใช้ได้"</string>
+    <string name="details" msgid="8415120088556445230">"รายละเอียด"</string>
+    <plurals name="delete_selection">
+        <item quantity="one" msgid="6453379735401083732">"ลบรายการที่เลือกหรือไม่"</item>
+        <item quantity="other" msgid="5874316486520635333">"ลบรายการที่เลือกหรือไม่"</item>
+    </plurals>
+    <!-- Translate by TP-Link START-->
+    <string name="share_to">แบ่งปันกับ</string>
+    <string name="burst_selected">เลือก</string>
+    <string name="waiting_dialog_msg">กำลังดำเนินการ\u2026</string>
+    <string name="dialog_title_burst_selected">เลือกถ่ายต่อเนื่อง</string>
+    <string name="msg_burst_selected_all">รูปถ่ายทั้งหมดยังอยู่ในกลุ่มเหมือนเดิม</string>
+    <string name="msgs_no_disk_space">ไม่มีพื้นที่จัดเก็บ</string>
+    <string name="photos">รูปถ่าย</string>
+    <string name="more">เพิ่มเติม</string>
+    <string name="title_append_colon">ชื่อ:</string>
+    <string name="duration_append_colon">ช่วงเวลา:</string>
+    <string name="resolution_append_colon">ความละเอียด:</string>
+    <string name="size_append_colon">ขนาด:</string>
+    <string name="path_append_colon">พาธ:</string>
+    <string name="delete_this_photo">"ต้องการลบรูปภาพนี้หรือไม่"</string>
+    <string name="delete_this_video">"ต้องการลบวิดีโอนี้หรือไม่"</string>
+    <plurals name="burst_photos_num">
+        <item quantity="one">ถ่ายต่อเนื่องรูปถ่าย</item>
+        <item quantity="other">ถ่ายต่อเนื่อง %d รูปถ่าย</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="one">เก็บรูปถ่ายที่เลือกไว้หรือไม่</item>
+        <item quantity="other">เก็บ %d รูปถ่ายที่เลือกไว้หรือไม่</item>
+    </plurals>
+    <string name="remove_picture">ลบออก</string>
+    <string name="sure_remove">แน่ใจว่าคุณต้องการลบรูปภาพหรือไม่</string>
+
+    <plurals name="attachments_saved_to_album" formatted="false" msgid="8407480699515308929">
+        <item quantity="other">บันทึก <xliff:g id="QUANTITY_2">%d</xliff:g> ไฟล์แนบไปยังอัลบั้ม \"<xliff:g id="ALBUMNAME_3">%s</xliff:g>\" แล้ว</item>
+        <item quantity="one">บันทึก <xliff:g id="QUANTITY_0">%d</xliff:g> ไฟล์แนบไปยังอัลบั้ม \"<xliff:g id="ALBUMNAME_1">%s</xliff:g>\" แล้ว</item>
+        </plurals>
+    <!-- Translate by TP-Link END-->
+    <string name="select_pic">เลือกภาพ</string>
+    <string name="select_size_over">เกิน %1$dM แล้ว</string>
+    <string name="select_count_over">เกินจำนวนเลือกสูงสุดแล้ว</string>
+    <string name="image_loading">กำลังโหลด...</string>
+    <string name="select_pic_count_limit">เลือก %1$d/%2$d</string>
+    <string name="select_pic_count">เลือก %1$d</string>
+
+    <string name="photo_tab_albums">อัลบั้ม</string>
+    <string name="photo_tab_all_images">ทุกรูปภาพ</string>
+
+    <string name="refocus_canceling_dialog_cancel">ยกเลิก</string>
+    <string name="refocus_canceling_dialog_confirm">ยืนยัน</string>
+    <string name="refocus_canceling_dialog_title">ละทิ้งการเปลี่ยนแปลงที่ได้ทำไว้หรือไม่</string>
+    <string name="m_saving_image">กำลังบันทึกภาพไปยัง <xliff:g id="album_name">%1$s</xliff:g> \u2026</string>
+    <string name="m_refocus_save_fail">ไม่สามารถบันทึก</string>
+    <string name="saving_image">กำลังบันทึกภาพ\u2026</string>
+
+    <string name="delete_this_burst">ลบภาพถ่ายต่อเนื่องหรือไม่</string>
+    <string name="sure_single_remove">คุณแน่ใจหรือไม่ว่าต้องการลบภาพถ่ายนี้</string>
+</resources>

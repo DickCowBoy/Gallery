@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>-->
     </style>
 
+
+    <style name="PhotoPagerTabStyle" parent="Widget.Design.TabLayout">
+        <item name="tabSelectedTextColor">@color/photo_tab_selected_title</item>
+        <item name="tabIndicatorColor">@color/photo_tab_selected_title</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="PhotoTabLayoutTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
 </resources>

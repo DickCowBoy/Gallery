@@ -1,3 +1,133 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Gallery</string>
+    <string name="details_ms">%1$02d:%2$02d</string>
+    <string name="details_hms">%1$d:%2$02d:%3$02d</string>
+    <string name="no_thumbnail">No thumbnail</string>
+    <string name="set_image">Set picture as</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="deleted">Deleted</string>
+    <string name="undo">UNDO</string>
+    <string name="details_title">%1$d of %2$d items:</string>
+    <string name="close">Close</string>
+    <string name="no_such_item">Couldn\'t find item.</string>
+    <string name="edit">Edit</string>
+    <string name="set_as">Set as</string>
+    <string name="video_mute_err">Can\'t mute video.</string>
+    <string name="video_err">Can\'t play video.</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="time">Time</string>
+    <string name="location">Location</string>
+    <string name="path">Path</string>
+    <string name="width">Width</string>
+    <string name="height">Height</string>
+    <string name="orientation">Orientation</string>
+    <string name="duration">Duration</string>
+    <string name="mimetype">MIME type</string>
+    <string name="file_size">File size</string>
+    <string name="maker">Maker</string>
+    <string name="model">Model</string>
+    <string name="flash">Flash</string>
+    <string name="aperture">Aperture</string>
+    <string name="focal_length">Focal length</string>
+    <string name="white_balance">White balance</string>
+    <string name="exposure_time">Exposure time</string>
+    <string name="iso">ISO</string>
+    <string name="unit_mm">mm</string>
+    <string name="manual">Manual</string>
+    <string name="auto">Auto</string>
+    <string name="flash_on">Flash fired</string>
+    <string name="flash_off">No flash</string>
+    <string name="unknown">Unknown</string>
+    <string name="set_label_local_albums">Local albums</string>
+    <string name="no_external_storage_title">No Storage</string>
+    <string name="no_external_storage">No external storage available</string>
+    <string name="details">Details</string>
+    <plurals name="delete_selection">
+        <item quantity="one">Delete selected item?</item>
+        <item quantity="other">Delete selected items?</item>
+    </plurals>
+    <!-- Translate by TP-Link START-->
+    <string name="share_to">Share to</string>
+    <string name="burst_selected">Select</string>
+    <string name="waiting_dialog_msg">Implementing\u2026</string>
+    <string name="dialog_title_burst_selected">Select burst photos</string>
+    <string name="msg_burst_selected_all">Remain all the photos in the group</string>
+    <string name="msgs_no_disk_space">Lack of storage space</string>
+    <string name="photos">Photos</string>
+    <string name="more">More</string>
+    <string name="title_append_colon">Title: </string>
+    <string name="duration_append_colon">Duration: </string>
+    <string name="resolution_append_colon">Resolution: </string>
+    <string name="size_append_colon">Size: </string>
+    <string name="path_append_colon">Path: </string>
+    <string name="delete_this_photo">"Delete this photo?"</string>
+    <string name="delete_this_video">"Delete this video?"</string>
+    <plurals name="burst_photos_num">
+        <item quantity="one">Burst one photo</item>
+        <item quantity="other">Burst %d photos</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="one">Reserve the selected photo</item>
+        <item quantity="other">Reserve the selected %d photos</item>
+    </plurals>
+
+    <string name="remove_picture">Remove</string>
+    <string name="sure_remove">Are you sure you want to remove the image(s)?</string>
+    <string name="total_selected_count" translatable="false">%1$d / %2$d</string>
+
+    <!--ROM 2.2-->
+    <string name="save">Save</string>
+
+    <string name="photo_tab_all_images">All images</string>
+    <string name="photo_tab_albums">Albums</string>
+
+    <string name="photo_operation_loading">Loading\u2026</string>
+
+    <plurals name="attachments_saved_to_album">
+        <item quantity="one"><xliff:g id="quantity">%d</xliff:g> attachment saved to \"<xliff:g id="albumName">%s</xliff:g>\" album</item>
+        <item quantity="other"><xliff:g id="quantity">%d</xliff:g> attachments saved to \"<xliff:g id="albumName">%s</xliff:g>\" album</item>
+    </plurals>
+
+    <!-- Translate by TP-Link END-->
+
+    <string name="select_pic">Select image</string>
+    <string name="select_pic_count_limit">Selected %1$d/%2$d</string>
+    <string name="select_pic_count">Selected %1$d</string>
+    <string name="select_count_over">Exceeded maximum number of selections</string>
+    <string name="select_size_over">Exceeded %1$dM</string>
+    <string name="image_loading">Loading...</string>
+    <plurals name="select_pic_count_limit">
+        <item quantity="other">@string/select_pic_count_limit</item>
+    </plurals>
+    <plurals name="select_pic_count">
+        <item quantity="other">@string/select_pic_count</item>
+    </plurals>
+
+    <string name="refocus_canceling_dialog_title">Abandon the changes you have made?</string>
+    <string name="refocus_canceling_dialog_cancel">Cancel</string>
+    <string name="refocus_canceling_dialog_confirm">Confirm</string>
+    <string name="loading_image">Loading image\u2026</string>
+    <string name="saving_image">Saving picture\u2026</string>
+    <string name="m_saving_image">Saving picture to <xliff:g id="album_name">%1$s</xliff:g> \u2026</string>
+    <string name="m_refocus_save_fail">Failed to save !</string>
+    <string name="delete_this_burst">Delete the burst photos?</string>
+    <string name="sure_single_remove">Are you sure you want to delete this photo?</string>
 </resources>

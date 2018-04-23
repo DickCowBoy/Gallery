@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tplink.widget.LoadingView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/loading_file_category"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@null"
+    android:clipToPadding="true">
+
+    <RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_container"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@null">
+
+            <com.tplink.widget.SlidingTabStripTP
+                android:id="@+id/custom_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                app:tp_slidingtabCornerRadius="1.5dp"
+                app:tp_slidingtabIndicatorColor="#0C83FF"
+                app:tp_slidingtabIndicatorHeight="2dp"
+                app:tp_slidingtabIndicatorWidth="24dp" />
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                style="@style/PhotoPagerTabStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutDirection="ltr"
+                app:tabBackground="@null"
+                app:tabGravity="fill"
+                app:tabTextAppearance="@style/PhotoTabLayoutTextStyle" />
+        </FrameLayout>
+
+        <View
+            android:id="@+id/vw_divider"
+            android:layout_below="@+id/fl_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/photo_divider_height"
+            android:background="@color/photo_divider_color" />
+
+        <com.tplink.gallery.view.SelectViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/vw_divider"/>
+
+        <com.tplink.view.AutoFitToolBar
+            android:id="@+id/toolbar"
+            style="@style/PhotoAppTheme.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/photo_toolbar_height"
+            android:layout_marginTop="@dimen/status_bar_height"
+            android:minHeight="@dimen/photo_toolbar_height"
+            app:contentInsetStartWithNavigation="@dimen/photo_toolbar_start_margin"
+            app:titleTextAppearance="@style/PhotoAppTheme.ActionBar.TitleTextStyle">
+
+            <com.tplink.widget.InterceptCheckBox
+                android:id="@+id/cb_item_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:button="@drawable/photo_checkbox_selector"
+                android:paddingEnd="10dp"
+                android:visibility="gone" />
+        </com.tplink.view.AutoFitToolBar>
+
+    </RelativeLayout>
+
+</com.tplink.widget.LoadingView>

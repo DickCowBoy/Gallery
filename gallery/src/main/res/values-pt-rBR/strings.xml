@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name" msgid="1928079047368929634">"Galeria"</string>
+    <string name="details_ms" msgid="940634969189855292">"%1$02d:%2$02d"</string>
+    <string name="details_hms" msgid="3215779248094151255">"%1$d:%2$02d:%3$02d"</string>
+    <string name="no_thumbnail" msgid="284723185546429750">"Sem miniatura"</string>
+    <string name="set_image" msgid="2331476809308010401">"Definir imagem como"</string>
+    <string name="delete" msgid="2839695998251824487">"Excluir"</string>
+    <string name="cancel" msgid="3637516880917356226">"Cancelar"</string>
+    <string name="deleted" msgid="6795433049119073871">"Excluída"</string>
+    <string name="undo" msgid="2930873956446586313">"DESFAZER"</string>
+    <string name="details_title" msgid="2611396603977441273">"%1$d de %2$d itens:"</string>
+    <string name="close" msgid="5585646033158453043">"Fechar"</string>
+    <string name="no_such_item" msgid="5315144556325243400">"Não foi possível encontrar o item."</string>
+    <string name="edit" msgid="1502273844748580847">"Editar"</string>
+    <string name="set_as" msgid="3636764710790507868">"Definir como"</string>
+    <string name="video_mute_err" msgid="6392457611270600908">"Impossível silenciar o vídeo."</string>
+    <string name="video_err" msgid="7003051631792271009">"Não é possível reproduzir o vídeo."</string>
+    <string name="title" msgid="7622928349908052569">"Título"</string>
+    <string name="description" msgid="3016729318096557520">"Descrição"</string>
+    <string name="time" msgid="1367953006052876956">"Horário"</string>
+    <string name="location" msgid="3432705876921618314">"Local"</string>
+    <string name="path" msgid="4725740395885105824">"Caminho"</string>
+    <string name="width" msgid="9215847239714321097">"Largura"</string>
+    <string name="height" msgid="3648885449443787772">"Altura"</string>
+    <string name="orientation" msgid="4958327983165245513">"Orientação"</string>
+    <string name="duration" msgid="8160058911218541616">"Duração"</string>
+    <string name="mimetype" msgid="8024168704337990470">"Tipo MIME"</string>
+    <string name="file_size" msgid="8486169301588318915">"Tam. arquivo"</string>
+    <string name="maker" msgid="7921835498034236197">"Criador"</string>
+    <string name="model" msgid="8240207064064337366">"Modelo"</string>
+    <string name="flash" msgid="2816779031261147723">"Flash"</string>
+    <string name="aperture" msgid="5920657630303915195">"Abertura"</string>
+    <string name="focal_length" msgid="1291383769749877010">"Comprimento focal"</string>
+    <string name="white_balance" msgid="1582509289994216078">"Balanç. branco"</string>
+    <string name="exposure_time" msgid="3990163680281058826">"Temp. exposiç."</string>
+    <string name="iso" msgid="5028296664327335940">"ISO"</string>
+    <string name="unit_mm" msgid="1125768433254329136">"mm"</string>
+    <string name="manual" msgid="6608905477477607865">"Manual"</string>
+    <string name="auto" msgid="4296941368722892821">"Auto"</string>
+    <string name="flash_on" msgid="7891556231891837284">"Flash ativo"</string>
+    <string name="flash_off" msgid="1445443413822680010">"Sem flash"</string>
+    <string name="unknown" msgid="3506693015896912952">"Desconhecida"</string>
+    <string name="set_label_local_albums" msgid="6698133661656266702">"Álbuns locais"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Nenhum armazenamento"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"Nenhum armazenamento externo disponível"</string>
+    <string name="details" msgid="8415120088556445230">"Detalhes"</string>
+    <plurals name="delete_selection">
+        <item quantity="one" msgid="6453379735401083732">"Excluir o item selecionado?"</item>
+        <item quantity="other" msgid="5874316486520635333">"Excluir os itens selecionados?"</item>
+    </plurals>
+    <!-- Translate by TP-Link START-->
+    <string name="share_to">Compartilhar com</string>
+    <string name="burst_selected">Selecionar</string>
+    <string name="waiting_dialog_msg">Implementando\u2026</string>
+    <string name="dialog_title_burst_selected">Selecionar fotos da sequência</string>
+    <string name="msg_burst_selected_all">Manter todas as fotos no grupo</string>
+    <string name="msgs_no_disk_space">Não há espaço de armazenamento</string>
+    <string name="photos">Fotos</string>
+    <string name="more">Mais</string>
+    <string name="title_append_colon">Título:</string>
+    <string name="duration_append_colon">Duração:</string>
+    <string name="resolution_append_colon">Resolução:</string>
+    <string name="size_append_colon">Tamanho:</string>
+    <string name="path_append_colon">Caminho:</string>
+    <string name="delete_this_photo">"Apagar essa foto?"</string>
+    <string name="delete_this_video">"Apagar esse vídeo?"</string>
+    <plurals name="burst_photos_num">
+        <item quantity="one">Sequência de uma foto</item>
+        <item quantity="other">Sequência de %d fotos</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="one">Reservar a foto selecionada</item>
+        <item quantity="other">Reservar as %d fotos selecionadas</item>
+    </plurals>
+    <string name="remove_picture">Remover</string>
+    <string name="sure_remove">Tem certeza que deseja remover as imagens?</string>
+    <plurals name="attachments_saved_to_album">
+        <item quantity="one"><xliff:g id="QUANTITY_2">%d</xliff:g> anexos salvos no álbum \"<xliff:g id="ALBUMNAME_3">%s</xliff:g>\"</item>
+        <item quantity="other"><xliff:g id="QUANTITY_2">%d</xliff:g> anexos salvos no álbum \"<xliff:g id="ALBUMNAME_3">%s</xliff:g>\"</item>
+    </plurals>
+    <!-- Translate by TP-Link END-->
+    <string name="select_pic">Selecionar imagem</string>
+    <string name="select_size_over">%1$dM excedido</string>
+    <string name="select_count_over">O número máximo de seleções foi excedido</string>
+    <string name="image_loading">Carregando...</string>
+    <string name="select_pic_count">%1$d selecionado</string>
+    <plurals name="select_pic_count_limit">
+        <item quantity="one">%1$d/%2$d selecionado</item>
+        <item quantity="other">%1$d/%2$d selecionados</item>
+    </plurals>
+    <plurals name="select_pic_count">
+        <item quantity="one">%1$d selecionado</item>
+        <item quantity="other">%1$d selecionados</item>
+    </plurals>
+
+    <string name="photo_tab_all_images">Todas as imagens</string>
+    <string name="photo_tab_albums">Álbuns</string>
+
+    <string name="refocus_canceling_dialog_cancel">Cancelar</string>
+    <string name="refocus_canceling_dialog_confirm">Confirmar</string>
+    <string name="refocus_canceling_dialog_title">Abandonar as alterações feitas?</string><string name="m_saving_image">Salvando imagem em <xliff:g id="album_name">%1$s</xliff:g> \u2026</string>
+    <string name="m_refocus_save_fail">Falhou ao salvar</string>
+    <string name="saving_image">Salvando imagem\u2026</string>
+    <string name="delete_this_burst">Deseja excluir as fotos em captura contínua?</string>
+    <string name="sure_single_remove">Tem certeza de que deseja apagar essa foto?</string>
+</resources>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">圖片庫</string>
+    <string name="details_ms" msgid="940634969189855292">"%1$02d:%2$02d"</string>
+    <string name="details_hms" msgid="3215779248094151255">"%1$d:%2$02d:%3$02d"</string>
+    <string name="no_thumbnail" msgid="284723185546429750">"無縮圖"</string>
+    <string name="set_image" msgid="2331476809308010401">"將相片設為"</string>
+    <string name="delete" msgid="2839695998251824487">"刪除"</string>
+    <string name="cancel" msgid="3637516880917356226">"取消"</string>
+    <string name="deleted" msgid="6795433049119073871">"已刪除"</string>
+    <string name="undo" msgid="2930873956446586313">"復原"</string>
+    <string name="details_title" msgid="2611396603977441273">"第 %1$d 個項目 (共 %2$d 個項目)："</string>
+    <string name="close" msgid="5585646033158453043">"關閉"</string>
+    <string name="no_such_item" msgid="5315144556325243400">"找不到項目。"</string>
+    <string name="edit" msgid="1502273844748580847">"編輯"</string>
+    <string name="set_as" msgid="3636764710790507868">"設為"</string>
+    <string name="video_mute_err" msgid="6392457611270600908">"無法將影片設為靜音。"</string>
+    <string name="video_err" msgid="7003051631792271009">"無法播放影片。"</string>
+    <string name="title" msgid="7622928349908052569">"標題"</string>
+    <string name="description" msgid="3016729318096557520">"說明"</string>
+    <string name="time" msgid="1367953006052876956">"時間"</string>
+    <string name="location" msgid="3432705876921618314">"地點"</string>
+    <string name="path" msgid="4725740395885105824">"路徑"</string>
+    <string name="width" msgid="9215847239714321097">"寬度"</string>
+    <string name="height" msgid="3648885449443787772">"高度"</string>
+    <string name="orientation" msgid="4958327983165245513">"瀏覽方向"</string>
+    <string name="duration" msgid="8160058911218541616">"影片長度"</string>
+    <string name="mimetype" msgid="8024168704337990470">"MIME 類型"</string>
+    <string name="file_size" msgid="8486169301588318915">"檔案大小"</string>
+    <string name="maker" msgid="7921835498034236197">"製造商"</string>
+    <string name="model" msgid="8240207064064337366">"設備型號"</string>
+    <string name="flash" msgid="2816779031261147723">"閃光燈"</string>
+    <string name="aperture" msgid="5920657630303915195">"光圈"</string>
+    <string name="focal_length" msgid="1291383769749877010">"焦距"</string>
+    <string name="white_balance" msgid="1582509289994216078">"白平衡"</string>
+    <string name="exposure_time" msgid="3990163680281058826">"曝光時間"</string>
+    <string name="iso" msgid="5028296664327335940">"ISO"</string>
+    <string name="unit_mm" msgid="1125768433254329136">"釐米"</string>
+    <string name="manual" msgid="6608905477477607865">"手動"</string>
+    <string name="auto" msgid="4296941368722892821">"自動"</string>
+    <string name="flash_on" msgid="7891556231891837284">"使用閃光燈"</string>
+    <string name="flash_off" msgid="1445443413822680010">"未使用閃光燈"</string>
+    <string name="unknown" msgid="3506693015896912952">"不明"</string>
+    <string name="set_label_local_albums" msgid="6698133661656266702">"本機相簿"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"沒有儲存裝置"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"沒有可用的外部儲存裝置"</string>
+    <string name="details" msgid="8415120088556445230">"詳細資料"</string>
+    <plurals name="delete_selection">
+        <item quantity="one" msgid="6453379735401083732">"刪除選取的項目？"</item>
+        <item quantity="other" msgid="5874316486520635333">"刪除選取的項目？"</item>
+    </plurals>
+    <!-- Translate by TP-Link START-->
+    <string name="share_to">分享到</string>
+    <string name="burst_selected">選取</string>
+    <string name="waiting_dialog_msg">正在執行\u2026</string>
+    <string name="dialog_title_burst_selected">選取連拍相片</string>
+    <string name="msg_burst_selected_all">保留群組中的所有相片</string>
+    <string name="msgs_no_disk_space">儲存空間不足</string>
+    <string name="photos">相片</string>
+    <string name="more">更多</string>
+    <string name="title_append_colon">標題：</string>
+    <string name="duration_append_colon">影片長度：</string>
+    <string name="resolution_append_colon">解析度：</string>
+    <string name="size_append_colon">大小：</string>
+    <string name="path_append_colon">路徑：</string>
+    <string name="delete_this_photo">"要刪除此相片？"</string>
+    <string name="delete_this_video">"要刪除此影片？"</string>
+    <plurals name="burst_photos_num">
+        <item quantity="one">連拍 1 張相片</item>
+        <item quantity="other">連拍 %d 張相片</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="one">保留選取的相片</item>
+        <item quantity="other">保留選取的 %d 張相片</item>
+    </plurals>
+    <string name="sure_remove">確定要移除影像嗎？</string>
+    <string name="remove_picture">移除</string>
+    <plurals name="attachments_saved_to_album" formatted="false" msgid="8407480699515308929">
+        <item quantity="other"><xliff:g id="QUANTITY_2">%d</xliff:g> 份附件已儲存到「<xliff:g id="ALBUMNAME_3">%s</xliff:g>」相簿</item>
+        <item quantity="one"><xliff:g id="QUANTITY_0">%d</xliff:g> 份附件已儲存到「<xliff:g id="ALBUMNAME_1">%s</xliff:g>」相簿</item>
+    </plurals>
+    <!-- Translate by TP-Link END-->
+    <string name="select_pic">選取影像</string>
+    <string name="select_size_over">已超過 %1$dM</string>
+    <string name="select_count_over">已超過選取數目上限</string>
+    <string name="image_loading">載入中...</string>
+    <string name="select_pic_count_limit">已選取 %1$d/%2$d</string>
+    <string name="select_pic_count">已選取 %1$d</string>
+
+    <string name="photo_tab_all_images">所有影像</string>
+    <string name="photo_tab_albums">相簿</string>
+
+    <string name="refocus_canceling_dialog_cancel">取消</string>
+    <string name="refocus_canceling_dialog_confirm">確認</string>
+    <string name="refocus_canceling_dialog_title">要捨棄您所做的修改嗎？</string>
+    <string name="m_saving_image">儲存圖片<xliff:g id="album_name">%1$s</xliff:g> \u2026</string>
+    <string name="m_refocus_save_fail">儲存失敗</string>
+    <string name="saving_image">儲存圖片\u2026</string>
+
+    <string name="delete_this_burst">是否要刪除連拍照片？</string>
+    <string name="sure_single_remove">您確定要刪除這張照片嗎？</string>
+</resources>

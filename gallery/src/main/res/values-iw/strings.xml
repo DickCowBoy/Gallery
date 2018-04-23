@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name" msgid="1928079047368929634">"גלריה"</string>
+    <string name="details_ms" msgid="940634969189855292">"%1$02d:%2$02d"</string>
+    <string name="details_hms" msgid="3215779248094151255">"%1$d:%2$02d:%3$02d"</string>
+    <string name="no_thumbnail" msgid="284723185546429750">"אין תמונות ממוזערו"</string>
+    <string name="set_image" msgid="2331476809308010401">"הגדר את התמונה ל"</string>
+    <string name="delete" msgid="2839695998251824487">"מחק"</string>
+    <string name="cancel" msgid="3637516880917356226">"ביטול"</string>
+    <string name="deleted" msgid="6795433049119073871">"נמחק"</string>
+    <string name="undo" msgid="2930873956446586313">"בטל פעולה"</string>
+    <string name="details_title" msgid="2611396603977441273">פריט <xliff:g id="NUMBER">%d</xliff:g></string>
+    <string name="close" msgid="5585646033158453043">"כבוי"</string>
+    <string name="no_such_item" msgid="5315144556325243400">"לא ניתן למצוא את הפריט שצוין"</string>
+    <string name="edit" msgid="1502273844748580847">"ערוך"</string>
+    <string name="set_as" msgid="3636764710790507868">"הגדר ל"</string>
+    <string name="video_mute_err" msgid="6392457611270600908">"לא ניתן להשתיק את הסרטון"</string>
+    <string name="video_err" msgid="7003051631792271009">לא ניתן להפעיל את סרטון הווידאו.</string>
+    <string name="title" msgid="7622928349908052569">"כותרת"</string>
+    <string name="description" msgid="3016729318096557520">"תיאור"</string>
+    <string name="time" msgid="1367953006052876956">"שעה"</string>
+    <string name="location" msgid="3432705876921618314">"מיקום"</string>
+    <string name="path" msgid="4725740395885105824">"נתיב"</string>
+    <string name="width" msgid="9215847239714321097">"רוחב"</string>
+    <string name="height" msgid="3648885449443787772">"גובה"</string>
+    <string name="orientation" msgid="4958327983165245513">"כיוון"</string>
+    <string name="duration" msgid="8160058911218541616">"משך"</string>
+    <string name="mimetype" msgid="8024168704337990470">"‏סוג MIME"</string>
+    <string name="file_size" msgid="8486169301588318915">"גודל הקובץ"</string>
+    <string name="maker" msgid="7921835498034236197">"יוצר"</string>
+    <string name="model" msgid="8240207064064337366">"דגם"</string>
+    <string name="flash" msgid="2816779031261147723">"פלאש"</string>
+    <string name="aperture" msgid="5920657630303915195">"צמצם"</string>
+    <string name="focal_length" msgid="1291383769749877010">"רוחק מוקד"</string>
+    <string name="white_balance" msgid="1582509289994216078">"איזון לבן"</string>
+    <string name="exposure_time" msgid="3990163680281058826">"זמן חשיפה"</string>
+    <string name="iso" msgid="5028296664327335940">"‏מהירות ISO‏"</string>
+    <string name="unit_mm" msgid="1125768433254329136">"מ\"מ"</string>
+    <string name="manual" msgid="6608905477477607865">"ידנית"</string>
+    <string name="auto" msgid="4296941368722892821">"אוטומטי"</string>
+    <string name="flash_on" msgid="7891556231891837284">"צילום עם פלאש"</string>
+    <string name="flash_off" msgid="1445443413822680010">"ללא פלאש"</string>
+    <string name="unknown" msgid="3506693015896912952">"לא ידוע"</string>
+    <string name="set_label_local_albums" msgid="6698133661656266702">"אלבומים מקומיים"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"אין אחסון"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"אחסון חיצוני לא זמין"</string>
+    <string name="details" msgid="8415120088556445230">"פרטים"</string>
+    <plurals name="delete_selection">
+        <item quantity="one" msgid="6453379735401083732">"האם למחוק את הפריט שנבחר?"</item>
+        <item quantity="other" msgid="5874316486520635333">"האם למחוק את הפריטים שנבחרו?"</item>
+    </plurals>
+    <!-- Translate by TP-Link START-->
+    <string name="share_to">שתף</string>
+    <string name="burst_selected">הקרנה</string>
+    <string name="waiting_dialog_msg">מטמיע\u2026</string>
+    <string name="dialog_title_burst_selected">בחר ברצף תמונות</string>
+    <string name="msg_burst_selected_all">השאר את כל התמונות בקבוצה</string>
+    <string name="msgs_no_disk_space">חסר נפח אחסון</string>
+    <string name="photos">צלם תמונה</string>
+    <string name="more">עוד</string>
+    <string name="title_append_colon">כותרת:</string>
+    <string name="duration_append_colon">משך זמן:</string>
+    <string name="resolution_append_colon">רזולוציה:</string>
+    <string name="size_append_colon">גודל:</string>
+    <string name="path_append_colon">נתיב:</string>
+    <string name="delete_this_photo">"האם למחוק תמונה זו?"</string>
+    <string name="delete_this_video">"האם למחוק סרטון זה?"</string>
+    <plurals name="burst_photos_num">
+        <item quantity="one">צלם רצף תמונות 1</item>
+        <item quantity="other">צלם %d רצפי תמונות</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="one">שמור את התמונה שנבחרה</item>
+        <item quantity="other">שמור את %d התמונות שנבחרו</item>
+    </plurals>
+    <string name="remove_picture">הסר</string>
+    <string name="sure_remove">האם אתה בטוח שברצונך להסיר את התמונה(ות)?</string>
+
+    <plurals name="attachments_saved_to_album" formatted="false" msgid="8407480699515308929">
+        <item quantity="two"><xliff:g id="QUANTITY_2">%d</xliff:g> קבצים מצורפים נשמרו באלבום \"<xliff:g id="ALBUMNAME_3">%s</xliff:g>\"</item>
+        <item quantity="many"><xliff:g id="QUANTITY_2">%d</xliff:g> קבצים מצורפים נשמרו באלבום \"<xliff:g id="ALBUMNAME_3">%s</xliff:g>\"</item>
+        <item quantity="other"><xliff:g id="QUANTITY_2">%d</xliff:g> קבצים מצורפים נשמרו באלבום \"<xliff:g id="ALBUMNAME_3">%s</xliff:g>\"</item>
+        <item quantity="one">קובץ מצורף <xliff:g id="QUANTITY_0">%d</xliff:g> נשמר באלבום \"<xliff:g id="ALBUMNAME_1">%s</xliff:g>\"</item>
+    </plurals>
+    <string name="refocus_canceling_dialog_cancel">ביטול</string>
+    <string name="refocus_canceling_dialog_confirm">אשר</string>
+    <string name="refocus_canceling_dialog_title">האם ברצונך לבטל את השינויים שעשית?</string>
+    <string name="m_saving_image">שומר תמונה ל-<xliff:g id="album_name">%1$s</xliff:g> \u2026</string>
+    <string name="m_refocus_save_fail">השמירה נכשלה</string>
+    <string name="saving_image">שומר תמונה\u2026</string>
+    <!-- Translate by TP-Link END-->
+    <string name="photo_tab_all_images">כל התמונות</string>
+    <string name="photo_tab_albums">אלבומים</string>
+    <string name="delete_this_burst">האם ברצונך למחוק את פרץ התמונות?</string>
+    <string name="sure_single_remove">האם אתה בטוח שברצונך למחוק תמונה זאת?</string>
+</resources>

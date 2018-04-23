@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name" msgid="1928079047368929634">"گالری"</string>
+    <string name="details_ms" msgid="940634969189855292">"%1$02d:%2$02d"</string>
+    <string name="details_hms" msgid="3215779248094151255">"%1$d:%2$02d:%3$02d"</string>
+    <string name="no_thumbnail" msgid="284723185546429750">"تصویر کوچکی وجود ندارد"</string>
+    <string name="set_image" msgid="2331476809308010401">"تنظیم تصویر به‌عنوان"</string>
+    <string name="delete" msgid="2839695998251824487">"حذف"</string>
+    <string name="cancel" msgid="3637516880917356226">"لغو"</string>
+    <string name="deleted" msgid="6795433049119073871">"پاک شد"</string>
+    <string name="undo" msgid="2930873956446586313">"واگرد"</string>
+    <string name="details_title" msgid="2611396603977441273">"‏%1$d از %2$d مورد:"</string>    <string name="close" msgid="5585646033158453043">"بستن"</string>
+    <string name="no_such_item" msgid="5315144556325243400">"مورد یافت نشد."</string>
+    <string name="edit" msgid="1502273844748580847">"ویرایش"</string>
+    <string name="set_as" msgid="3636764710790507868">"تنظیم به‌عنوان"</string>
+    <string name="video_mute_err" msgid="6392457611270600908">"بیصدا کردن ویدیو انجام نشد."</string>
+    <string name="video_err" msgid="7003051631792271009">"ویدئو پخش نمی‌شود."</string>
+    <string name="title" msgid="7622928349908052569">"عنوان"</string>
+    <string name="description" msgid="3016729318096557520">"توصیف"</string>
+    <string name="time" msgid="1367953006052876956">"زمان"</string>
+    <string name="location" msgid="3432705876921618314">"موقعیت مکانی"</string>
+    <string name="path" msgid="4725740395885105824">"مسیر"</string>
+    <string name="width" msgid="9215847239714321097">"عرض"</string>
+    <string name="height" msgid="3648885449443787772">"ارتفاع"</string>
+    <string name="orientation" msgid="4958327983165245513">"جهت"</string>
+    <string name="duration" msgid="8160058911218541616">"مدت"</string>
+    <string name="mimetype" msgid="8024168704337990470">"‏نوع MIME"</string>
+    <string name="file_size" msgid="8486169301588318915">"اندازه فایل"</string>
+    <string name="maker" msgid="7921835498034236197">"سازنده"</string>
+    <string name="model" msgid="8240207064064337366">"مدل"</string>
+    <string name="flash" msgid="2816779031261147723">"فلاش"</string>
+    <string name="aperture" msgid="5920657630303915195">"دریچه دیافراگم"</string>
+    <string name="focal_length" msgid="1291383769749877010">"فاصله کانونی"</string>
+    <string name="white_balance" msgid="1582509289994216078">"توازن سفیدی"</string>
+    <string name="exposure_time" msgid="3990163680281058826">"زمان نوردهی"</string>
+    <string name="iso" msgid="5028296664327335940">"ایزو"</string>
+    <string name="unit_mm" msgid="1125768433254329136">"میلیمتر"</string>
+    <string name="manual" msgid="6608905477477607865">"دستی"</string>
+    <string name="auto" msgid="4296941368722892821">"خودکار"</string>
+    <string name="flash_on" msgid="7891556231891837284">"فلاش زده شد"</string>
+    <string name="flash_off" msgid="1445443413822680010">"بدون فلاش"</string>
+    <string name="unknown" msgid="3506693015896912952">"ناشناس"</string>
+    <string name="set_label_local_albums" msgid="6698133661656266702">"آلبوم‌های محلی"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"فاقد دستگاه ذخیره‌‌‌سازی"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"هیچ دستگاه ذخیره خارجی دردسترس نیست"</string>
+    <string name="details" msgid="8415120088556445230">"جزئیات"</string>
+    <plurals name="delete_selection">
+        <item quantity="one" msgid="6453379735401083732">"مورد انتخابی حذف شود؟"</item>
+        <item quantity="other" msgid="5874316486520635333">"موارد انتخابی حذف شوند؟"</item>
+    </plurals>
+    <!-- Translate by TP-Link START-->
+    <string name="share_to">به اشتراک گذاشتن در</string>
+    <string name="burst_selected">انتخاب</string>
+    <string name="waiting_dialog_msg">در حال اجرا\u2026</string>
+    <string name="dialog_title_burst_selected">انتخاب عکس‌های متوالی</string>
+    <string name="msg_burst_selected_all">همه عکس‌ها در گروه بماند</string>
+    <string name="msgs_no_disk_space">فضای حافظه کافی نیست</string>
+    <string name="photos">عکس ها</string>
+    <string name="more">بیشتر</string>
+    <string name="title_append_colon">عنوان:</string>
+    <string name="duration_append_colon">مدت:</string>
+    <string name="resolution_append_colon">وضوح تصویر:</string>
+    <string name="size_append_colon">اندازه:</string>
+    <string name="path_append_colon">مسیر:</string>
+    <string name="delete_this_photo">"این عکس حذف شود؟"</string>
+    <string name="delete_this_video">"این رسانه حذف شود؟"</string>
+    <plurals name="burst_photos_num">
+        <item quantity="one">یک عکس متوالی</item>
+        <item quantity="other">%d عکس متوالی</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="one">عکس انتخابی نگه داشته شود؟</item>
+        <item quantity="other">%d عکس انتخابی نگه داشته شود؟</item>
+    </plurals>
+    <string name="remove_picture">حذف</string>
+    <string name="sure_remove">آیا مطمئنید م‌ی‌خواهید تصویر(ها) را حذف کنید؟</string>
+
+    <plurals name="attachments_saved_to_album" formatted="false" msgid="8407480699515308929">
+        <item quantity="one"><xliff:g id="QUANTITY_2">%d</xliff:g> پیوست در آلبوم «<xliff:g id="ALBUMNAME_3">%s</xliff:g>» ذخیره شد</item>
+        <item quantity="other"><xliff:g id="QUANTITY_2">%d</xliff:g> پیوست در آلبوم «<xliff:g id="ALBUMNAME_3">%s</xliff:g>» ذخیره شد</item>
+    </plurals>
+    <!-- Translate by TP-Link END-->
+    <string name="select_pic">انتخاب تصویر</string>
+    <string name="select_size_over">از %1$dم بیشتر شد</string>
+    <string name="select_count_over">تعداد انتخاب‌ها به حداکثر مجاز رسید</string>
+    <string name="image_loading">در حال بارگذاری...</string>
+    <string name="select_pic_count_limit">%1$d/%2$d انتخاب شد</string>
+    <string name="select_pic_count">%1$d انتخاب شد</string>
+
+    <string name="photo_tab_all_images">همه تصاویر</string>
+    <string name="photo_tab_albums">آلبوم‌ها</string>
+
+    <string name="refocus_canceling_dialog_cancel">لغو</string>
+    <string name="refocus_canceling_dialog_confirm">تأیید</string>
+    <string name="refocus_canceling_dialog_title">از تغییراتی که انجام داده‌اید صرف نظر شود؟</string>
+    <string name="m_saving_image">ذخیره عکس در <xliff:g id="album_name">%1$s</xliff:g> \u2026</string>
+    <string name="m_refocus_save_fail">ذخیره‌سازی ممکن نیست</string>
+    <string name="saving_image">ذخیره عکس\u2026</string>
+
+    <string name="delete_this_burst">عکس‌های رگباری حذف شود؟</string>
+    <string name="sure_single_remove">مطمئن هستید می‌خواهید این عکس را حذف کنید؟</string>
+</resources>

@@ -18,6 +18,7 @@ public class MediaColumn {
             MediaStore.Images.ImageColumns.MIME_TYPE,
             MediaStore.Images.ImageColumns.DATE_MODIFIED,
             MediaStore.Video.VideoColumns.DURATION,
+            MediaStore.Images.ImageColumns.SIZE,
             "camera_refocus",// MTK媒体库特有字段识别是否是虚化拍摄
     };
 
@@ -28,6 +29,7 @@ public class MediaColumn {
             MediaStore.Images.ImageColumns.HEIGHT,
             MediaStore.Images.ImageColumns.MIME_TYPE,
             MediaStore.Images.ImageColumns.DATE_MODIFIED,
+            MediaStore.Images.ImageColumns.SIZE,
             "camera_refocus",// MTK媒体库特有字段识别是否是虚化拍摄
     };
 
@@ -54,7 +56,8 @@ public class MediaColumn {
                 bean.height = cursor.getInt(3);
                 bean.mimeType = cursor.getString(4);
                 bean.lastModify = cursor.getLong(5);
-                bean.refocusType = cursor.getInt(6);
+                bean.size = cursor.getLong(6);
+                bean.refocusType = cursor.getInt(7);
                 result.add(bean);
             }
         }
@@ -84,7 +87,8 @@ public class MediaColumn {
                 bean.mimeType = cursor.getString(4);
                 bean.lastModify = cursor.getLong(5);
                 bean.duration = cursor.getLong(6);
-                bean.refocusType = cursor.getInt(7);
+                bean.size = cursor.getLong(7);
+                bean.refocusType = cursor.getInt(8);
                 result.add(bean);
             }
         }

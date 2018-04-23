@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name" msgid="1928079047368929634">"Thư viện"</string>
+    <string name="details_ms" msgid="940634969189855292">"%1$02d:%2$02d"</string>
+    <string name="details_hms" msgid="3215779248094151255">"%1$d:%2$02d:%3$02d"</string>
+    <string name="no_thumbnail" msgid="284723185546429750">"Không có hình thu nhỏ"</string>
+    <string name="set_image" msgid="2331476809308010401">"Đặt ảnh làm"</string>
+    <string name="delete" msgid="2839695998251824487">"Xóa"</string>
+    <string name="cancel" msgid="3637516880917356226">"Hủy"</string>
+    <string name="deleted" msgid="6795433049119073871">"Đã xóa"</string>
+    <string name="undo" msgid="2930873956446586313">"HOÀN TÁC"</string>
+    <string name="details_title" msgid="2611396603977441273">"%1$d trong tổng số %2$d mục:"</string>
+    <string name="close" msgid="5585646033158453043">"Đóng"</string>
+    <string name="no_such_item" msgid="5315144556325243400">"Không thể tìm thấy mục."</string>
+    <string name="edit" msgid="1502273844748580847">"Chỉnh sửa"</string>
+    <string name="set_as" msgid="3636764710790507868">"Đặt làm"</string>
+    <string name="video_mute_err" msgid="6392457611270600908">"Không thể ẩn video."</string>
+    <string name="video_err" msgid="7003051631792271009">"Không thể phát video."</string>
+    <string name="title" msgid="7622928349908052569">"Tiêu đề"</string>
+    <string name="description" msgid="3016729318096557520">"Mô tả"</string>
+    <string name="time" msgid="1367953006052876956">"Thời gian"</string>
+    <string name="location" msgid="3432705876921618314">"Vị trí"</string>
+    <string name="path" msgid="4725740395885105824">"Đường dẫn"</string>
+    <string name="width" msgid="9215847239714321097">"Chiều rộng"</string>
+    <string name="height" msgid="3648885449443787772">"Chiều cao"</string>
+    <string name="orientation" msgid="4958327983165245513">"Hướng"</string>
+    <string name="duration" msgid="8160058911218541616">"Thời lượng"</string>
+    <string name="mimetype" msgid="8024168704337990470">"Loại MIME"</string>
+    <string name="file_size" msgid="8486169301588318915">"Kích thước tệp"</string>
+    <string name="maker" msgid="7921835498034236197">"Trình tạo"</string>
+    <string name="model" msgid="8240207064064337366">"Mẫu"</string>
+    <string name="flash" msgid="2816779031261147723">"Flash"</string>
+    <string name="aperture" msgid="5920657630303915195">"Khẩu độ"</string>
+    <string name="focal_length" msgid="1291383769749877010">"Tiêu cự"</string>
+    <string name="white_balance" msgid="1582509289994216078">"Cân bằng trắng"</string>
+    <string name="exposure_time" msgid="3990163680281058826">"Thời gian phơi sáng"</string>
+    <string name="iso" msgid="5028296664327335940">"ISO"</string>
+    <string name="unit_mm" msgid="1125768433254329136">"mm"</string>
+    <string name="manual" msgid="6608905477477607865">"Thủ công"</string>
+    <string name="auto" msgid="4296941368722892821">"Tự động"</string>
+    <string name="flash_on" msgid="7891556231891837284">"Sử dụng flash"</string>
+    <string name="flash_off" msgid="1445443413822680010">"Không có flash"</string>
+    <string name="unknown" msgid="3506693015896912952">"Không xác định"</string>
+    <string name="set_label_local_albums" msgid="6698133661656266702">"Album cục bộ"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Không có bộ nhớ nào"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"Không có bộ nhớ ngoài nào"</string>
+    <string name="details" msgid="8415120088556445230">"Chi tiết"</string>
+    <plurals name="delete_selection">
+        <item quantity="one" msgid="6453379735401083732">"Xóa mục đã chọn?"</item>
+        <item quantity="other" msgid="5874316486520635333">"Xóa các mục đã chọn?"</item>
+    </plurals>
+    <!-- Translate by TP-Link START-->
+    <string name="share_to">Chia sẻ cho</string>
+    <string name="burst_selected">Chọn</string>
+    <string name="waiting_dialog_msg">Đang thực hiện\u2026</string>
+    <string name="dialog_title_burst_selected">Chọn ảnh chụp liên tục</string>
+    <string name="msg_burst_selected_all">Giữ lại tất cả các ảnh trong nhóm</string>
+    <string name="msgs_no_disk_space">Thiếu dung lượng lưu trữ</string>
+    <string name="photos">Ảnh</string>
+    <string name="more">Thêm</string>
+    <string name="title_append_colon">Tiêu đề:</string>
+    <string name="duration_append_colon">Thời lượng:</string>
+    <string name="resolution_append_colon">Độ phân giải:</string>
+    <string name="size_append_colon">Kích cỡ:</string>
+    <string name="path_append_colon">Đường dẫn:</string>
+    <string name="delete_this_photo">"Xóa ảnh này?"</string>
+    <string name="delete_this_video">"Xóa video này?"</string>
+    <plurals name="burst_photos_num">
+        <item quantity="one">Chụp liên tục một ảnh</item>
+        <item quantity="other">Chụp liên tục %d ảnh</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="one">Giữ lại ảnh đã chọn?</item>
+        <item quantity="other">Giữ lại %d ảnh đã chọn?</item>
+    </plurals>
+    <string name="remove_picture">Loại bỏ</string>
+    <string name="sure_remove">Bạn có chắc chắn muốn xóa (các) hình ảnh này không?</string>
+    <plurals name="attachments_saved_to_album" formatted="false" msgid="8407480699515308929">
+        <item quantity="other"><xliff:g id="QUANTITY_2">%d</xliff:g> tệp đính kèm đã được lưu vào album \"<xliff:g id="ALBUMNAME_3">%s</xliff:g>\"</item>
+        <item quantity="one"><xliff:g id="QUANTITY_0">%d</xliff:g> tệp đính kèm đã được lưu vào album \"<xliff:g id="ALBUMNAME_1">%s</xliff:g>\"</item>
+    </plurals>
+    <!-- Translate by TP-Link END-->
+    <string name="select_pic">Chọn hình ảnh</string>
+    <string name="select_size_over">Đã vượt quá %1$dM</string>
+    <string name="select_count_over">Đã vượt quá số lựa chọn tối đa</string>
+    <string name="image_loading">Đang tải...</string>
+    <string name="select_pic_count_limit">Đã chọn %1$d/%2$d</string>
+    <string name="select_pic_count">Đã chọn %1$d</string>
+
+    <string name="photo_tab_albums">Album</string>
+    <string name="photo_tab_all_images">Tất cả hình ảnh</string>
+
+    <string name="refocus_canceling_dialog_cancel">Hủy</string>
+    <string name="refocus_canceling_dialog_confirm">Xác nhận</string>
+    <string name="refocus_canceling_dialog_title">Bỏ những thay đổi mà bạn đã thực hiện?</string>
+    <string name="m_saving_image">Đang lưu hình vào <xliff:g id="album_name">%1$s</xliff:g> \u2026</string>
+    <string name="m_refocus_save_fail">Không thể lưu</string>
+    <string name="saving_image">Đang lưu hình\u2026</string>
+
+    <string name="delete_this_burst">Xóa ảnh chụp liên tiếp?</string>
+    <string name="sure_single_remove">Bạn có chắc chắn muốn xóa ảnh này không?</string>
+</resources>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!--  Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="details_ms">%1$02d:%2$02d</string>
+    <string name="details_hms">%1$d:%2$02d:%3$02d</string>
+    <string name="no_thumbnail">အကျဉ်းကို မထုတ်လုပ်နိုင်ပါ</string>
+    <string name="set_image">အဖြစ် ရုပ်ပုံကိုထားရှိပါ</string>
+    <string name="delete">ဖျက်ပါ</string>
+    <string name="cancel">ပယ်ဖျက်</string>
+    <string name="deleted">ဖျက်ပြီး</string>
+    <string name="undo">မလုပ်ပါ</string>
+    <string name="details_title">အကြောင်းအရာ %2$d ခုရှိ %1$d:</string>
+    <string name="close">ပိတ်ပါ</string>
+    <string name="no_such_item">အကြောင်းအရာရှာမတွေ့ပါ။</string>
+    <string name="edit">တည်းဖြတ်ပါ</string>
+    <string name="set_as">အဖြစ်ထားရှိပါ</string>
+    <string name="video_mute_err">ဗီဒီယိုကို အသံမဖျောက်နိုင်ပါ။</string>
+    <string name="video_err">ဗီဒီယိုမဖွင့်နိုင်ပါ။</string>
+    <string name="title">ခေါင်းစဉ်</string>
+    <string name="description">ဖော်ပြချက်</string>
+    <string name="time">အချိန်</string>
+    <string name="location">တည်နေရာ</string>
+    <string name="path">လမ်းကြောင်း</string>
+    <string name="width">အကျယ်</string>
+    <string name="height">အမြင့်</string>
+    <string name="orientation">အနေအထား</string>
+    <string name="duration">ကြာချိန်</string>
+    <string name="mimetype">MIME အမျိုးအစား</string>
+    <string name="file_size">ဖိုင်အရွယ်အစား</string>
+    <string name="maker">ပြုလုပ်ချက်</string>
+    <string name="model">မော်ဒယ်</string>
+    <string name="flash">ဖလက်(ရှ်)မီး</string>
+    <string name="aperture">အလင်းဝင်ပေါက်</string>
+    <string name="focal_length">ဆုံချက်အလျား</string>
+    <string name="white_balance">အရှိအတိုင်းအဖြူရောင်အဖြစ်ပေါ်စေခြင်း</string>
+    <string name="exposure_time">အလင်းရောင်နှင့်ထိတွေ့ချိန်</string>
+    <string name="iso">ISO</string>
+    <string name="unit_mm">မီလီမီတာ</string>
+    <string name="manual">ကိုယ်တိုင်ပြုပြင်ချက်</string>
+    <string name="auto">အလိုအလျောက်</string>
+    <string name="flash_on">ဖလက်(ရှ်)မီးဖွင့်ပြီး</string>
+    <string name="flash_off">ဖလက်(ရှ်)မီးမဖွင့်ထား</string>
+    <string name="unknown">အမည်မသိ</string>
+    <string name="set_label_local_albums">ဖုန်းတွင်းအယ်လ်ဘမ်များ</string>
+    <string name="no_external_storage_title">သိမ်းဆည်းချက်မရှိပါ</string>
+    <string name="no_external_storage">ပြင်ပသိမ်းဆည်းမှုမရရှိနိုင်ပါ</string>
+    <string name="details">အသေးစိတ်</string>
+
+    <plurals name="delete_selection">
+        <item quantity="one">ရွေးချယ်ထားသောအကြောင်းအရာကိုဖျက်မလား။</item>
+        <item quantity="other">ရွေးချယ်ထားသောအကြောင်းအရာများကိုဖျက်မလား။</item>
+    </plurals>
+
+    <!-- Translate by TP-Link START-->
+    <string name="share_to">"...အား မျှဝေရန်"</string>
+    <string name="burst_selected">ရွေးချယ်ပါ</string>
+    <string name="waiting_dialog_msg">အလုပ်လုပ်ဆောင်နေသည်...</string>
+    <string name="dialog_title_burst_selected">ဓာတ္ပံုမ်ားကို ဆက္တုိက္႐ိုက္ပါ</string>
+    <string name="msg_burst_selected_all">အုပ္စုအတြင္းတြင္ ဓာတ္ပံုမ်ားအားလံုး က်န္သည္</string>
+    <string name="msgs_no_disk_space">သိုလှောင်နေရာ နေရာလွတ် မလုံလောက်ပါ။</string>
+    <string name="photos">"ဓာတ်ပုံဆို"</string>
+    <string name="more">နောက်ထပ်</string>
+    <string name="title_append_colon">ခေါင်းစဉ်: </string>
+    <string name="duration_append_colon">ကြာချိန်: </string>
+    <string name="resolution_append_colon" >"ပြတ်သားမှု:"</string>
+    <string name="size_append_colon">"အရွယ်အစား:"</string>
+    <string name="path_append_colon">လမ်းကြောင်း: </string>
+    <string name="delete_this_photo">"ဒီဓါတ်ပုံကိုဖျက်ပစ်ပါ?"</string>
+    <string name="delete_this_video">"ဒီဗီဒီယိုကိုဖျက်ပစ်ပါ?"</string>
+    <plurals name="burst_photos_num">
+        <item quantity="one">ဓာတ္ပံုတစ္ပံုကို ဆက္တုိက္႐ိုက္ပါ</item>
+        <item quantity="other">ဓာတ္ပံု %d ပံုကို ဆက္တုိက္႐ိုက္ပါ</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="one">ေ႐ြးခ်ယ္ထားသည့္ဓာတ္ပံုကို ေနရာဦးပါ</item>
+        <item quantity="other">ေ႐ြးခ်ယ္ထားသည့္ဓာတ္ပံု %d ကို ေနရာဦးပါ</item>
+    </plurals>
+    <string name="app_name">ပုံပြခန်း</string>
+    <string name="remove_picture">ဖယ်ရှားပါ</string>
+    <string name="sure_remove">ရွေးချယ်ထားသော ရုပ်ပုံ(များ)ကို ဖယ်ရှားလိုသည်မှာ သေချာပါသလား?</string>
+
+    <plurals name="attachments_saved_to_album" formatted="false" msgid="8407480699515308929">
+        <item quantity="other"><xliff:g id="QUANTITY_2">%d</xliff:g> ပူးတွဲပါဖိုင်များကို \"<xliff:g id="ALBUMNAME_3">%s</xliff:g>\" အယ်လ်ဘမ်သို့ သိမ်းဆည်းပြီးပါပြီ</item>
+        <item quantity="one"><xliff:g id="QUANTITY_0">%d</xliff:g> ပူးတွဲပါဖိုင်ကို \"<xliff:g id="ALBUMNAME_1">%s</xliff:g>\" အယ်လ်ဘမ်သို့ သိမ်းဆည်းပြီးပါပြီ</item>
+    </plurals>
+    <!-- Translate by TP-Link END-->
+    <string name="select_pic">ပုံရွေးရန်</string>
+    <string name="select_size_over">%1$dM ကျော်သွားပါပြီ</string>
+    <string name="select_count_over">ရွေးချယ်မှု အရေအတွက် အများဆုံးကို ကျော်သွားပါပြီ</string>
+    <string name="image_loading">ဖွင့်နေသည်...</string>
+    <string name="select_pic_count_limit">%1$d/%2$d ရွေးထားသည်</string>
+    <string name="select_pic_count">%1$d ရွေးထားသည်</string>
+
+    <string name="photo_tab_albums">အယ်(လ်)ဘမ်များ</string>
+    <string name="photo_tab_all_images">ရုပ်ပုံများအားလုံး</string>
+
+    <string name="refocus_canceling_dialog_cancel">"ထားတော့"</string>
+    <string name="refocus_canceling_dialog_confirm">"အတည်ပြုသည်"</string>
+    <string name="refocus_canceling_dialog_title">သင်ပြုလုပ်ခဲ့သည့်ပြောင်းလဲမှုများကို ပယ်ဖျက်လိုပါသလား?</string>
+    <string name="m_saving_image"><xliff:g id="album_name">%1$s</xliff:g> သို့ ရုပ်ပုံသိမ်းနေသည်\u2026</string>
+    <string name="m_refocus_save_fail">သိမ်းရန်မအောင်မြင်ပါ</string>
+    <string name="saving_image">ရုပ်ပုံသိမ်းနေသည်\u2026</string>
+
+    <string name="delete_this_burst">ဆက်တိုက်ရိုက်ဓာတ်ပုံများကို ဖျက်ပစ်မည်လား?</string>
+    <string name="sure_single_remove">ဤဓာတ်ပုံအား ဖျက်ပစ်လိုသည်မှာ သေချာပါသလား?</string>
+</resources>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name" msgid="1928079047368929634">"Galéria"</string>
+    <string name="details_ms" msgid="940634969189855292">"%1$02d:%2$02d"</string>
+    <string name="details_hms" msgid="3215779248094151255">"%1$d:%2$02d:%3$02d"</string>
+    <string name="no_thumbnail" msgid="284723185546429750">"Žiadne miniatúry"</string>
+    <string name="set_image" msgid="2331476809308010401">"Nastaviť fotku ako"</string>
+    <string name="delete" msgid="2839695998251824487">"Odstrániť"</string>
+    <string name="cancel" msgid="3637516880917356226">"Zrušiť"</string>
+    <string name="deleted" msgid="6795433049119073871">"Odstránený"</string>
+    <string name="undo" msgid="2930873956446586313">"SPÄŤ"</string>
+    <string name="details_title" msgid="2611396603977441273">"%1$d z %2$d položiek:"</string>
+    <string name="close" msgid="5585646033158453043">"Zavrieť"</string>
+    <string name="no_such_item" msgid="5315144556325243400">"Položku sa nepodarilo nájsť."</string>
+    <string name="edit" msgid="1502273844748580847">"Upraviť"</string>
+    <string name="set_as" msgid="3636764710790507868">"Použiť ako"</string>
+    <string name="video_mute_err" msgid="6392457611270600908">"Zvuk videa sa nedá vypnúť."</string>
+    <string name="video_err" msgid="7003051631792271009">"Video sa nepodarilo prehrať."</string>
+    <string name="title" msgid="7622928349908052569">"Titul"</string>
+    <string name="description" msgid="3016729318096557520">"Popis"</string>
+    <string name="time" msgid="1367953006052876956">"Čas"</string>
+    <string name="location" msgid="3432705876921618314">"Poloha"</string>
+    <string name="path" msgid="4725740395885105824">"Cesta"</string>
+    <string name="width" msgid="9215847239714321097">"Šírka"</string>
+    <string name="height" msgid="3648885449443787772">"Výška"</string>
+    <string name="orientation" msgid="4958327983165245513">"Orientácia"</string>
+    <string name="duration" msgid="8160058911218541616">"Trvanie"</string>
+    <string name="mimetype" msgid="8024168704337990470">"Typ MIME"</string>
+    <string name="file_size" msgid="8486169301588318915">"Veľkosť súboru"</string>
+    <string name="maker" msgid="7921835498034236197">"Autor"</string>
+    <string name="model" msgid="8240207064064337366">"Model"</string>
+    <string name="flash" msgid="2816779031261147723">"Blesk"</string>
+    <string name="aperture" msgid="5920657630303915195">"Clona"</string>
+    <string name="focal_length" msgid="1291383769749877010">"Ohnisk. vzd."</string>
+    <string name="white_balance" msgid="1582509289994216078">"Vyváženie bielej"</string>
+    <string name="exposure_time" msgid="3990163680281058826">"Doba expozície"</string>
+    <string name="iso" msgid="5028296664327335940">"ISO"</string>
+    <string name="unit_mm" msgid="1125768433254329136">"mm"</string>
+    <string name="manual" msgid="6608905477477607865">"Ručne"</string>
+    <string name="auto" msgid="4296941368722892821">"Auto"</string>
+    <string name="flash_on" msgid="7891556231891837284">"S bleskom"</string>
+    <string name="flash_off" msgid="1445443413822680010">"Bez blesku"</string>
+    <string name="unknown" msgid="3506693015896912952">"Neznáme"</string>
+    <string name="set_label_local_albums" msgid="6698133661656266702">"Miestne albumy"</string>
+    <string name="no_external_storage_title" msgid="2408933644249734569">"Žiadny ukladací priestor"</string>
+    <string name="no_external_storage" msgid="95726173164068417">"K dispozícii nie je žiadny externý ukladací priestor"</string>
+    <string name="details" msgid="8415120088556445230">"Podrobnosti"</string>
+    <plurals name="delete_selection">
+        <item quantity="one" msgid="6453379735401083732">"Odstrániť vybratú položku?"</item>
+        <item quantity="other" msgid="5874316486520635333">"Odstrániť vybraté položky?"</item>
+    </plurals>
+    <!-- Translate by TP-Link START-->
+    <string name="share_to">Zdieľať do</string>
+    <string name="burst_selected">Vyberte</string>
+    <string name="waiting_dialog_msg">Implementuje sa\u2026</string>
+    <string name="dialog_title_burst_selected">Vyberte zhlukové fotografie</string>
+    <string name="msg_burst_selected_all">Uchovať všetky fotografie v skupine</string>
+    <string name="msgs_no_disk_space">Nedostatok ukladacieho miesta</string>
+    <string name="photos">Fotografie</string>
+    <string name="more">Ďalšie</string>
+    <string name="title_append_colon">Názov:</string>
+    <string name="duration_append_colon">Trvanie:</string>
+    <string name="resolution_append_colon">Rozlíšenie:</string>
+    <string name="size_append_colon">Veľkosť:</string>
+    <string name="path_append_colon">Cesta:</string>
+    <string name="delete_this_photo">"Odstrániť túto fotografiu?"</string>
+    <string name="delete_this_video">"Odstrániť toto video?"</string>
+    <plurals name="burst_photos_num">
+        <item quantity="one">Zhlukový záber jednej fotografie</item>
+        <item quantity="other">Zhlukový záber %d fotografií</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="one">Uschovať zvolenú fotografiu</item>
+        <item quantity="other">Uschovať zvolené %d fotografie(-ií)</item>
+    </plurals>
+    <string name="remove_picture">Odstrániť</string>
+    <string name="sure_remove">Naozaj chcete odstrániť obrázky?</string>
+    <plurals name="attachments_saved_to_album" formatted="false" msgid="8407480699515308929">
+        <item quantity="few"><xliff:g id="QUANTITY_2">%d</xliff:g> prílohy boli uložené do albumu <xliff:g id="ALBUMNAME_3">%s</xliff:g></item>
+        <item quantity="many"><xliff:g id="QUANTITY_2">%d</xliff:g> prílohy bolo uloženej do albumu <xliff:g id="ALBUMNAME_3">%s</xliff:g></item>
+        <item quantity="other"><xliff:g id="QUANTITY_2">%d</xliff:g> príloh bolo uložených do albumu <xliff:g id="ALBUMNAME_3">%s</xliff:g></item>
+        <item quantity="one"><xliff:g id="QUANTITY_0">%d</xliff:g> príloha bola uložená do albumu <xliff:g id="ALBUMNAME_1">%s</xliff:g></item>
+    </plurals>
+
+    <string name="refocus_canceling_dialog_cancel">Zrušiť</string>
+    <string name="refocus_canceling_dialog_confirm">Potvrdiť</string>
+    <string name="refocus_canceling_dialog_title">Zrušiť vami vykonané zmeny?</string>
+    <string name="m_saving_image">Obraz sa ukladá do <xliff:g id="album_name">%1$s</xliff:g> \u2026</string>
+    <string name="m_refocus_save_fail">Nepodarilo sa uložiť</string>
+    <string name="saving_image">Ukladanie obrazu\u2026</string>
+    <!-- Translate by TP-Link END-->
+    <string name="photo_tab_all_images">Všetky obrázky</string>
+    <string name="photo_tab_albums">Albumy</string>
+</resources>

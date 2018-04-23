@@ -57,6 +57,7 @@ public class MediaBean {
     public long lastModify;
     public long duration;
     public int refocusType;
+    public long size;
 
     // 使用到时才加载
 
