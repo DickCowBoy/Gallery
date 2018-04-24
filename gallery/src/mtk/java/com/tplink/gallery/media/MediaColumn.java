@@ -17,7 +17,7 @@ public class MediaColumn {
     public static final  String[] ALBUM_PROJECTION = new String[]{
             COUNT_PROJECTION,
             MediaStore.Images.ImageColumns.BUCKET_ID,
-            MediaStore.Images.ImageColumns.DISPLAY_NAME,
+            MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
             MediaStore.Images.ImageColumns.DATE_MODIFIED,
             MediaStore.Images.ImageColumns._ID,
     };
