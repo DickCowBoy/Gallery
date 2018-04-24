@@ -15,9 +15,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 
+import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.media.MediaColumn;
 import com.tplink.gallery.utils.MediaUtils;
 
 import java.util.List;
@@ -28,17 +31,59 @@ public class MediaDao extends BaseMediaDao {
         super(context);
     }
 
-    public List<MediaBean> queryAllMedia(final boolean queryVideo, boolean queryImage, boolean queryGif) {
-        Uri uri = queryVideo ? MediaUtils.getFileUri() : MediaUtils.getFileUri();
+    public List<MediaBean> queryAllMedia(boolean queryVideo, boolean queryImage, boolean queryGif, boolean needResolveBurst) {
 
         String selection = null;
         String[] selectionArgs = null;
-        if (queryImage && queryVideo) {
+        if (queryVideo && ! queryImage) {
+            return queryVideo(null, null);
+        }  else if (queryImage && !queryVideo) {
+            return queryImage(null, null, queryGif);
+        } else if (queryImage && queryVideo) {
             selection = SELECTION_ALL;
             selectionArgs = SELECTION_ALL_ARGS;
         }
-        return queryVideo ? queryFile(selection, selectionArgs, queryGif)
-                : queryImage(selection, selectionArgs, queryGif);
+        return queryFile(selection, selectionArgs, queryGif);
+    }
+
+    public List<AlbumBean> queryAllAlbum(boolean queryVideo, boolean queryImage, boolean queryGif, boolean needResolveBurst) {
+        String selection = null;
+        String[] selectionArgs = null;
+
+        if (queryVideo && ! queryImage) {
+            query(MediaUtils.getVideoUri(),
+                    MediaColumn.ALBUM_PROJECTION,
+                    ") GROUP BY (bucket_id",
+                    null, DATA_MODIFY_DESC,
+                    cursor -> MediaColumn.parseAlbum(cursor));
+        }  else if (queryImage && !queryVideo) {
+            if (!queryGif) {
+                if (TextUtils.isEmpty(selection)) {
+                    selection = MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
+                } else {
+                    selection += " AND " + MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
+                }
+            }
+            query(MediaUtils.getImageUri(),
+                    MediaColumn.ALBUM_PROJECTION,
+                    (TextUtils.isEmpty(selection) ? "" : selection) + ") GROUP BY (bucket_id",
+                    null, DATA_MODIFY_DESC,
+                    cursor -> MediaColumn.parseAlbum(cursor));
+        } else if (queryImage && queryVideo) {
+            selection = SELECTION_ALL;
+            selectionArgs = SELECTION_ALL_ARGS;
+        }
+        return query(MediaUtils.getFileUri(),
+                MediaColumn.ALBUM_PROJECTION,
+                selection + ") GROUP BY (bucket_id",
+                selectionArgs,
+                DATA_MODIFY_DESC,
+                cursor -> MediaColumn.parseAlbum(cursor));
+
+    }
+
+    private  AlbumBean parseAlbum(Cursor cursor) {
+        return null;
     }
 
     public List<MediaBean> queryVideoById(List<String> ids) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.tplink.widget.LoadingView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.tplink.gallery.view.LoadingView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/loading_file_category"
     android:layout_width="match_parent"
@@ -7,12 +7,24 @@
     android:background="@null"
     android:clipToPadding="true">
 
-    <RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
         <FrameLayout
             android:id="@+id/fl_container"
+            android:layout_below="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+
+        <FrameLayout
+            android:id="@+id/fl_tab_container"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_below="@id/toolbar"
             android:background="@null">
 
             <com.tplink.widget.SlidingTabStripTP
@@ -38,7 +50,7 @@
 
         <View
             android:id="@+id/vw_divider"
-            android:layout_below="@+id/fl_container"
+            android:layout_below="@+id/fl_tab_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/photo_divider_height"
             android:background="@color/photo_divider_color" />
@@ -49,7 +61,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/vw_divider"/>
 
-        <com.tplink.view.AutoFitToolBar
+        <com.tplink.gallery.view.AutoFitToolBar
             android:id="@+id/toolbar"
             style="@style/PhotoAppTheme.Toolbar"
             android:layout_width="match_parent"
@@ -59,7 +71,7 @@
             app:contentInsetStartWithNavigation="@dimen/photo_toolbar_start_margin"
             app:titleTextAppearance="@style/PhotoAppTheme.ActionBar.TitleTextStyle">
 
-            <com.tplink.widget.InterceptCheckBox
+            <com.tplink.gallery.view.InterceptCheckBox
                 android:id="@+id/cb_item_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -67,8 +79,8 @@
                 android:button="@drawable/photo_checkbox_selector"
                 android:paddingEnd="10dp"
                 android:visibility="gone" />
-        </com.tplink.view.AutoFitToolBar>
+        </com.tplink.gallery.view.AutoFitToolBar>
 
     </RelativeLayout>
 
-</com.tplink.widget.LoadingView>
+</com.tplink.gallery.view.LoadingView>

@@ -1,11 +1,77 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
-        <!-- <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>-->
+    <!-- TP define-->
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary</item>
+        <item name="colorAccent">@color/color_accent</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle"> @style/TPActionBarStyle</item>
+        <item name="actionBarTheme">@style/TPActionBarTheme</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="actionModeStyle">@style/TPActionModeStyle</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back</item> <!--返回icon-->
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+        <item name="actionOverflowMenuStyle">@android:style/Widget.Material.ActionMode</item>
+    </style>
+
+    <style name="OverflowStyle" parent="@android:style/Widget.Material.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_more_vert</item>
+    </style>
+
+    <style name="TPActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="closeItemLayout">@layout/ic_blabk_close</item>
+    </style>
+
+    <style name="TPActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <!-- Support library compatibility -->
+        <item name="background">@color/color_primary</item>
+        <!--解决左边一直有一块边距的问题 contentInsetStart = 0 -->
+        <item name="contentInsetStart">@dimen/contentInsetPadding</item>
+        <item name="contentInsetEnd">@dimen/contentInsetPadding</item>
+        <item name="elevation">0dp</item>
+        <item name="height">60dp</item>
+        <item name="titleTextStyle">@style/CustomActionBarTitleTextAppearance</item>
+        <item name="subtitleTextStyle">@style/CustomActionBarSubTitleTextAppearance</item>
+    </style>
+
+    <style name="CustomActionBarTitleTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">17sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="CustomActionBarSubTitleTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">11sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TPActionBarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <item name="actionModeBackground">@color/color_primary</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="elevation">0dp</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateTint">@android:color/white</item>
+        <item name="android:indeterminateTintMode">src_over</item>
     </style>
 
 
@@ -18,5 +84,56 @@
     <style name="PhotoTabLayoutTextStyle" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
     </style>
+
+    <style name="PhotoAppTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
+        <item name="android:textColor">#b2000000</item>
+        <item name="android:fontFamily">"sans-serif-medium"</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="PhotoAppTheme.Toolbar" parent="@android:style/Widget.Material.Toolbar">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:elevation">0dp</item>
+        <item name="android:contentInsetStartWithNavigation">@dimen/photo_toolbar_start_margin</item>
+        <item name="android:titleMarginStart">0dp</item>
+        <item name="android:titleTextAppearance">@style/PhotoAppTheme.ActionBar.TitleTextStyle</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="PhotoAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:colorPrimary">@color/photo_toolbar_background</item>
+        <item name="android:colorPrimaryDark">@color/photo_toolbar_background</item>
+        <item name="android:checkboxStyle">@style/CheckBoxStyleTP</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:colorAccent">@color/material_deep_teal_tp</item>
+        <!--<item name="android:alertDialogStyle">@style/AlertDialogStyleTP</item>-->
+        <item name="android:toolbarStyle">@style/PhotoAppTheme.Toolbar</item>
+        <!--<item name="android:popupMenuStyle">@android:style/Widget.Material.ActionModeTP</item>-->
+        <item name="actionModeStyle">@style/PhotoCustomActionModeStyle</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">@color/photo_toolbar_background</item>
+        <item name="android:colorControlActivated">@color/material_deep_teal_tp</item>
+        <!--<item name="actionOverflowMenuStyle">@android:style/Widget.Material.ActionModeTP</item>-->
+        <item name="actionOverflowButtonStyle">@style/PhotoOverflowButtonStyle</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <!--<item name="android:dropDownSpinnerStyle">@*android:style/Widget.Material.SpinnerTP</item>-->
+    </style>
+
+    <style name="PhotoCustomActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="closeItemLayout">@layout/photo_action_mode_close_item</item>
+        <item name="android:minHeight">@dimen/photo_toolbar_height</item>
+        <item name="height">@dimen/photo_toolbar_height</item>
+        <item name="android:titleTextStyle">@style/PhotoAppTheme.ActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="PhotoOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/photo_ic_menu_more_normal</item>
+    </style>
+
 
 </resources>

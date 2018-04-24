@@ -11,8 +11,19 @@
  */
 package com.tplink.gallery.bean;
 
+import android.net.Uri;
+
+import com.tplink.gallery.utils.MediaUtils;
+
 public class AlbumBean {
     public long bucketId;
-    public MediaBean coverMediaBean;
+    public int coverId;
     public String displayName;
+    public int count;
+    public long lastModify;
+
+    public Uri getContentUri() {
+        return MediaUtils.getFileUri()
+                .buildUpon().appendPath(String.valueOf(coverId)).build();
+    }
 }

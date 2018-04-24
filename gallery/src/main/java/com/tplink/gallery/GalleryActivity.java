@@ -3,9 +3,9 @@ package com.tplink.gallery;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.dao.MediaDao;
@@ -27,15 +27,13 @@ public class GalleryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gallery_activity);
         thumbView = new PhotoThumbView(this, findViewById(R.id.rcl_gallery), false);
-        List<MediaBean> mediaBeans = new MediaDao(this).queryAllMedia(true, true, true);
+        List<MediaBean> mediaBeans = new MediaDao(this).queryAllMedia(true, true, true,true);
         thumbView.showMediaBeans(mediaBeans);
         HashSet<MediaBean> mediaBeans1 = new HashSet<>();
         mediaBeans1.addAll(mediaBeans);
         thumbView.setPhotoThumbListener(new PhotoThumbView.PhotoThumbListener() {
             @Override
             public void onItemClick(MediaBean data, int index) {
-                view1 = findViewById(R.id.recyclerView);
-                view2 = findViewById(R.id.recyclerViewfilm);
                 view2.setVisibility(View.VISIBLE);
                 view1.setVisibility(View.VISIBLE);
                 if (preview == null) {
@@ -65,9 +63,17 @@ public class GalleryActivity extends AppCompatActivity {
 
             }
         });
-
+        view1 = findViewById(R.id.recyclerView);
+        view2 = findViewById(R.id.recyclerViewfilm);
+        setScreenFlags();
     }
 
+    private void setScreenFlags() {
+        final Window win = getWindow();
+        final WindowManager.LayoutParams params = win.getAttributes();
+        params.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+        win.setAttributes(params);
+    }
     @Override
     public void onBackPressed() {
         if (view1.getVisibility() == View.VISIBLE) {

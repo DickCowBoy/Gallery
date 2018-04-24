@@ -46,7 +46,7 @@ public class BaseMediaDao extends BaseDao {
         return query(MediaUtils.getFileUri(), MediaColumn.QUERY_PROJECTION,
                 selection, selectionArgs,
                 DATA_MODIFY_DESC,
-                cursor->MediaColumn.parseVideo(cursor)
+                cursor->MediaColumn.parseFile(cursor)
         );
     }
 
@@ -69,10 +69,10 @@ public class BaseMediaDao extends BaseDao {
 
     public List<MediaBean> queryVideo(String selection, String[] selectionArgs) {
 
-        return query(MediaUtils.getVideoUri(), MediaColumn.QUERY_IMAGE_PROJECTION,
+        return query(MediaUtils.getVideoUri(), MediaColumn.QUERY_VIDEO_PROJECTION,
                 selection, selectionArgs,
                 DATA_MODIFY_DESC,
-                cursor->MediaColumn.parseImage(cursor)
+                cursor->MediaColumn.parseVideo(cursor)
         );
     }
 }

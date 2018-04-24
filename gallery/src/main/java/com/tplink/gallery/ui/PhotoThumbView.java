@@ -34,11 +34,13 @@ public class PhotoThumbView implements CommonDataViewProxy.OnDataItemClick<Media
     public PhotoThumbView(Context context, CommonDataView recyclerView, boolean awaysInSelectMode) {
         this.mCommonDataView = recyclerView;
         this.awaysInSelectMode = awaysInSelectMode;
-        mDataProxy = new MediaAdapter(context, recyclerView, awaysInSelectMode);
+
+        mDataProxy = new MediaAdapter(context, recyclerView, this.awaysInSelectMode);
         spaceItemDecoration = new SpaceItemDecoration(4, CommonUtils.dp2px(context, 2),
                 false);
         //spaceItemDecoration.setLastColumnMargin(activity.getNavigationBarHeight());
         mCommonDataView.getDataView().addItemDecoration(spaceItemDecoration);
+
         mDataProxy.setListener(this);
         mDataProxy.setSelectController(this);
         mDataProxy.setOnSelectModeChanged(this);

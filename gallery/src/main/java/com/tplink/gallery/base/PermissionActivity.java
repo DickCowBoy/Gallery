@@ -33,11 +33,11 @@ public abstract class PermissionActivity extends AppCompatActivity {
     private static final String PACKAGE_URL_SCHEME = "package:";// 权限方案
 
     public static final String[] NEED_PERMISSIONS = new String[]{
-            Manifest.permission.CAMERA,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_SMS,
+           // Manifest.permission.CAMERA,
+            //Manifest.permission.ACCESS_COARSE_LOCATION,
+           // Manifest.permission.ACCESS_FINE_LOCATION,
+           // Manifest.permission.READ_PHONE_STATE,
+          //  Manifest.permission.READ_SMS,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
