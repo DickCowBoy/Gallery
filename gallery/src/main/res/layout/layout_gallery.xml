@@ -12,13 +12,6 @@
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
-        <FrameLayout
-            android:id="@+id/fl_container"
-            android:layout_below="@id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-
 
         <FrameLayout
             android:id="@+id/fl_tab_container"
@@ -80,6 +73,13 @@
                 android:paddingEnd="10dp"
                 android:visibility="gone" />
         </com.tplink.gallery.view.AutoFitToolBar>
+
+        <FrameLayout
+            android:id="@+id/fl_container"
+            android:layout_below="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
     </RelativeLayout>
 

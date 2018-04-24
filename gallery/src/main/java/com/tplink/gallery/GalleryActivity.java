@@ -1,86 +1,42 @@
+/*
+ * Copyright (C) 2018, TP-LINK TECHNOLOGIES CO., LTD.
+ *
+ * GalleryActivity.java
+ *
+ * Description 显示所有照片及相册
+ *
+ * Author LinJinLong
+ *
+ * Ver 1.0, 2018-04-20 LinJinLong, Create file
+ */
 package com.tplink.gallery;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import com.tplink.gallery.base.BaseGalleryActivity;
 
-import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.dao.MediaDao;
-import com.tplink.gallery.gallery.R;
-import com.tplink.gallery.ui.BigImagePreview;
-import com.tplink.gallery.ui.PhotoThumbView;
+public class GalleryActivity extends BaseGalleryActivity {
 
-import java.util.HashSet;
-import java.util.List;
-
-public class GalleryActivity extends AppCompatActivity {
-
-    PhotoThumbView thumbView = null;
-    RecyclerView view1;
-    RecyclerView view2;
-    BigImagePreview preview;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.gallery_activity);
-        thumbView = new PhotoThumbView(this, findViewById(R.id.rcl_gallery), false);
-        List<MediaBean> mediaBeans = new MediaDao(this).queryAllMedia(true, true, true,true);
-        thumbView.showMediaBeans(mediaBeans);
-        HashSet<MediaBean> mediaBeans1 = new HashSet<>();
-        mediaBeans1.addAll(mediaBeans);
-        thumbView.setPhotoThumbListener(new PhotoThumbView.PhotoThumbListener() {
-            @Override
-            public void onItemClick(MediaBean data, int index) {
-                view2.setVisibility(View.VISIBLE);
-                view1.setVisibility(View.VISIBLE);
-                if (preview == null) {
-                    preview = new BigImagePreview(GalleryActivity.this, view1, view2);
-                    preview.setData(mediaBeans);
-                }
-                preview.showIndex(index);
-            }
-
-            @Override
-            public boolean canSelectItem(MediaBean item) {
-                return true;
-            }
-
-            @Override
-            public void delSelectItem(MediaBean item) {
-
-            }
-
-            @Override
-            public void onSelectModeChanged(boolean inSelectMode) {
-
-            }
-
-            @Override
-            public void onSelectCountChanged(int count, int amount) {
-
-            }
-        });
-        view1 = findViewById(R.id.recyclerView);
-        view2 = findViewById(R.id.recyclerViewfilm);
-        setScreenFlags();
+    protected boolean needImage() {
+        return true;
     }
 
-    private void setScreenFlags() {
-        final Window win = getWindow();
-        final WindowManager.LayoutParams params = win.getAttributes();
-        params.flags |= WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
-        win.setAttributes(params);
-    }
     @Override
-    public void onBackPressed() {
-        if (view1.getVisibility() == View.VISIBLE) {
-            view1.setVisibility(View.GONE);
-            view2.setVisibility(View.GONE);
-            return;
-        }
-        super.onBackPressed();
+    protected boolean needVideo() {
+        return true;
+    }
+
+    @Override
+    protected boolean needGif() {
+        return true;
+    }
+
+    @Override
+    protected boolean awaysInSelectMode() {
+        return false;
+    }
+
+    @Override
+    protected boolean needResolveBurst() {
+        return true;
     }
 }

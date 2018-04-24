@@ -130,4 +130,23 @@ public class MediaDao extends BaseMediaDao {
             return array;
         }
     }
+
+    public List<MediaBean> queryMediaByBucketId(long bucketId, boolean queryVideo, boolean queryImage, boolean queryGif) {
+
+        String selection = MediaStore.Images.ImageColumns.BUCKET_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(bucketId)};
+        if (queryVideo && ! queryImage) {
+            return queryVideo(null, null);
+        }  else if (queryImage && !queryVideo) {
+            return queryImage(null, null, queryGif);
+        } else if (queryImage && queryVideo) {
+            selection = selection + " AND " + SELECTION_ALL;
+            selectionArgs = new String[]{
+                    String.valueOf(bucketId),
+                    String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+                    String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
+            };
+        }
+        return queryFile(selection, selectionArgs, queryGif);
+    }
 }

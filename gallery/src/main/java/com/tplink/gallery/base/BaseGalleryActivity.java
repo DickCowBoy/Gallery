@@ -22,7 +22,6 @@ import android.view.WindowManager;
 
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.dao.MediaDao;
 import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.view.AutoFitToolBar;
 import com.tplink.gallery.view.LoadingView;
@@ -32,7 +31,7 @@ import com.tplink.widget.SlidingTabStripTP;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseGalleryActivity extends PermissionActivity implements AutoFitToolBar.OnPaddingListener,
+public abstract class BaseGalleryActivity extends PermissionActivity implements AutoFitToolBar.OnPaddingListener,
         ImageSlotFragment.ImageSlotDataProvider, MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider {
 
     private LoadingView mLoadingView;
@@ -133,24 +132,14 @@ public class BaseGalleryActivity extends PermissionActivity implements AutoFitTo
         return beans == null ? new ArrayList<>() : beans;
     }
 
-    protected boolean needImage() {
-        return true;
-    }
+    protected abstract boolean needImage();
 
-    protected boolean needVideo() {
-        return true;
-    }
+    protected abstract boolean needVideo();
 
-    protected boolean needGif() {
-        return true;
-    }
+    protected abstract boolean needGif();
 
-    protected boolean awaysInSelectMode() {
-        return false;
-    }
-    protected boolean needResolveBurst() {
-        return true;
-    }
+    protected abstract boolean awaysInSelectMode();
+    protected abstract boolean needResolveBurst();
 
     @Override
     public boolean isActive() {
@@ -181,5 +170,11 @@ public class BaseGalleryActivity extends PermissionActivity implements AutoFitTo
     @Override
     public List<AlbumBean> getAlbumDataBeans(String key) {
         return albumBeans;
+    }
+
+    @Override
+    public void showAlbumDetail(AlbumBean bean) {
+        AlbumImageSlotFragment albumImageSlotFragment = AlbumImageSlotFragment.newInstance(bean.bucketId, needImage(), needVideo(), needGif());
+        showViewFragment(albumImageSlotFragment);
     }
 }

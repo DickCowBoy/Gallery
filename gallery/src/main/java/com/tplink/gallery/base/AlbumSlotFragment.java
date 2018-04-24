@@ -16,7 +16,7 @@ import com.tplink.view.CommonDataView;
 import java.util.List;
 
 
-public class AlbumSlotFragment extends Fragment {
+public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperateProcessor {
     private static final String KEY_AWAYS_IN_SELECT_MODE = "KEY_AWAYS_IN_SELECT_MODE";
     private static final String KEY_DATA_KEY = "KEY_DATA_KEY";
 
@@ -40,7 +40,7 @@ public class AlbumSlotFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         CommonDataView commonDataView = new CommonDataView(getContext(), null);
-        albumView = new AlbumView(getContext(), commonDataView, awaysInSelectMode);
+        albumView = new AlbumView(getContext(), commonDataView, awaysInSelectMode, this);
         showAlbumBeans(imageSlotDataProvider.getAlbumDataBeans(dataKey));
         return commonDataView;
     }
@@ -62,8 +62,27 @@ public class AlbumSlotFragment extends Fragment {
         return imageSlotFragment;
     }
 
+    @Override
+    public void onItemClick(AlbumBean data, int index) {
+        // 显示相册
+        if (imageSlotDataProvider != null) {
+            imageSlotDataProvider.showAlbumDetail(data);
+        }
+    }
+
+    @Override
+    public boolean canSelectItem(AlbumBean item) {
+        return false;
+    }
+
+    @Override
+    public void delSelectItem(AlbumBean item) {
+
+    }
+
     public interface AlbumSlotDataProvider {
         List<AlbumBean> getAlbumDataBeans(String key);
+        void showAlbumDetail(AlbumBean bean);
     }
 
     @Override

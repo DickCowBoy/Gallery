@@ -17,8 +17,9 @@ public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>
     private AlbumAdapter mDataProxy;
     private SpaceItemDecoration spaceItemDecoration;
     private boolean awaysInSelectMode = false;
+    private AlbumOperateProcessor albumOperateProcessor;
 
-    public AlbumView(Context context, CommonDataView recyclerView, boolean awaysInSelectMode) {
+    public AlbumView(Context context, CommonDataView recyclerView, boolean awaysInSelectMode, AlbumOperateProcessor albumOperateProcessor) {
         this.mCommonDataView = recyclerView;
         this.awaysInSelectMode = awaysInSelectMode;
 
@@ -31,22 +32,29 @@ public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>
         //spaceItemDecoration.setLastColumnMargin(mediaPickerActivity.getNavigationBarHeight());
         mCommonDataView.getDataView().addItemDecoration(spaceItemDecoration);
 
-
+        this.albumOperateProcessor = albumOperateProcessor;
     }
 
     @Override
     public void onItemClick(AlbumBean data, int index) {
-
+        if (albumOperateProcessor != null) {
+            albumOperateProcessor.onItemClick(data, index);
+        }
     }
 
     @Override
     public boolean canSelectItem(AlbumBean item) {
+        if (albumOperateProcessor != null) {
+            return albumOperateProcessor.canSelectItem(item);
+        }
         return false;
     }
 
     @Override
     public void delSelectItem(AlbumBean item) {
-
+        if (albumOperateProcessor != null) {
+            albumOperateProcessor.delSelectItem(item);
+        }
     }
 
     @Override
@@ -56,5 +64,11 @@ public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>
 
     public void showAlbums(List<AlbumBean> beans) {
         mDataProxy.updateData(beans);
+    }
+
+    public interface AlbumOperateProcessor {
+        void onItemClick(AlbumBean data, int index);
+        boolean canSelectItem(AlbumBean item);
+        void delSelectItem(AlbumBean item);
     }
 }

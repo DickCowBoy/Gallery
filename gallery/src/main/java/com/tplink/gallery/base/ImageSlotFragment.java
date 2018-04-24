@@ -35,7 +35,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
     private boolean awaysInSelectMode = false;
     private String dataKey;
     private DragSelectTouchHelper.InterceptController interceptController;
-    private ImageSlotDataProvider imageSlotDataProvider;
+    protected ImageSlotDataProvider imageSlotDataProvider;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +53,9 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
         CommonDataView commonDataView = new CommonDataView(getContext(), null);
         thumbView = new PhotoThumbView(getContext(), commonDataView, awaysInSelectMode);
         thumbView.setPhotoThumbListener(this);
-        showMediaBeans(imageSlotDataProvider.getDataBeans(dataKey));
+        if (imageSlotDataProvider != null) {
+            showMediaBeans(imageSlotDataProvider.getDataBeans(dataKey));
+        }
         return commonDataView;
     }
 

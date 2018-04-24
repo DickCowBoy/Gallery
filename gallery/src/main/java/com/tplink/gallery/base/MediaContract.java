@@ -25,6 +25,10 @@ public class MediaContract {
         void showAlbums(List<AlbumBean> beans);
     }
 
+    public interface AlbumView extends BaseView {
+        void showMedias(List<MediaBean> beans);
+    }
+
     public static abstract class MediaPresenter extends RxPresenter<MediaView> {
 
         public MediaPresenter(MediaView view) {
@@ -34,4 +38,15 @@ public class MediaContract {
         public abstract void loadMediaInfo(boolean needImage, boolean needVideo, boolean needGif, boolean needResolveBurst);
         public abstract void loadAlbumInfo(boolean needImage, boolean needVideo, boolean needGif, boolean needResolveBurst);
     }
+
+    public static abstract class AlbumDetailPresenter extends RxPresenter<AlbumView> {
+
+        public AlbumDetailPresenter(AlbumView view) {
+            super(view);
+        }
+        public abstract void loadAlbumDetail(long bucketId, boolean needImage, boolean needVideo, boolean needGif);
+
+    }
+
+
 }

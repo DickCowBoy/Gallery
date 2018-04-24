@@ -12,11 +12,10 @@
         android:supportsRtl="true"
         android:name="com.tplink.gallery.GalleryApplication"
         android:theme="@style/AppTheme">
-        <activity android:name="com.tplink.gallery.base.BaseGalleryActivity"
+        <activity android:name="com.tplink.gallery.GalleryActivity"
             android:theme="@style/PhotoAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
