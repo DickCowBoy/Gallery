@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import com.tplink.base.CommonUtils;
 import com.tplink.base.DragSelectTouchHelper;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.utils.MediaUtils;
 
 public class ContainerPagerAdapter extends FragmentPagerAdapter {
     public static final String TAG = "PicPagerAdapter";
@@ -39,16 +40,27 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
     private ImageSlotFragment mMediaFragment = null;
     private AlbumSlotFragment mAlbumFragment = null;
 
+    private boolean needImage;
+    private boolean needVideo;
+    private boolean needGif;
+    private boolean needResolveBurst;
+
+
     private DragSelectTouchHelper.InterceptController interceptController;
 
     public ContainerPagerAdapter(FragmentManager fm, Context context,
                                  DragSelectTouchHelper.InterceptController interceptController,
-                                 boolean awaysInSelectMode) {
+                                 boolean awaysInSelectMode, boolean needImage, boolean needVideo, boolean needGif,
+                                 boolean needResolveBurst) {
         super(fm);
         mContext = context;
         mFragmentManager = fm;
         this.interceptController = interceptController;
         this.awaysInSelectMode = awaysInSelectMode;
+        this.needGif = needGif;
+        this.needImage = needImage;
+        this.needVideo = needVideo;
+        this.needResolveBurst = needResolveBurst;
     }
 
     public void setInterceptController(DragSelectTouchHelper.InterceptController interceptController) {
@@ -78,12 +90,14 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
         // 保证Fragment的复用
         if (getPosInDirection(i) == ALBUM_TAB) {
             if (mAlbumFragment == null) {
-                mAlbumFragment = AlbumSlotFragment.newInstance(awaysInSelectMode, "all");
+                mAlbumFragment = AlbumSlotFragment.newInstance(awaysInSelectMode,
+                        MediaUtils.getAllAlbumKey(needVideo, needImage, needGif, needResolveBurst));
             }
             return mAlbumFragment;
         } else {
             if (mMediaFragment == null) {
-                mMediaFragment = ImageSlotFragment.newInstance(awaysInSelectMode, "album");
+                mMediaFragment = ImageSlotFragment.newInstance(awaysInSelectMode,
+                        MediaUtils.getAllMediaKey (needVideo, needImage, needGif, needResolveBurst));
             }
             mMediaFragment.setInterceptController(interceptController);
             return mMediaFragment;

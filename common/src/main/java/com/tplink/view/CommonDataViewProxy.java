@@ -346,22 +346,25 @@ public abstract class CommonDataViewProxy<T, M extends CommonDataViewHolder>
             return;
         }
         T downloadInfo = mData.get(containingViewHolder.getAdapterPosition());
-        if (view instanceof ClickParser) {
-            if (((ClickParser)view).clickRegion()) {
-                // 如果是在点击区域直接点击处理
-                if (mListener != null) {
-                    mListener.onItemClick(downloadInfo, mData.indexOf(downloadInfo));
-                }
-                return;
-            }
-        }
-        boolean selected = mSelector.isItemSelected(downloadInfo);
-        if (!selected && !mSelector.isItemSelected(downloadInfo) && mSelectController != null && !mSelectController.canSelectItem(downloadInfo)) {
-            return;
-        } else if (selected && mSelectController != null) {
-            mSelectController.delSelectItem(downloadInfo);
-        }
+
         if (mSelector.inSelectionMode()) {
+
+            if (view instanceof ClickParser) {
+                if (((ClickParser)view).clickRegion()) {
+                    // 如果是在点击区域直接点击处理
+                    if (mListener != null) {
+                        mListener.onItemClick(downloadInfo, mData.indexOf(downloadInfo));
+                    }
+                    return;
+                }
+            }
+            boolean selected = mSelector.isItemSelected(downloadInfo);
+            if (!selected && !mSelector.isItemSelected(downloadInfo) && mSelectController != null && !mSelectController.canSelectItem(downloadInfo)) {
+                return;
+            } else if (selected && mSelectController != null) {
+                mSelectController.delSelectItem(downloadInfo);
+            }
+
             mSelector.toggle(downloadInfo, containingViewHolder.getAdapterPosition());
             if (mOnSelectModeChanged != null) {
                 mOnSelectModeChanged.onSelectCountChanged(mSelector.getSelectedCount(), mData

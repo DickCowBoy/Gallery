@@ -16,13 +16,16 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.data.DataCacheManager;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.ui.BigImagePreview;
 import com.tplink.gallery.view.AutoFitToolBar;
 import com.tplink.gallery.view.LoadingView;
 import com.tplink.gallery.view.SelectViewPager;
@@ -41,6 +44,9 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private ContainerPagerAdapter mPagerAdapter;
     private boolean isActive = false;
     private MediaContract.MediaPresenter mediaPresenter;
+    private BigImagePreview bigImagePreview;
+    private  RecyclerView bigImageView;
+    private RecyclerView filmImageView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +76,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
         if (mPagerAdapter == null) {
             mPagerAdapter = new ContainerPagerAdapter(getFragmentManager(),
-                    this, mPager, awaysInSelectMode());
+                    this, mPager, awaysInSelectMode(), needImage(), needVideo(), needGif(), needResolveBurst());
         } else {
             mPagerAdapter.setInterceptController(mPager);
         }
@@ -83,6 +89,19 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
                 .custom_indicator);
         shapeIndicatorView.setupWithTabLayout(mTabLayout);
         shapeIndicatorView.setupWithViewPager(mPager);
+
+        RecyclerView bigImageView = findViewById(R.id.rcl_gallery);
+        RecyclerView filmImageView = findViewById(R.id.rcl_sub_gallery);
+        bigImagePreview = new BigImagePreview(this, bigImageView, filmImageView);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (bigImagePreview.isShow()) {
+            bigImagePreview.hide();
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -176,5 +195,11 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     public void showAlbumDetail(AlbumBean bean) {
         AlbumImageSlotFragment albumImageSlotFragment = AlbumImageSlotFragment.newInstance(bean.bucketId, needImage(), needVideo(), needGif());
         showViewFragment(albumImageSlotFragment);
+    }
+
+    @Override
+    public void showAllImage(MediaBean data, int index, String key) {
+        bigImagePreview.setData(DataCacheManager.dataManager.getMediaBeanCollectionByKey(key).mediaBeans);
+        bigImagePreview.showIndex(index);
     }
 }

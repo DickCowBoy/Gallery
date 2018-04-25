@@ -1,27 +1,64 @@
 package com.tplink.gallery.ui;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.ListPreloader;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
+import com.bumptech.glide.util.FixedPreloadSizeProvider;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.tplink.gallery.GlideApp;
 import com.tplink.gallery.gallery.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public final int imageWidthPixels = 1024;
+    public final int imageHeightPixels = 768;
+
+
+    private ListPreloader.PreloadSizeProvider sizeProvider;
+    private ListPreloader.PreloadModelProvider preloadModelProvider;
+
     private final RecyclerView mView;
     private List<ImageSource> mList = new ArrayList<>();
     private Context context;
     public LargeImagedAdapter(Context context, RecyclerView view) {
         this.context = context;
         this.mView = view;
+
+        sizeProvider =
+                new FixedPreloadSizeProvider(imageWidthPixels, imageHeightPixels);
+        preloadModelProvider = new ListPreloader.PreloadModelProvider<ImageSource>() {
+
+            @NonNull
+            @Override
+            public List<ImageSource> getPreloadItems(int position) {
+                return Collections.singletonList(mList.get(position));
+            }
+
+            @Nullable
+            @Override
+            public RequestBuilder<?> getPreloadRequestBuilder(ImageSource item) {
+                return GlideApp.with(context).asBitmap().load(item.getUri())
+                        .override(imageWidthPixels, imageHeightPixels)
+                        .placeholder(R.mipmap.ic_launcher);
+            }
+        };
+
+        RecyclerViewPreloader<ImageSource> preloader =
+                new RecyclerViewPreloader<>(GlideApp.with(context), preloadModelProvider, sizeProvider, 10);
+        view.addOnScrollListener(preloader);
     }
 
     @Override
@@ -54,7 +91,10 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 onCreateViewHolder(mView, holdersub.itemView);
                 holdersub.itemView.requestLayout();
                 holdersub.mSubImageView.setImage(mList.get(position));
-                GlideApp.with(context).asBitmap().load(mList.get(position).getUri()).centerInside().into(new CustomTarget(holdersub.mSubImageView));
+                GlideApp.with(context).asBitmap().load(mList.get(position).getUri())
+                        .override(imageWidthPixels, imageHeightPixels)
+                        .placeholder(R.mipmap.ic_launcher)
+                        .into(new CustomTarget(holdersub.mSubImageView));
                 if (mList.get(position) == null) {
 
                 }
@@ -69,7 +109,10 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 onCreateViewHolder(mView, holderimg.itemView);
 
                 holderimg.itemView.requestLayout();
-                GlideApp.with(context).load(mList.get(position).getUri()).into(holderimg.mImageView);
+                GlideApp.with(context)
+                        .load(mList.get(position).getUri())
+                        .override(imageWidthPixels, imageHeightPixels)
+                        .into(holderimg.mImageView);
                 break;
         }
     }
@@ -102,7 +145,7 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         if (mList.get(position).supportScale()) {
-            return 0;
+            return 1;// TODO 需要改成0
         } else {
             return 1;
         }

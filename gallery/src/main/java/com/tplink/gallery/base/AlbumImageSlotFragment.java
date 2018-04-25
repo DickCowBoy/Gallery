@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.utils.MediaUtils;
 
 import java.util.List;
 
@@ -75,8 +76,10 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        imageSlotDataProvider = null;
     }
+
+    @Override
+    protected void loadDataForView() {}
 
     @Override
     public void showMedias(List<MediaBean> beans) {
@@ -91,6 +94,8 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
         args.putBoolean(KEY_NEED_GIF, needGif);
         args.putBoolean(KEY_NEED_IMAGE, needImage);
         args.putBoolean(KEY_NEED_VIDEO, needVideo);
+
+        args.putString(KEY_DATA_KEY , MediaUtils.getBucketId(bucketId, needVideo, needImage, needGif));
 
         AlbumImageSlotFragment fragment = new AlbumImageSlotFragment();
         fragment.setArguments(args);

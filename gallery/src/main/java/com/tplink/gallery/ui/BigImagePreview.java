@@ -18,6 +18,8 @@ import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.bumptech.glide.ListPreloader;
+import com.bumptech.glide.util.FixedPreloadSizeProvider;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.tplink.gallery.bean.MediaBean;
 
@@ -158,7 +160,17 @@ public class BigImagePreview {
 
     public void showIndex(int index) {
         mLargeImageRecycle.scrollToPosition(index);
+        this.mLargeImageRecycle.setVisibility(View.VISIBLE);
+        this.mFilmImageRecycle.setVisibility(View.GONE);
     }
 
+    public void hide() {
+        this.mLargeImageRecycle.setVisibility(View.GONE);
+        this.mFilmImageRecycle.setVisibility(View.GONE);
+    }
+
+    public boolean isShow() {
+        return this.mLargeImageRecycle.getVisibility() == View.VISIBLE;
+    }
 
 }

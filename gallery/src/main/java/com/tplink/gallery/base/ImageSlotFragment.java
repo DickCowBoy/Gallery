@@ -22,14 +22,15 @@ import android.view.ViewGroup;
 import com.tplink.base.DragSelectTouchHelper;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.ui.PhotoThumbView;
+import com.tplink.gallery.utils.MediaUtils;
 import com.tplink.view.CommonDataView;
 
 import java.util.List;
 
 public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoThumbListener {
 
-    private static final String KEY_AWAYS_IN_SELECT_MODE = "KEY_AWAYS_IN_SELECT_MODE";
-    private static final String KEY_DATA_KEY = "KEY_DATA_KEY";
+    protected static final String KEY_AWAYS_IN_SELECT_MODE = "KEY_AWAYS_IN_SELECT_MODE";
+    protected static final String KEY_DATA_KEY = "KEY_DATA_KEY";
 
     PhotoThumbView thumbView = null;
     private boolean awaysInSelectMode = false;
@@ -53,17 +54,23 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
         CommonDataView commonDataView = new CommonDataView(getContext(), null);
         thumbView = new PhotoThumbView(getContext(), commonDataView, awaysInSelectMode);
         thumbView.setPhotoThumbListener(this);
-        if (imageSlotDataProvider != null) {
-            showMediaBeans(imageSlotDataProvider.getDataBeans(dataKey));
-        }
+        loadDataForView();
         return commonDataView;
     }
 
+    protected void loadDataForView() {
+        if (imageSlotDataProvider != null) {
+            showMediaBeans(imageSlotDataProvider.getDataBeans(dataKey));
+        }
+    }
 
 
     @Override
     public void onItemClick(MediaBean data, int index) {
-
+        // 预览图片
+        if (imageSlotDataProvider != null) {
+            imageSlotDataProvider.showAllImage(data, index, dataKey);
+        }
     }
 
     @Override
@@ -105,6 +112,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
 
     public interface ImageSlotDataProvider {
         List<MediaBean> getDataBeans(String key);
+        void showAllImage(MediaBean data, int index, String key);
     }
 
     @Override
