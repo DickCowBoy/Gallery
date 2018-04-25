@@ -15,21 +15,28 @@ import android.util.SparseIntArray;
 
 import com.tplink.gallery.bean.MediaBean;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public abstract class MediaBeanCollection {
+public abstract class MediaBeanCollection<T> {
 
-    private OnContentChanged onContentChanged;
-    public String key;
+    public long lastLoad;
+    public List<T> mediaBeans;
 
-    public abstract void updateMediaBeans(List<MediaBean> beans);
-    public abstract void delMediaBeans(SparseIntArray ids);
-
-    public interface OnContentChanged {
-        void onContentChanged();
+    public MediaBeanCollection(List<T> mediaBeans) {
+        updateCollection(mediaBeans);
     }
 
-    public void setOnContentChanged(OnContentChanged onContentChanged) {
-        this.onContentChanged = onContentChanged;
+    public abstract String key();
+
+    public void updateCollection(List<T> mediaBeans) {
+        this.mediaBeans = mediaBeans;
+        lastLoad = System.currentTimeMillis();
     }
+
+    public  void updateMediaBeans(List<MediaBean> beans){}
+    public  void delMediaBeans(SparseIntArray ids){}
+
 }

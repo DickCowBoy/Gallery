@@ -36,7 +36,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DataCacheManager {
 
-    private static DataCacheManager dataManager = null;
+    public static DataCacheManager dataManager = null;
 
     private SparseArray<MediaBean> cacheItems = new SparseArray<>();
 
@@ -46,9 +46,11 @@ public class DataCacheManager {
 
     private Application application;
 
+    private long lastNotifyChanged;
+
     private DataCacheManager(){}
 
-    public synchronized static DataCacheManager getDataCacheManager() {
+    public synchronized static DataCacheManager initDataCacheManager() {
         if (dataManager == null) {
             dataManager = new DataCacheManager();
         }
@@ -56,7 +58,7 @@ public class DataCacheManager {
     }
 
     public void addMediaBeanCollection(MediaBeanCollection collection) {
-        cacheMediaBeanCollectionMap.put(collection.key, collection);
+        cacheMediaBeanCollectionMap.put(collection.key(), collection);
     }
 
     public MediaBeanCollection getMediaBeanCollectionByKey(String key) {
@@ -106,6 +108,7 @@ public class DataCacheManager {
             // content://media/external/video/media/125  增加视频
             // content://media/external // 图片或者视频被删除
             // 自己触发的删除自己处理不通过内容观察着处理
+            lastNotifyChanged = System.currentTimeMillis();
             List<String> pathSegments = uri.getPathSegments();
             if (pathSegments == null || (pathSegments.size() !=4 && pathSegments.size() != 1)) {
                 return;
@@ -189,5 +192,9 @@ public class DataCacheManager {
                         .subscribe();
             }
         }
+    }
+
+    public boolean needReload(long time) {
+        return lastNotifyChanged > time;
     }
 }

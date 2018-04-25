@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.dao.MediaDao;
+import com.tplink.gallery.data.DataCacheManager;
+import com.tplink.gallery.data.MediaBeanCollection;
+import com.tplink.gallery.utils.MediaUtils;
 
 import java.util.List;
 
@@ -33,7 +36,23 @@ public class AlbumDetailPresenter extends MediaContract.AlbumDetailPresenter {
             public void subscribe(
                     @NonNull FlowableEmitter<List<MediaBean>> flowableEmitter)
                     throws Exception {
-                List<MediaBean> mediaBeans = mediaDao.queryMediaByBucketId(bucketId, needVideo, needImage, needGif);
+                MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.getMediaBeanCollectionByKey(MediaUtils.getBucketId(bucketId, needVideo, needImage, needGif));
+                AlbumDetailCollection albumDetailCollection = null;
+                List<MediaBean> mediaBeans = null;
+                if (mediaBeanCollectionByKey != null) {
+                    albumDetailCollection = (AlbumDetailCollection) mediaBeanCollectionByKey;
+
+                    if (DataCacheManager.dataManager.needReload(albumDetailCollection.lastLoad)) {
+                        mediaBeans = mediaDao.queryMediaByBucketId(bucketId, needVideo, needImage, needGif);
+                        albumDetailCollection.updateCollection(mediaBeans);
+                    } else {
+                        mediaBeans = albumDetailCollection.mediaBeans;
+                    }
+                } else {
+                    mediaBeans = mediaDao.queryMediaByBucketId(bucketId, needVideo, needImage, needGif);
+                    albumDetailCollection = new AlbumDetailCollection(bucketId, mediaBeans, needImage, needVideo, needGif);
+                    DataCacheManager.dataManager.addMediaBeanCollection(albumDetailCollection);
+                }
 
                 flowableEmitter.onNext(mediaBeans);
                 flowableEmitter.onComplete();

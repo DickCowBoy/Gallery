@@ -29,4 +29,18 @@ public class MediaUtils {
     }
 
     public static ImageEngine imageEngine = null;
+
+    public static String getAllMediaKey(boolean needVideo, boolean needImage, boolean needGif, boolean needResolveBurst) {
+        return "ALL_MEDIA" + "_" + needGif + "_" + needImage + "_" + needResolveBurst + "_" + needVideo;
+    }
+
+    public static String getAllAlbumKey(boolean needVideo, boolean needImage, boolean needGif, boolean needResolveBurst) {
+        return "ALL_ALBUM" + "_" + needGif + "_" + needImage + "_" + needResolveBurst + "_" + needVideo;
+    }
+
+    public static String getBucketId(long bucketId, boolean needVideo, boolean needImage, boolean needGif) {
+        return String.valueOf(bucketId) + "_" + needGif + "_" + needImage + "_" + needVideo;
+    }
+
+
 }

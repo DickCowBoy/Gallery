@@ -62,7 +62,7 @@ public class MediaColumn {
         if (cursor != null) {
             MediaBean bean = null;
             int anInt;
-            DataCacheManager dataCacheManager = DataCacheManager.getDataCacheManager();
+            DataCacheManager dataCacheManager = DataCacheManager.initDataCacheManager();
             while (cursor.moveToNext()) {
                 anInt = cursor.getInt(0);
                 // 检查是否存在
@@ -93,7 +93,7 @@ public class MediaColumn {
         if (cursor != null) {
             MediaBean bean = null;
             int anInt;
-            DataCacheManager dataCacheManager = DataCacheManager.getDataCacheManager();
+            DataCacheManager dataCacheManager = DataCacheManager.initDataCacheManager();
             while (cursor.moveToNext()) {
                 anInt = cursor.getInt(0);
                 // 检查是否存在
@@ -124,7 +124,7 @@ public class MediaColumn {
         if (cursor != null) {
             MediaBean bean = null;
             int anInt;
-            DataCacheManager dataCacheManager = DataCacheManager.getDataCacheManager();
+            DataCacheManager dataCacheManager = DataCacheManager.initDataCacheManager();
             while (cursor.moveToNext()) {
                 anInt = cursor.getInt(0);
                 // 检查是否存在
