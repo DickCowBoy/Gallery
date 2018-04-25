@@ -51,7 +51,7 @@ public class MediaDao extends BaseMediaDao {
         String[] selectionArgs = null;
 
         if (queryVideo && ! queryImage) {
-            query(MediaUtils.getVideoUri(),
+            return query(MediaUtils.getVideoUri(),
                     MediaColumn.ALBUM_PROJECTION,
                     ") GROUP BY (bucket_id",
                     null, DATA_MODIFY_DESC,
@@ -64,9 +64,9 @@ public class MediaDao extends BaseMediaDao {
                     selection += " AND " + MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
                 }
             }
-            query(MediaUtils.getImageUri(),
+            return query(MediaUtils.getImageUri(),
                     MediaColumn.ALBUM_PROJECTION,
-                    (TextUtils.isEmpty(selection) ? "" : selection) + ") GROUP BY (bucket_id",
+                    (TextUtils.isEmpty(selection) ? "0=0" : selection) + ") GROUP BY (bucket_id",
                     null, DATA_MODIFY_DESC,
                     cursor -> MediaColumn.parseAlbum(cursor));
         } else if (queryImage && queryVideo) {
@@ -136,9 +136,9 @@ public class MediaDao extends BaseMediaDao {
         String selection = MediaStore.Images.ImageColumns.BUCKET_ID + " = ?";
         String[] selectionArgs = new String[]{String.valueOf(bucketId)};
         if (queryVideo && ! queryImage) {
-            return queryVideo(null, null);
+            return queryVideo(selection, selectionArgs);
         }  else if (queryImage && !queryVideo) {
-            return queryImage(null, null, queryGif);
+            return queryImage(selection, selectionArgs, queryGif);
         } else if (queryImage && queryVideo) {
             selection = selection + " AND " + SELECTION_ALL;
             selectionArgs = new String[]{

@@ -9,7 +9,7 @@
  *
  * Ver 1.0, 2018-04-25 LinJinLong, Create file
  */
-package com.tplink.gallery.base;
+package com.tplink.gallery.data;
 
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.data.MediaBeanCollection;

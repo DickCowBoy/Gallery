@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.dao.MediaDao;
+import com.tplink.gallery.data.AllAlbumMediaCollection;
+import com.tplink.gallery.data.AllMediaBeanCollection;
 import com.tplink.gallery.data.DataCacheManager;
 import com.tplink.gallery.data.MediaBeanCollection;
 import com.tplink.gallery.utils.MediaUtils;
@@ -46,7 +48,7 @@ public class MediaPresenter extends MediaContract.MediaPresenter {
                 List<MediaBean> mediaBeans = null;
                 if (mediaBeanCollectionByKey != null) {
                     allAlbumMediaCollection = (AllMediaBeanCollection) mediaBeanCollectionByKey;
-                    if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad)) {
+                    if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad, needVideo, needImage)) {
                         mediaBeans = mediaDao.queryAllMedia(needVideo, needImage, needGif, needResolveBurst);
                         allAlbumMediaCollection.updateCollection(mediaBeans);
                     } else {
@@ -104,7 +106,7 @@ public class MediaPresenter extends MediaContract.MediaPresenter {
                 List<AlbumBean> mediaBeans = null;
                 if (mediaBeanCollectionByKey != null) {
                     allAlbumMediaCollection = (AllAlbumMediaCollection) mediaBeanCollectionByKey;
-                    if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad)) {
+                    if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad, needVideo, needImage)) {
                         mediaBeans = mediaDao.queryAllAlbum(needVideo, needImage, needGif, needResolveBurst);
                         allAlbumMediaCollection.updateCollection(mediaBeans);
                     } else {

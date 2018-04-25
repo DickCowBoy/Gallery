@@ -1,4 +1,4 @@
-package com.tplink.gallery.base;
+package com.tplink.gallery.data;
 
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.data.MediaBeanCollection;

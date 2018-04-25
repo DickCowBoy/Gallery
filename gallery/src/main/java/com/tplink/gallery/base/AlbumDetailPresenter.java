@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.dao.MediaDao;
+import com.tplink.gallery.data.AlbumDetailCollection;
 import com.tplink.gallery.data.DataCacheManager;
 import com.tplink.gallery.data.MediaBeanCollection;
 import com.tplink.gallery.utils.MediaUtils;
@@ -42,7 +43,7 @@ public class AlbumDetailPresenter extends MediaContract.AlbumDetailPresenter {
                 if (mediaBeanCollectionByKey != null) {
                     albumDetailCollection = (AlbumDetailCollection) mediaBeanCollectionByKey;
 
-                    if (DataCacheManager.dataManager.needReload(albumDetailCollection.lastLoad)) {
+                    if (DataCacheManager.dataManager.needReload(albumDetailCollection.lastLoad, needVideo, needImage)) {
                         mediaBeans = mediaDao.queryMediaByBucketId(bucketId, needVideo, needImage, needGif);
                         albumDetailCollection.updateCollection(mediaBeans);
                     } else {

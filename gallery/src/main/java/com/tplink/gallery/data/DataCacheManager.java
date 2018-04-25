@@ -46,7 +46,8 @@ public class DataCacheManager {
 
     private Application application;
 
-    private long lastNotifyChanged;
+    private long lastNotifyImage;
+    private long lastNotifyVideo;
 
     private DataCacheManager(){}
 
@@ -108,7 +109,6 @@ public class DataCacheManager {
             // content://media/external/video/media/125  增加视频
             // content://media/external // 图片或者视频被删除
             // 自己触发的删除自己处理不通过内容观察着处理
-            lastNotifyChanged = System.currentTimeMillis();
             List<String> pathSegments = uri.getPathSegments();
             if (pathSegments == null || (pathSegments.size() !=4 && pathSegments.size() != 1)) {
                 return;
@@ -117,11 +117,15 @@ public class DataCacheManager {
                 if (pathSegments.size() == 4) {
                     if ("images".equals(pathSegments.get(1))) {
                         updateImageIds.add(pathSegments.get(3));
+                        lastNotifyImage = System.currentTimeMillis();
                     } else if ("video".equals(pathSegments.get(1))) {
                         updateVideoIds.add(pathSegments.get(3));
+                        lastNotifyVideo = System.currentTimeMillis();
                     }
                 } else {
                     lastDelTime = System.currentTimeMillis();
+                    lastNotifyImage = System.currentTimeMillis();
+                    lastNotifyVideo = System.currentTimeMillis();
                 }
             }
 
@@ -194,7 +198,14 @@ public class DataCacheManager {
         }
     }
 
-    public boolean needReload(long time) {
-        return lastNotifyChanged > time;
+    public boolean needReload(long time, boolean video, boolean image) {
+        boolean needReload = false;
+        if (video) {
+            needReload = (time < lastNotifyImage) || needReload;
+        }
+        if (image) {
+            needReload = (time < lastNotifyVideo) || needReload;
+        }
+        return needReload;
     }
 }
