@@ -95,6 +95,9 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
 
     public void showMediaBeans(List<MediaBean> beans) {
         thumbView.showMediaBeans(beans);
+        if (imageSlotDataProvider != null) {
+            imageSlotDataProvider.updateMediaIfNeed();
+        }
     }
 
     public void setInterceptController(DragSelectTouchHelper.InterceptController interceptController) {
@@ -113,6 +116,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
     public interface ImageSlotDataProvider {
         List<MediaBean> getDataBeans(String key);
         void showAllImage(MediaBean data, int index, String key);
+        void updateMediaIfNeed();
     }
 
     @Override

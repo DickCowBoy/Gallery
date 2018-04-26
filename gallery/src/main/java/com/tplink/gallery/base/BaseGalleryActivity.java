@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -48,6 +49,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private  RecyclerView bigImageView;
     private RecyclerView filmImageView;
     private boolean firstLoad = true;
+    private String currentKey;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +101,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     public void onBackPressed() {
         if (bigImagePreview.isShow()) {
             bigImagePreview.hide();
+            currentKey = null;
             return;
         }
         super.onBackPressed();
@@ -220,7 +223,15 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
     @Override
     public void showAllImage(MediaBean data, int index, String key) {
+        currentKey = key;
         bigImagePreview.setData(DataCacheManager.dataManager.getMediaBeanCollectionByKey(key).mediaBeans);
         bigImagePreview.showIndex(index);
+    }
+
+    @Override
+    public void updateMediaIfNeed() {
+        if (!TextUtils.isEmpty(currentKey)) {
+            bigImagePreview.setData(DataCacheManager.dataManager.getMediaBeanCollectionByKey(currentKey).mediaBeans);
+        }
     }
 }

@@ -64,7 +64,9 @@ public class BigImagePreview {
             sources.add(ImageSource.uri(datum.getContentUri(), datum.width, datum.height, 0, datum.mimeType));
         }
         largeImageAdapter.setList(sources);
+        largeImageAdapter.notifyDataSetChanged();
         mFilmCardAdapter.setList(sources);
+        mFilmCardAdapter.notifyDataSetChanged();
     }
 
 
