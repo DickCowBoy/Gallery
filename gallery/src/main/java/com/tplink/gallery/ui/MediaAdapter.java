@@ -12,6 +12,7 @@ package com.tplink.gallery.ui;
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.TransitionOptions;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
+import com.bumptech.glide.load.resource.bitmap.DrawableTransformation;
 import com.tplink.base.Consts;
+import com.tplink.gallery.GlideApp;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.utils.MediaUtils;
@@ -60,8 +65,11 @@ public class MediaAdapter extends CommonDataViewProxy<MediaBean, MediaAdapter.Me
     public void onBindViewHolder(MediaViewHolder viewHolder, int i) {
         super.onBindViewHolder(viewHolder, i);
         MediaBean pic = getItem(i);
-        MediaUtils.imageEngine.loadImage(mContext, pic.lastModify,
-                null, viewHolder.mThumbnail, pic.getContentUri());
+        GlideApp.with(mContext).asBitmap().load(pic.getContentUri())
+                .transition(BitmapTransitionOptions.withCrossFade())
+                .into(viewHolder.mThumbnail);
+//        MediaUtils.imageEngine.loadImage(mContext, pic.lastModify,
+//                null, viewHolder.mThumbnail, pic.getContentUri());
     }
 
     @Override
