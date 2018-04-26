@@ -25,8 +25,10 @@ import com.tplink.gallery.utils.MediaUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
@@ -41,6 +43,7 @@ public class DataCacheManager {
     private SparseArray<MediaBean> cacheItems = new SparseArray<>();
 
     private Map<String, MediaBeanCollection> cacheMediaBeanCollectionMap = new HashMap<>();
+    private Set<OnMediaChanged> onMediaChanged = new HashSet<>();
 
     private ContentObserver observer;
 
@@ -138,53 +141,29 @@ public class DataCacheManager {
                             public String apply(String updateCondition) throws Exception {
                                 List<String> needUpdateImageIds = new ArrayList<>();
                                 List<String> needUpdateVideoIds = new ArrayList<>();
-                                synchronized (updateImageIds) {
-                                    needUpdateImageIds.addAll(updateImageIds);
-                                    needUpdateVideoIds.addAll(updateVideoIds);
-                                }
+                                needUpdateImageIds.addAll(updateImageIds);
+                                needUpdateVideoIds.addAll(updateVideoIds);
+                                long loadTime;
                                 while (needUpdateImageIds.size() > 0 || needUpdateVideoIds.size() > 0 || lastDelTime != 0) {
-                                    MediaDao dao = new MediaDao(application);
-                                    if (needUpdateImageIds.size() > 0) {
-                                        // 查询所有更新的图片
-                                        List<MediaBean> mediaBeans = dao.queryImageById(needUpdateImageIds);
-                                        for (MediaBeanCollection mediaBeanCollection : cacheMediaBeanCollectionMap.values()) {
-                                            mediaBeanCollection.updateMediaBeans(mediaBeans);
-                                        }
-                                        synchronized (updateImageIds) {
-                                            updateImageIds.removeAll(needUpdateImageIds);
-                                            needUpdateImageIds.clear();
-                                        }
+
+                                    loadTime = System.currentTimeMillis();
+                                    for (OnMediaChanged mediaChanged : onMediaChanged) {
+                                        mediaChanged.onMediaChanged(needUpdateImageIds, needUpdateVideoIds, lastDelTime != 0);
                                     }
 
-                                    if (needUpdateVideoIds.size() > 0) {
-                                        List<MediaBean> mediaBeans = dao.queryVideoById(needUpdateImageIds);
-                                        for (MediaBeanCollection mediaBeanCollection : cacheMediaBeanCollectionMap.values()) {
-                                            mediaBeanCollection.updateMediaBeans(mediaBeans);
-                                        }
-                                        synchronized (updateImageIds) {
-                                            updateVideoIds.removeAll(needUpdateVideoIds);
-                                            needUpdateVideoIds.clear();
-                                        }
-                                    }
+                                    updateImageIds.removeAll(needUpdateImageIds);
+                                    needUpdateImageIds.clear();
 
-                                    if (lastDelTime != 0) {
-                                        // 查询所有检查被删除内容
-                                        SparseIntArray array = dao.queryAllMediaIds();
-                                        long loadTime = System.currentTimeMillis();
-                                        for (MediaBeanCollection mediaBeanCollection : cacheMediaBeanCollectionMap.values()) {
-                                            mediaBeanCollection.delMediaBeans(array);
-                                        }
-                                        for (int i = 0; i < array.size(); i++) {
-                                            cacheItems.remove(array.keyAt(i));
-                                        }
-                                        if (lastDelTime <= loadTime) {
-                                            lastDelTime = 0;
-                                        }
-                                    }
+                                    updateVideoIds.removeAll(needUpdateVideoIds);
+                                    needUpdateVideoIds.clear();
 
                                     synchronized (updateImageIds) {
                                         needUpdateImageIds.addAll(updateImageIds);
                                         needUpdateVideoIds.addAll(updateVideoIds);
+                                    }
+
+                                    if (lastDelTime <= loadTime) {
+                                        lastDelTime = 0;
                                     }
 
                                 }
@@ -207,5 +186,17 @@ public class DataCacheManager {
             needReload = (time < lastNotifyVideo) || needReload;
         }
         return needReload;
+    }
+
+    public void registerOnMediaChanged(OnMediaChanged onMediaChanged) {
+        this.onMediaChanged.add(onMediaChanged);
+    }
+    public void unregisterOnMediaChanged(OnMediaChanged onMediaChanged) {
+        this.onMediaChanged.remove(onMediaChanged);
+    }
+
+    public interface OnMediaChanged {
+
+        void onMediaChanged(List<String> images, List<String> videos, boolean del);
     }
 }

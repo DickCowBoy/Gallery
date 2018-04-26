@@ -21,12 +21,12 @@ import java.util.List;
 public class MediaContract {
 
     public interface MediaView extends BaseView{
-        void showMedias(List<MediaBean> beans);
-        void showAlbums(List<AlbumBean> beans);
+        void showMedias(List<MediaBean> beans, long version);
+        void showAlbums(List<AlbumBean> beans, long version);
     }
 
     public interface AlbumView extends BaseView {
-        void showMedias(List<MediaBean> beans);
+        void showMedias(List<MediaBean> beans, long lastLoad);
     }
 
     public static abstract class MediaPresenter extends RxPresenter<MediaView> {
@@ -35,8 +35,10 @@ public class MediaContract {
             super(view);
         }
 
-        public abstract void loadMediaInfo(boolean needImage, boolean needVideo, boolean needGif, boolean needResolveBurst);
-        public abstract void loadAlbumInfo(boolean needImage, boolean needVideo, boolean needGif, boolean needResolveBurst);
+        public abstract void resume();
+        public abstract void pause();
+        public abstract void loadMediaInfo();
+        public abstract void loadAlbumInfo();
     }
 
     public static abstract class AlbumDetailPresenter extends RxPresenter<AlbumView> {
@@ -44,7 +46,9 @@ public class MediaContract {
         public AlbumDetailPresenter(AlbumView view) {
             super(view);
         }
-        public abstract void loadAlbumDetail(long bucketId, boolean needImage, boolean needVideo, boolean needGif);
+        public abstract void resume();
+        public abstract void pause();
+        public abstract void loadAlbumDetail();
 
     }
 

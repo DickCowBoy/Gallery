@@ -47,14 +47,14 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private BigImagePreview bigImagePreview;
     private  RecyclerView bigImageView;
     private RecyclerView filmImageView;
+    private boolean firstLoad = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        mediaPresenter = new MediaPresenter(this, this);
-        mediaPresenter.loadMediaInfo(needImage(), needVideo(), needGif(), needResolveBurst());
-        mediaPresenter.loadAlbumInfo(needImage(), needVideo(), needGif(), needResolveBurst());
+        mediaPresenter = new MediaPresenter(this, this, needImage(), needVideo(), needGif(), needResolveBurst());
+        loadData();
     }
 
     private void initView() {
@@ -107,13 +107,24 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     @Override
     protected void onResume() {
         super.onResume();
+        if (!firstLoad) {
+            loadData();
+        }
+        firstLoad = false;
         isActive = true;
+        mediaPresenter.resume();
+    }
+
+    private void loadData() {
+        mediaPresenter.loadMediaInfo();
+        mediaPresenter.loadAlbumInfo();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         isActive = false;
+        mediaPresenter.pause();
     }
 
     public void showViewFragment(Fragment fragment) {
@@ -166,8 +177,13 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     }
 
     private List<MediaBean> beans;
+    private long mediaVersion = -1;
     @Override
-    public void showMedias(List<MediaBean> beans) {
+    public void showMedias(List<MediaBean> beans, long version) {
+        if (version <= mediaVersion) {
+            return;
+        }
+        mediaVersion = version;
         ImageSlotFragment allFragment = mPagerAdapter.getAllFragment();
         if (allFragment != null) {
             allFragment.showMediaBeans(beans);
@@ -177,8 +193,13 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     }
 
     private List<AlbumBean> albumBeans;
+    private long albumVersion;
     @Override
-    public void showAlbums(List<AlbumBean> beans) {
+    public void showAlbums(List<AlbumBean> beans, long version) {
+        if (version <= albumVersion) {
+            return;
+        }
+        albumVersion = version;
         AlbumSlotFragment allFragment = mPagerAdapter.getAlbumFragment();
         if (allFragment != null) {
             allFragment.showAlbumBeans(beans);

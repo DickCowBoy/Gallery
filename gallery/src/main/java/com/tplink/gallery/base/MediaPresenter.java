@@ -18,63 +18,61 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
 
-public class MediaPresenter extends MediaContract.MediaPresenter {
+public class MediaPresenter extends MediaContract.MediaPresenter implements DataCacheManager.OnMediaChanged {
 
     private MediaDao mediaDao;
+    private boolean needImage;
+    private boolean needVideo;
+    private boolean needGif;
+    private boolean needResolveBurst;
 
-    public MediaPresenter(MediaContract.MediaView view, Context context) {
+    public MediaPresenter(MediaContract.MediaView view, Context context, boolean needImage, boolean needVideo, boolean needGif, boolean needResolveBurst) {
         super(view);
         mediaDao = new MediaDao(context);
+        this.needImage = needImage;
+        this.needVideo = needVideo;
+        this.needGif = needGif;
+        this.needResolveBurst = needResolveBurst;
     }
 
     @Override
-    public void loadMediaInfo(boolean needImage, boolean needVideo, boolean needGif, boolean needResolveBurst) {
-        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<MediaBean>>() {
+    public void resume() {
+        DataCacheManager.dataManager.registerOnMediaChanged(this);
+    }
+
+    @Override
+    public void pause() {
+        DataCacheManager.dataManager.unregisterOnMediaChanged(this);
+    }
+
+    @Override
+    public void loadMediaInfo() {
+        Disposable disposable = Flowable.create(new FlowableOnSubscribe<AllMediaBeanCollection>() {
             @Override
             public void subscribe(
-                    @NonNull FlowableEmitter<List<MediaBean>> flowableEmitter)
+                    @NonNull FlowableEmitter<AllMediaBeanCollection> flowableEmitter)
                     throws Exception {
-
-                MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.
-                        getMediaBeanCollectionByKey(
-                                MediaUtils.getAllMediaKey(needVideo, needImage, needGif, needResolveBurst));
-                AllMediaBeanCollection allAlbumMediaCollection = null;
-                List<MediaBean> mediaBeans = null;
-                if (mediaBeanCollectionByKey != null) {
-                    allAlbumMediaCollection = (AllMediaBeanCollection) mediaBeanCollectionByKey;
-                    if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad, needVideo, needImage)) {
-                        mediaBeans = mediaDao.queryAllMedia(needVideo, needImage, needGif, needResolveBurst);
-                        allAlbumMediaCollection.updateCollection(mediaBeans);
-                    } else {
-                        mediaBeans = allAlbumMediaCollection.mediaBeans;
-                    }
-                } else {
-                    mediaBeans = mediaDao.queryAllMedia(needVideo, needImage, needGif, needResolveBurst);
-                    allAlbumMediaCollection = new AllMediaBeanCollection(mediaBeans,
-                            needVideo,
-                            needImage,
-                            needGif,
-                            needResolveBurst);
-                    DataCacheManager.dataManager.addMediaBeanCollection(allAlbumMediaCollection);
-                }
-                flowableEmitter.onNext(mediaBeans);
+                flowableEmitter.onNext(loadImage());
                 // 解析相册信息
                 flowableEmitter.onComplete();
             }
         }, BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSubscriber<List<MediaBean>>() {
+                .subscribeWith(new DisposableSubscriber<AllMediaBeanCollection>() {
                     @Override
-                    public void onNext(List<MediaBean> albumList) {
+                    public void onNext(AllMediaBeanCollection albumList) {
                         if (mView.isActive()) {
-                            mView.showMedias(albumList);
+                            mView.showMedias(albumList.mediaBeans, albumList.lastLoad);
                         }
                     }
 
@@ -82,7 +80,7 @@ public class MediaPresenter extends MediaContract.MediaPresenter {
                     public void onError(Throwable throwable) {
                         if (mView.isActive()) {
                             // 不做处理
-                            mView.showAlbums(null);
+                            mView.showAlbums(null, -1);
                         }
                     }
 
@@ -94,41 +92,25 @@ public class MediaPresenter extends MediaContract.MediaPresenter {
     }
 
     @Override
-    public void loadAlbumInfo(boolean needImage, boolean needVideo, boolean needGif, boolean needResolveBurst) {
-        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<AlbumBean>>() {
+    public void loadAlbumInfo() {
+        Disposable disposable = Flowable.create(new FlowableOnSubscribe<AllAlbumMediaCollection>() {
             @Override
             public void subscribe(
-                    @NonNull FlowableEmitter<List<AlbumBean>> flowableEmitter)
+                    @NonNull FlowableEmitter<AllAlbumMediaCollection> flowableEmitter)
                     throws Exception {
-                MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.getMediaBeanCollectionByKey(
-                        MediaUtils.getAllAlbumKey(needVideo, needImage, needGif, needResolveBurst));
-                AllAlbumMediaCollection allAlbumMediaCollection = null;
-                List<AlbumBean> mediaBeans = null;
-                if (mediaBeanCollectionByKey != null) {
-                    allAlbumMediaCollection = (AllAlbumMediaCollection) mediaBeanCollectionByKey;
-                    if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad, needVideo, needImage)) {
-                        mediaBeans = mediaDao.queryAllAlbum(needVideo, needImage, needGif, needResolveBurst);
-                        allAlbumMediaCollection.updateCollection(mediaBeans);
-                    } else {
-                        mediaBeans = allAlbumMediaCollection.mediaBeans;
-                    }
-                } else {
-                    mediaBeans = mediaDao.queryAllAlbum(needVideo, needImage, needGif, needResolveBurst);
-                    allAlbumMediaCollection = new AllAlbumMediaCollection(mediaBeans, needVideo, needImage, needGif, needResolveBurst);
-                    DataCacheManager.dataManager.addMediaBeanCollection(allAlbumMediaCollection);
-                }
-                flowableEmitter.onNext(mediaBeans);
+
+                flowableEmitter.onNext(loadAlbum());
                 // 解析相册信息
                 flowableEmitter.onComplete();
             }
         }, BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSubscriber<List<AlbumBean>>() {
+                .subscribeWith(new DisposableSubscriber<AllAlbumMediaCollection>() {
                     @Override
-                    public void onNext(List<AlbumBean> albumList) {
+                    public void onNext(AllAlbumMediaCollection albumList) {
                         if (mView.isActive()) {
-                            mView.showAlbums(albumList);
+                            mView.showAlbums(albumList.mediaBeans, albumList.lastLoad);
                         }
                     }
 
@@ -136,7 +118,7 @@ public class MediaPresenter extends MediaContract.MediaPresenter {
                     public void onError(Throwable throwable) {
                         if (mView.isActive()) {
                             // 不做处理
-                            mView.showAlbums(null);
+                            mView.showAlbums(null, -1);
                         }
                     }
 
@@ -145,5 +127,122 @@ public class MediaPresenter extends MediaContract.MediaPresenter {
                     }
                 });
         addDispose(disposable);
+    }
+
+    @Override
+    public void onMediaChanged(List<String> images, List<String> videos, boolean del) {
+        if (del) {
+            updateMedia();
+            return;
+        }
+        if (needImage && images.size() > 0) {
+            updateMedia();
+            return;
+        }
+        if (needVideo && videos.size() > 0) {
+            updateMedia();
+            return;
+        }
+    }
+
+    private void updateMedia() {
+        AllMediaBeanCollection allMediaBeanCollection = loadImage();
+        AllAlbumMediaCollection allAlbumMediaCollection = loadAlbum();
+        Observable.just(allMediaBeanCollection)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AllMediaBeanCollection>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(AllMediaBeanCollection value) {
+                if (mView.isActive()) {
+                    mView.showMedias(value.mediaBeans, value.lastLoad);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
+        Observable.just(allAlbumMediaCollection)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AllAlbumMediaCollection>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(AllAlbumMediaCollection value) {
+                if (mView.isActive()) {
+                    mView.showAlbums(value.mediaBeans, value.lastLoad);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private AllAlbumMediaCollection loadAlbum() {
+        MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.getMediaBeanCollectionByKey(
+                MediaUtils.getAllAlbumKey(needVideo, needImage, needGif, needResolveBurst));
+        AllAlbumMediaCollection allAlbumMediaCollection = null;
+        List<AlbumBean> mediaBeans = null;
+        if (mediaBeanCollectionByKey != null) {
+            allAlbumMediaCollection = (AllAlbumMediaCollection) mediaBeanCollectionByKey;
+            if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad, needVideo, needImage)) {
+                mediaBeans = mediaDao.queryAllAlbum(needVideo, needImage, needGif, needResolveBurst);
+                allAlbumMediaCollection.updateCollection(mediaBeans);
+            } else {
+                mediaBeans = allAlbumMediaCollection.mediaBeans;
+            }
+        } else {
+            mediaBeans = mediaDao.queryAllAlbum(needVideo, needImage, needGif, needResolveBurst);
+            allAlbumMediaCollection = new AllAlbumMediaCollection(mediaBeans, needVideo, needImage, needGif, needResolveBurst);
+            DataCacheManager.dataManager.addMediaBeanCollection(allAlbumMediaCollection);
+        }
+        return allAlbumMediaCollection;
+    }
+
+    public AllMediaBeanCollection loadImage() {
+        MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.
+                getMediaBeanCollectionByKey(
+                        MediaUtils.getAllMediaKey(needVideo, needImage, needGif, needResolveBurst));
+        AllMediaBeanCollection allAlbumMediaCollection = null;
+        List<MediaBean> mediaBeans = null;
+        if (mediaBeanCollectionByKey != null) {
+            allAlbumMediaCollection = (AllMediaBeanCollection) mediaBeanCollectionByKey;
+            if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad, needVideo, needImage)) {
+                mediaBeans = mediaDao.queryAllMedia(needVideo, needImage, needGif, needResolveBurst);
+                allAlbumMediaCollection.updateCollection(mediaBeans);
+            }
+        } else {
+            mediaBeans = mediaDao.queryAllMedia(needVideo, needImage, needGif, needResolveBurst);
+            allAlbumMediaCollection = new AllMediaBeanCollection(mediaBeans,
+                    needVideo,
+                    needImage,
+                    needGif,
+                    needResolveBurst);
+            DataCacheManager.dataManager.addMediaBeanCollection(allAlbumMediaCollection);
+        }
+        return allAlbumMediaCollection;
     }
 }

@@ -38,6 +38,7 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
     private boolean needGif;
 
     private boolean isActive;
+    private boolean firstLoad = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,20 +50,31 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
             needVideo = arguments.getBoolean(KEY_NEED_VIDEO);
             needGif = arguments.getBoolean(KEY_NEED_GIF);
         }
-        albumDetailPresenter = new AlbumDetailPresenter(getContext(), this);
-        albumDetailPresenter.loadAlbumDetail(bucketId, needImage, needVideo, needGif);
+        albumDetailPresenter = new AlbumDetailPresenter(getContext(), this, bucketId, needImage, needVideo, needGif);
+        albumDetailPresenter.loadAlbumDetail();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        albumDetailPresenter.resume();
         isActive = true;
+        if (!firstLoad) {
+            albumDetailPresenter.loadAlbumDetail();
+        }
+        firstLoad = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isActive = false;
+        albumDetailPresenter.pause();
     }
 
     @Override
     public boolean isActive() {
         return isActive;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        isActive = false;
     }
 
     @Nullable
@@ -81,8 +93,13 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
     @Override
     protected void loadDataForView() {}
 
+    private long dataVersion;
     @Override
-    public void showMedias(List<MediaBean> beans) {
+    public void showMedias(List<MediaBean> beans, long version) {
+        if (version <= dataVersion){
+            return;
+        }
+        dataVersion = version;
         showMediaBeans(beans);
     }
 

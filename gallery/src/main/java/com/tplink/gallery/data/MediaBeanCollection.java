@@ -35,8 +35,4 @@ public abstract class MediaBeanCollection<T> {
         this.mediaBeans = mediaBeans;
         lastLoad = System.currentTimeMillis();
     }
-
-    public  void updateMediaBeans(List<MediaBean> beans){}
-    public  void delMediaBeans(SparseIntArray ids){}
-
 }
