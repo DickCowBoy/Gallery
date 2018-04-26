@@ -172,7 +172,7 @@ public final class ImageSource {
         return tile;
     }
 
-    protected final int getSWidth() {
+    public final int getSWidth() {
         if (orientation % 180 ==0) {
             return sWidth;
         } else {
@@ -180,7 +180,7 @@ public final class ImageSource {
         }
     }
 
-    protected final int getSHeight() {
+    public final int getSHeight() {
         if (orientation % 180 ==0) {
             return sHeight;
         } else {

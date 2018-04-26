@@ -12,19 +12,24 @@ import android.widget.ImageView;
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
+import com.bumptech.glide.request.target.BaseTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.transition.Transition;
 import com.bumptech.glide.util.FixedPreloadSizeProvider;
+import com.bumptech.glide.util.Synthetic;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.tplink.gallery.GlideApp;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.view.BigImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public final int imageWidthPixels = 1024;
-    public final int imageHeightPixels = 768;
+    public final int imageWidthPixels = 640;
+    public final int imageHeightPixels = 640;
 
 
     private ListPreloader.PreloadSizeProvider sizeProvider;
@@ -57,7 +62,7 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         };
 
         RecyclerViewPreloader<ImageSource> preloader =
-                new RecyclerViewPreloader<>(GlideApp.with(context), preloadModelProvider, sizeProvider, 10);
+                new RecyclerViewPreloader<>(GlideApp.with(context), preloadModelProvider, sizeProvider, 3);
         view.addOnScrollListener(preloader);
     }
 
@@ -109,6 +114,9 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 onCreateViewHolder(mView, holderimg.itemView);
 
                 holderimg.itemView.requestLayout();
+
+                ImageSource imageSource = mList.get(position);
+                holderimg.mImageView.setBackDx(imageSource.getSWidth() / 1.0F / imageSource.getSHeight());
                 GlideApp.with(context)
                         .load(mList.get(position).getUri())
                         .override(imageWidthPixels, imageHeightPixels)
@@ -133,10 +141,10 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class ViewHolderImage extends RecyclerView.ViewHolder {
-        public final ImageView mImageView;
+        public final BigImageView mImageView;
         public ViewHolderImage(final View itemView) {
             super(itemView);
-            mImageView = (ImageView) itemView.findViewById(R.id.imageView);
+            mImageView = itemView.findViewById(R.id.imageView);
             //mSubView = (SubsamplingScaleImageView) itemView.findViewById(R.id.subimageView);
         }
 
@@ -165,5 +173,32 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         lp.height = parent.getHeight() * 2 / 3;
         lp.topMargin = parent.getHeight() / 6;
         itemView.setLayoutParams(lp);
+    }
+
+    /**
+     * 预先加载下一条
+     */
+    private static final class PreloadTarget extends BaseTarget<Object> {
+        @Synthetic
+        int photoHeight;
+        @Synthetic int photoWidth;
+
+        @Synthetic
+        PreloadTarget() { }
+
+        @Override
+        public void onResourceReady(Object resource, Transition<? super Object> transition) {
+            // Do nothing.
+        }
+
+        @Override
+        public void getSize(SizeReadyCallback cb) {
+            cb.onSizeReady(photoWidth, photoHeight);
+        }
+
+        @Override
+        public void removeCallback(SizeReadyCallback cb) {
+            // Do nothing because we don't retain references to SizeReadyCallbacks.
+        }
     }
 }
