@@ -12,6 +12,7 @@
 package com.tplink.gallery.ui;
 
 import android.content.Context;
+import android.support.v7.util.DiffUtil;
 
 import com.tplink.base.CommonUtils;
 import com.tplink.gallery.bean.MediaBean;
@@ -47,7 +48,44 @@ public class PhotoThumbView implements CommonDataViewProxy.OnDataItemClick<Media
     }
 
     public void showMediaBeans(List<MediaBean> data) {
-        mDataProxy.updateData(data);
+        List<MediaBean> data1 = mDataProxy.getData();
+        if (data1 != null && data1.size() > 0) {
+            mDataProxy.updateData(data, DiffUtil.calculateDiff(new MediaBeanDiffCallback(data1, data), true));
+        } else {
+            mDataProxy.updateData(data);
+        }
+        
+    }
+
+    private class MediaBeanDiffCallback extends DiffUtil.Callback {
+
+        private List<MediaBean> oldBeans;
+        private List<MediaBean> newBeans;
+
+        public MediaBeanDiffCallback(List<MediaBean> oldBeans, List<MediaBean> newBeans) {
+            this.oldBeans = oldBeans;
+            this.newBeans = newBeans;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldBeans == null ? 0 : oldBeans.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newBeans == null ? 0 : newBeans.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return newBeans.get(newItemPosition) == oldBeans.get(oldItemPosition);
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return newBeans.get(newItemPosition).equals(oldBeans.get(oldItemPosition));
+        }
     }
 
     public void delSelectItems(MediaBean item) {

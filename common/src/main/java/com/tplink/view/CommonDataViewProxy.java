@@ -661,6 +661,10 @@ public abstract class CommonDataViewProxy<T, M extends CommonDataViewHolder>
         }
     }
 
+    public List<T> getData() {
+        return mData;
+    }
+
     public void setSelectController(SelectController<T> mSelectController) {
         this.mSelectController = mSelectController;
     }
