@@ -63,8 +63,8 @@ public class BigImagePreview {
         for (MediaBean datum : data) {
             sources.add(ImageSource.uri(datum.getContentUri(), datum.width, datum.height, 0, datum.mimeType));
         }
-        largeImageAdapter.setList(sources);
-        largeImageAdapter.notifyDataSetChanged();
+        largeImageAdapter.updateList(sources);
+        //largeImageAdapter.notifyDataSetChanged();
         mFilmCardAdapter.setList(sources);
         mFilmCardAdapter.notifyDataSetChanged();
     }
@@ -167,6 +167,8 @@ public class BigImagePreview {
     }
 
     public void hide() {
+        largeImageAdapter.setList(null);
+        mFilmCardAdapter.setList(null);
         this.mLargeImageRecycle.setVisibility(View.GONE);
         this.mFilmImageRecycle.setVisibility(View.GONE);
     }

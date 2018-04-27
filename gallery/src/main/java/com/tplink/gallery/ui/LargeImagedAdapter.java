@@ -3,11 +3,11 @@ package com.tplink.gallery.ui;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.RequestBuilder;
@@ -87,6 +87,48 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void updateList(List<ImageSource> list) {
+        if (mList == null || mList.size() == 0) {
+            setList(list);
+            return;
+        }
+        LargeImageDiffUtil largeImageDiffUtil = new LargeImageDiffUtil(mList);
+        mList = list;
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(largeImageDiffUtil);
+        diffResult.dispatchUpdatesTo(this);
+    }
+
+    private class LargeImageDiffUtil extends DiffUtil.Callback{
+
+        private List<ImageSource> oldList;
+
+        public LargeImageDiffUtil(List<ImageSource> oldList) {
+            this.oldList = oldList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldList == null ? 0 : oldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return mList.size();
+        }
+
+        // 条目是否一样
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).getUri().equals(mList.get(newItemPosition).getUri());
+        }
+
+        // 内容一致
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).getUri().equals(mList.get(newItemPosition).getUri());
+        }
+    }
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         // mCardAdapterHelper.onBindViewHolder(holder.itemView, position, getItemCount());
@@ -127,7 +169,7 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return mList == null ? 0 : mList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
