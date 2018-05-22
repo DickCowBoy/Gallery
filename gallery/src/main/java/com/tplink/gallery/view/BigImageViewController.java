@@ -1,6 +1,7 @@
 package com.tplink.gallery.view;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,7 +17,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.OverScroller;
+import android.widget.Scroller;
 
+import com.ortiz.touch.TouchImageView;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.utils.ThreadUtils;
 
@@ -29,6 +33,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     public static final int STATE_NONE = 0;
     public static final int STATE_SCALE = 1;
     public static final int STATE_ANIMATE_ZOOM = 2;
+    public static final int STATE_DRAG = 3;
+    public static final int STATE_FLING = 4;
 
     private static final float SUPER_MIN_MULTIPLIER = .75f;
     private static final float SUPER_MAX_MULTIPLIER = 1.25f;
@@ -46,12 +52,16 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     private float superMaxScale;
     private float normalizedScale;
     private float[] m;
+    // Remember last point position for dragging
+    private PointF last = new PointF();
+    private Fling fling;
+
 
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mGestureDetector;
     private Matrix mCurrentImageMatrix;
 
-    @IntDef({STATE_NONE, STATE_SCALE, STATE_ANIMATE_ZOOM})
+    @IntDef({STATE_NONE, STATE_SCALE, STATE_ANIMATE_ZOOM, STATE_DRAG, STATE_FLING})
     @Retention(RetentionPolicy.SOURCE)
     public @interface State {
     }
@@ -195,6 +205,21 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 consumed = true;
             }
             return consumed;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+            if (fling != null) {
+                //
+                // If a previous fling is still active, it should be cancelled so that two flings
+                // are not run simultaenously.
+                //
+                fling.cancelFling();
+            }
+            fling = new Fling((int) velocityX, (int) velocityY);
+            compatPostOnAnimation(fling);
+            return super.onFling(e1, e2, velocityX, velocityY);
         }
     }
 
@@ -406,7 +431,45 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     protected boolean processTouchEvent(MotionEvent event) {
         mScaleDetector.onTouchEvent(event);
         mGestureDetector.onTouchEvent(event);
+        PointF curr = new PointF(event.getX(), event.getY());
+
+        if (state == STATE_NONE || state == STATE_DRAG || state == STATE_FLING) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    last.set(curr);
+                    if (fling != null)
+                        fling.cancelFling();
+                    setState(STATE_DRAG);
+                    break;
+
+                case MotionEvent.ACTION_MOVE:
+                    if (state == STATE_DRAG) {
+                        float deltaX = curr.x - last.x;
+                        float deltaY = curr.y - last.y;
+                        float fixTransX = getFixDragTrans(deltaX, mTextureView.getWidth(), getShowImageWidth());
+                        float fixTransY = getFixDragTrans(deltaY, mTextureView.getHeight(), getShowImageHeight());
+                        mCurrentImageMatrix.postTranslate(fixTransX, fixTransY);
+                        fixTrans();
+                        last.set(curr.x, curr.y);
+                    }
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_POINTER_UP:
+                    setState(STATE_NONE);
+                    break;
+            }
+        }
+        mRenderThread.notifyDirty(System.currentTimeMillis());
+
         return true;
+    }
+
+    private float getFixDragTrans(float delta, float viewSize, float contentSize) {
+        if (contentSize <= viewSize) {
+            return 0;
+        }
+        return delta;
     }
 
     @Override
@@ -467,5 +530,155 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     private int getShowImageHeight() {
         return (int) (bitmap.getHeight() * normalizedScale * originScale);
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+    private class CompatScroller {
+        Scroller scroller;
+        OverScroller overScroller;
+        boolean isPreGingerbread;
+
+        public CompatScroller(Context context) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
+                isPreGingerbread = true;
+                scroller = new Scroller(context);
+
+            } else {
+                isPreGingerbread = false;
+                overScroller = new OverScroller(context);
+            }
+        }
+
+        public void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY) {
+            if (isPreGingerbread) {
+                scroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
+            } else {
+                overScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
+            }
+        }
+
+        public void forceFinished(boolean finished) {
+            if (isPreGingerbread) {
+                scroller.forceFinished(finished);
+            } else {
+                overScroller.forceFinished(finished);
+            }
+        }
+
+        public boolean isFinished() {
+            if (isPreGingerbread) {
+                return scroller.isFinished();
+            } else {
+                return overScroller.isFinished();
+            }
+        }
+
+        public boolean computeScrollOffset() {
+            if (isPreGingerbread) {
+                return scroller.computeScrollOffset();
+            } else {
+                overScroller.computeScrollOffset();
+                return overScroller.computeScrollOffset();
+            }
+        }
+
+        public int getCurrX() {
+            if (isPreGingerbread) {
+                return scroller.getCurrX();
+            } else {
+                return overScroller.getCurrX();
+            }
+        }
+
+        public int getCurrY() {
+            if (isPreGingerbread) {
+                return scroller.getCurrY();
+            } else {
+                return overScroller.getCurrY();
+            }
+        }
+    }
+
+
+    /**
+     * Fling launches sequential runnables which apply
+     * the fling graphic to the image. The values for the translation
+     * are interpolated by the Scroller.
+     * @author Ortiz
+     *
+     */
+    private class Fling implements Runnable {
+
+        CompatScroller scroller;
+        int currX, currY;
+
+        Fling(int velocityX, int velocityY) {
+            setState(STATE_FLING);
+            scroller = new CompatScroller(mTextureView.getContext());
+            mCurrentImageMatrix.getValues(m);
+
+            int startX = (int) m[Matrix.MTRANS_X];
+            int startY = (int) m[Matrix.MTRANS_Y];
+            int minX, maxX, minY, maxY;
+
+            if (getShowImageWidth() > mTextureView.getWidth()) {
+                minX = mTextureView.getWidth() - (int) getShowImageWidth();
+                maxX = 0;
+
+            } else {
+                minX = maxX = startX;
+            }
+
+            if (getShowImageHeight() > mTextureView.getHeight()) {
+                minY = mTextureView.getHeight() - (int) getShowImageHeight();
+                maxY = 0;
+
+            } else {
+                minY = maxY = startY;
+            }
+
+            scroller.fling(startX, startY, (int) velocityX, (int) velocityY, minX,
+                    maxX, minY, maxY);
+            currX = startX;
+            currY = startY;
+        }
+
+        public void cancelFling() {
+            if (scroller != null) {
+                setState(STATE_NONE);
+                scroller.forceFinished(true);
+            }
+        }
+
+        @Override
+        public void run() {
+
+            //
+            // OnTouchImageViewListener is set: TouchImageView listener has been flung by user.
+            // Listener runnable updated with each frame of fling animation.
+            //
+//todo            if (touchImageViewListener != null) {
+//                touchImageViewListener.onMove();
+//            }
+
+            if (scroller.isFinished()) {
+                scroller = null;
+                return;
+            }
+
+            if (scroller.computeScrollOffset()) {
+                int newX = scroller.getCurrX();
+                int newY = scroller.getCurrY();
+                int transX = newX - currX;
+                int transY = newY - currY;
+                currX = newX;
+                currY = newY;
+                mCurrentImageMatrix.postTranslate(transX, transY);
+                fixTrans();
+                mRenderThread.notifyDirty(System.currentTimeMillis());
+                compatPostOnAnimation(this);
+            }
+        }
     }
 }
