@@ -195,7 +195,7 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         if (mList.get(position).supportScale()) {
-            return 1;// TODO 需要改成0
+            return 0;// TODO 需要改成0
         } else {
             return 1;
         }

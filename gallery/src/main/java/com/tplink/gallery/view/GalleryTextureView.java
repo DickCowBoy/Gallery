@@ -13,7 +13,7 @@ public class GalleryTextureView extends TextureView implements TextureView.Surfa
     }
 
     public GalleryTextureView(Context context, AttributeSet attrs) {
-        super(context, attrs, 0);
+        this(context, attrs, 0);
     }
 
     public void setViewController(ViewController viewController) {
@@ -27,25 +27,27 @@ public class GalleryTextureView extends TextureView implements TextureView.Surfa
 
     private void initView() {
         setOpaque(true);
+        setSurfaceTextureListener(this);
     }
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
+        viewController.onAvailable(i, i1);
     }
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1) {
-
+        viewController.onSizeChanged(i, i1);
     }
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+        viewController.onDisable();
         return false;
     }
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-
     }
 
     @Override
@@ -66,7 +68,7 @@ public class GalleryTextureView extends TextureView implements TextureView.Surfa
             this.mTextureView = mTextureView;
         }
 
-        protected abstract void onAvailable();
+        protected abstract void onAvailable(int width, int height);
         protected abstract void onDisable();
         protected abstract void onSizeChanged(int width, int height);
         protected abstract boolean processTouchEvent(MotionEvent event);

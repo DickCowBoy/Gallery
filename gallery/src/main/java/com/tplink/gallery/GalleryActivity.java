@@ -12,11 +12,13 @@
 package com.tplink.gallery;
 
 import com.tplink.gallery.base.BaseGalleryActivity;
+import com.tplink.gallery.gallery.R;
 
 public class GalleryActivity extends BaseGalleryActivity {
 
     @Override
     protected boolean needImage() {
+        int id = R.string.xx;
         return true;
     }
 
