@@ -1,17 +1,21 @@
 package com.tplink.gallery.view;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
+import android.os.Build;
 import android.support.annotation.IntDef;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.utils.ThreadUtils;
@@ -24,6 +28,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     public static final int STATE_NONE = 0;
     public static final int STATE_SCALE = 1;
+    public static final int STATE_ANIMATE_ZOOM = 2;
 
     private static final float SUPER_MIN_MULTIPLIER = .75f;
     private static final float SUPER_MAX_MULTIPLIER = 1.25f;
@@ -44,10 +49,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mGestureDetector;
-    private GestureDetector.OnDoubleTapListener doubleTapListener = null;
     private Matrix mCurrentImageMatrix;
 
-    @IntDef({STATE_NONE, STATE_SCALE})
+    @IntDef({STATE_NONE, STATE_SCALE, STATE_ANIMATE_ZOOM})
     @Retention(RetentionPolicy.SOURCE)
     public @interface State {
     }
@@ -70,7 +74,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         mGestureDetector = new GestureDetector(mTextureView.getContext(), new GestureListener());
 
         minScale = 1;
-        maxScale = 3;
+        maxScale = 2;
         superMinScale = SUPER_MIN_MULTIPLIER * minScale;
         superMaxScale = SUPER_MAX_MULTIPLIER * maxScale;
         normalizedScale = 1;
@@ -181,8 +185,164 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            boolean consumed = false;
+            if (state == STATE_NONE) {
+                float targetZoom = (normalizedScale == minScale) ? maxScale : minScale;
+                DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, e.getX(), e.getY(), false);
+                compatPostOnAnimation(doubleTap);
+                consumed = true;
+            }
+            return consumed;
+        }
     }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void compatPostOnAnimation(Runnable runnable) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mTextureView.postOnAnimation(runnable);
+
+        } else {
+            mTextureView.postDelayed(runnable, 1000/60);
+        }
+    }
+
+    /**
+     * Inverse of transformCoordTouchToBitmap. This function will transform the coordinates in the
+     * drawable's coordinate system to the view's coordinate system.
+     * @param bx x-coordinate in original bitmap coordinate system
+     * @param by y-coordinate in original bitmap coordinate system
+     * @return Coordinates of the point in the view's coordinate system.
+     */
+    private PointF transformCoordBitmapToTouch(float bx, float by) {
+        mCurrentImageMatrix.getValues(m);
+        float origW = bitmap.getWidth();
+        float origH = bitmap.getHeight();
+        float px = bx / origW;
+        float py = by / origH;
+        float finalX = m[Matrix.MTRANS_X] + getShowImageWidth() * px;
+        float finalY = m[Matrix.MTRANS_Y] + getShowImageHeight() * py;
+        return new PointF(finalX , finalY);
+    }
+
+    private class DoubleTapZoom implements Runnable {
+
+        private long startTime;
+        private static final float ZOOM_TIME = 200;
+        private float startZoom, targetZoom;
+        private float bitmapX, bitmapY;
+        private boolean stretchImageToSuper;
+        private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+        private PointF startTouch;
+        private PointF endTouch;
+
+        DoubleTapZoom(float targetZoom, float focusX, float focusY, boolean stretchImageToSuper) {
+            setState(STATE_ANIMATE_ZOOM);
+            startTime = System.currentTimeMillis();
+            this.startZoom = normalizedScale;
+            this.targetZoom = targetZoom;
+            this.stretchImageToSuper = stretchImageToSuper;
+            PointF bitmapPoint = transformCoordTouchToBitmap(focusX, focusY, false);
+            this.bitmapX = bitmapPoint.x;
+            this.bitmapY = bitmapPoint.y;
+
+            //
+            // Used for translating image during scaling
+            //
+            startTouch = transformCoordBitmapToTouch(bitmapX, bitmapY);
+            endTouch = new PointF(mTextureView.getWidth() / 2, mTextureView.getHeight() / 2);
+        }
+
+        @Override
+        public void run() {
+            float t = interpolate();
+            double deltaScale = calculateDeltaScale(t);
+            scaleImage(deltaScale, bitmapX, bitmapY, stretchImageToSuper);
+            translateImageToCenterTouchPosition(t);
+            fixScaleTrans();
+            mRenderThread.notifyDirty(System.currentTimeMillis());
+//
+//TODO            if (touchImageViewListener != null) {
+//                touchImageViewListener.onMove();
+//            }
+
+            if (t < 1f) {
+                //
+                // We haven't finished zooming
+                //
+                compatPostOnAnimation(this);
+
+            } else {
+                //
+                // Finished zooming
+                //
+                setState(STATE_NONE);
+            }
+        }
+
+        /**
+         * Interpolate between where the image should start and end in order to translate
+         * the image so that the point that is touched is what ends up centered at the end
+         * of the zoom.
+         * @param t
+         */
+        private void translateImageToCenterTouchPosition(float t) {
+            float targetX = startTouch.x + t * (endTouch.x - startTouch.x);
+            float targetY = startTouch.y + t * (endTouch.y - startTouch.y);
+            PointF curr = transformCoordBitmapToTouch(bitmapX, bitmapY);
+            mCurrentImageMatrix.postTranslate(targetX - curr.x, targetY - curr.y);
+        }
+
+        /**
+         * Use interpolator to get t
+         * @return
+         */
+        private float interpolate() {
+            long currTime = System.currentTimeMillis();
+            float elapsed = (currTime - startTime) / ZOOM_TIME;
+            elapsed = Math.min(1f, elapsed);
+            return interpolator.getInterpolation(elapsed);
+        }
+
+        /**
+         * Interpolate the current targeted zoom and get the delta
+         * from the current zoom.
+         * @param t
+         * @return
+         */
+        private double calculateDeltaScale(float t) {
+            double zoom = startZoom + t * (targetZoom - startZoom);
+            return zoom / normalizedScale;
+        }
+    }
+
+    /**
+     * This function will transform the coordinates in the touch event to the coordinate
+     * system of the drawable that the imageview contain
+     * @param x x-coordinate of touch event
+     * @param y y-coordinate of touch event
+     * @param clipToBitmap Touch event may occur within view, but outside image content. True, to clip return value
+     * 			to the bounds of the bitmap size.
+     * @return Coordinates of the point touched, in the coordinate system of the original drawable.
+     */
+    private PointF transformCoordTouchToBitmap(float x, float y, boolean clipToBitmap) {
+        mCurrentImageMatrix.getValues(m);
+        float origW = bitmap.getWidth();
+        float origH = bitmap.getHeight();
+        float transX = m[Matrix.MTRANS_X];
+        float transY = m[Matrix.MTRANS_Y];
+        float finalX = ((x - transX) * origW) / getShowImageWidth();
+        float finalY = ((y - transY) * origH) / getShowImageHeight();
+
+        if (clipToBitmap) {
+            finalX = Math.min(Math.max(finalX, 0), origW);
+            finalY = Math.min(Math.max(finalY, 0), origH);
+        }
+
+        return new PointF(finalX , finalY);
+    }
+
 
     public void updateMedias(List<MediaBean> mediaBeans) {
         this.mediaBeans = mediaBeans;
