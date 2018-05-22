@@ -38,7 +38,7 @@ public class LiveCameraActivity extends Activity {
     protected void onResume() {
         super.onResume();
         // load image
-        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.nature_1);
+        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.cba872e4e0a4b47596613ff39846ec8c);
         bigImageViewController.setBitmap(drawable.getBitmap());
         bigImageViewController.enable();
     }

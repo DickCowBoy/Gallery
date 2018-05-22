@@ -51,11 +51,18 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     private float superMinScale;
     private float superMaxScale;
     private float normalizedScale;
+    private float filmScale;
     private float[] m;
     // Remember last point position for dragging
     private PointF last = new PointF();
     private Fling fling;
 
+    private boolean isFilmModeEnable = true;
+    private boolean isInFilmMode = false;
+
+    public void setFilmModeEnable(boolean filmModeEnable) {
+        isFilmModeEnable = filmModeEnable;
+    }
 
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mGestureDetector;
@@ -86,6 +93,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         minScale = 1;
         maxScale = 2;
         superMinScale = SUPER_MIN_MULTIPLIER * minScale;
+        filmScale = superMinScale;
         superMaxScale = SUPER_MAX_MULTIPLIER * maxScale;
         normalizedScale = 1;
         m = new float[9];
@@ -101,7 +109,15 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            scaleImage(detector.getScaleFactor(), detector.getFocusX(), detector.getFocusY(), false);
+            int scaleType = scaleImage(detector.getScaleFactor(),
+                    detector.getFocusX(),
+                    detector.getFocusY(),
+                    false);
+            if (isFilmModeEnable && !isInFilmMode && scaleType == 1) {
+                // enter the film mode
+                isInFilmMode = true;
+                // start the film anim
+            }
             mRenderThread.notifyDirty(System.currentTimeMillis());
             return true;
         }
@@ -113,8 +129,16 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         }
     }
 
-    private void scaleImage(double deltaScale, float focusX, float focusY, boolean stretchImageToSuper) {
+    /**
+     * @param deltaScale
+     * @param focusX
+     * @param focusY
+     * @param stretchImageToSuper
+     * @return 0 scale normal 1 scale to the min 2 scale to the max
+     */
+    private int scaleImage(double deltaScale, float focusX, float focusY, boolean stretchImageToSuper) {
 
+        int type = 0;
         float lowerScale, upperScale;
         if (stretchImageToSuper) {
             lowerScale = superMinScale;
@@ -129,13 +153,16 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         normalizedScale *= deltaScale;
         if (normalizedScale > upperScale) {
             normalizedScale = upperScale;
+            type = 2;
             deltaScale = upperScale / origScale;
         } else if (normalizedScale < lowerScale) {
             normalizedScale = lowerScale;
             deltaScale = lowerScale / origScale;
+            type = 1;
         }
         mCurrentImageMatrix.postScale((float) deltaScale, (float) deltaScale, focusX, focusY);
         fixScaleTrans();
+        return type;
     }
 
     private float getFixTrans(float trans, float viewSize, float contentSize) {
@@ -249,6 +276,18 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         float finalX = m[Matrix.MTRANS_X] + getShowImageWidth() * px;
         float finalY = m[Matrix.MTRANS_Y] + getShowImageHeight() * py;
         return new PointF(finalX , finalY);
+    }
+
+
+    /**
+     * apply the anim for enter film mode
+     */
+    private class EnterFilmModeAnim implements Runnable {
+
+        @Override
+        public void run() {
+
+        }
     }
 
     private class DoubleTapZoom implements Runnable {
