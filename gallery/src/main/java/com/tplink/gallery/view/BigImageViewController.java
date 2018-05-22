@@ -409,7 +409,6 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         return true;
     }
 
-    Paint paint = new Paint();
     @Override
     protected void renderContent() {
         if (mTextureView.isAvailable()) {
@@ -418,11 +417,6 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             if (canvas != null) {
                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);// 清空画布
                 canvas.drawBitmap(bitmap, mCurrentImageMatrix, null);
-                RectF rect = new RectF(0, 0 , bitmap.getWidth(), bitmap.getHeight());
-                mCurrentImageMatrix.mapRect(rect);
-                paint.setColor(Color.RED);
-                paint.setStyle(Paint.Style.STROKE);
-                canvas.drawRect(rect, paint);
                 mTextureView.unlockCanvasAndPost(canvas);
             }
         }
