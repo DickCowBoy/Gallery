@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.IntDef;
@@ -36,14 +37,15 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     public static final int STATE_DRAG = 3;
     public static final int STATE_FLING = 4;
 
+    private static final int DIVIDER_WIDTH = 40;// todo
+
     private static final float SUPER_MIN_MULTIPLIER = .75f;
     private static final float SUPER_MAX_MULTIPLIER = 1.25f;
 
     private RenderThread mRenderThread;
     private List<MediaBean> mediaBeans;
-    private Bitmap bitmap;
 
-    private float originScale;
+    private DrawContentProvider drawContentProvider;
 
     // TODO CALCULATE THE CORRECT VALUE
     private float minScale;
@@ -81,8 +83,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         this.state = state;
     }
 
-    public BigImageViewController(GalleryTextureView mTextureView) {
+    public BigImageViewController(GalleryTextureView mTextureView, DrawContentProvider drawContentProvider) {
         super(mTextureView);
+        this.drawContentProvider = drawContentProvider;
         init();
     }
 
@@ -113,11 +116,11 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                     detector.getFocusX(),
                     detector.getFocusY(),
                     false);
-            if (isFilmModeEnable && !isInFilmMode && scaleType == 1) {
-                // enter the film mode
-                isInFilmMode = true;
-                // start the film anim
-            }
+//            if (isFilmModeEnable && !isInFilmMode && scaleType == 1) {
+//                // enter the film mode
+//                isInFilmMode = true;
+//                // start the film anim
+//            }
             mRenderThread.notifyDirty(System.currentTimeMillis());
             return true;
         }
@@ -224,6 +227,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
+            Log.e("LJL", "DOUBLE TAP");
             boolean consumed = false;
             if (state == STATE_NONE) {
                 float targetZoom = (normalizedScale == minScale) ? maxScale : minScale;
@@ -236,6 +240,26 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+            if (Float.compare(normalizedScale, 1.0F) == 0 ||
+                    Float.compare(showRect.left, 1.0F) > 0 ||
+                    Float.compare(showRect.right, mTextureView.getWidth()) < 0
+                    ) {
+
+                if (state == STATE_DRAG) {
+                    int pos = 0;
+
+                    if (velocityX > 0 && drawContentProvider.hasPreview()) {
+                        pos = -1;
+                    } else if ((velocityX < 0 && drawContentProvider.hasNext())) {
+                        pos = 1;
+                    }
+                    NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect,
+                            pos);
+                    compatPostOnAnimation(normalScroll2Center);
+                }
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
 
             if (fling != null) {
                 //
@@ -269,8 +293,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
      */
     private PointF transformCoordBitmapToTouch(float bx, float by) {
         mCurrentImageMatrix.getValues(m);
-        float origW = bitmap.getWidth();
-        float origH = bitmap.getHeight();
+        float origW = drawContentProvider.getCurrentDrawContent().width;
+        float origH = drawContentProvider.getCurrentDrawContent().height;
         float px = bx / origW;
         float py = by / origH;
         float finalX = m[Matrix.MTRANS_X] + getShowImageWidth() * px;
@@ -287,6 +311,78 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         @Override
         public void run() {
 
+        }
+    }
+
+
+    private class NormalScroll2Center implements Runnable{
+        private static final float ZOOM_TIME = 100;
+        private long startTime;
+        private int prePos;
+        private float endX;
+        private float preAnim = 0;
+        private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+
+        /**
+         *
+         * @param prePos -1 means switch to the pre image 0 means no changes and 1 means next image
+         */
+        public NormalScroll2Center(RectF preRectF, int prePos) {
+            this.startTime = System.currentTimeMillis();
+            this.prePos = prePos;
+            switch (prePos) {
+                case 0:
+                    if (Float.compare(preRectF.left, 0.0F) > 0) {
+                        endX = 0 -  preRectF.left;
+                    } else {
+                        endX = mTextureView.getWidth() - preRectF.right;
+                    }
+
+                    break;
+                case -1:
+                    endX = mTextureView.getWidth() + DIVIDER_WIDTH - preRectF.left;
+                    break;
+                case 1:
+                    endX = -preRectF.right - DIVIDER_WIDTH;
+                    break;
+            }
+            preAnim = 0;
+            setState(STATE_ANIMATE_ZOOM);
+        }
+
+        @Override
+        public void run() {
+            float t = interpolate();
+
+            mCurrentImageMatrix.postTranslate((t- preAnim) * endX, 0);
+            preAnim = t;
+            mRenderThread.notifyDirty(System.currentTimeMillis());
+
+            if (t < 1f) {
+                compatPostOnAnimation(this);
+            } else {
+                setState(STATE_NONE);
+                if (prePos == -1) {
+                    drawContentProvider.switchToPre();
+                } else if (prePos == 1) {
+                    drawContentProvider.switchToNext();
+                }
+                normalizedScale = 1.0F;
+                mCurrentImageMatrix = drawContentProvider.getCurrentDrawContent()
+                        .calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
+            }
+
+        }
+
+        /**
+         * Use interpolator to get t
+         * @return
+         */
+        private float interpolate() {
+            long currTime = System.currentTimeMillis();
+            float elapsed = (currTime - startTime) / ZOOM_TIME;
+            elapsed = Math.min(1f, elapsed);
+            return interpolator.getInterpolation(elapsed);
         }
     }
 
@@ -392,8 +488,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
      */
     private PointF transformCoordTouchToBitmap(float x, float y, boolean clipToBitmap) {
         mCurrentImageMatrix.getValues(m);
-        float origW = bitmap.getWidth();
-        float origH = bitmap.getHeight();
+        float origW = drawContentProvider.getCurrentDrawContent().width;
+        float origH = drawContentProvider.getCurrentDrawContent().height;
         float transX = m[Matrix.MTRANS_X];
         float transY = m[Matrix.MTRANS_Y];
         float finalX = ((x - transX) * origW) / getShowImageWidth();
@@ -413,32 +509,18 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         this.mRenderThread.notifyDirty(System.currentTimeMillis());
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
-        mCurrentImageMatrix = calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
-    }
+//    public void setBitmap(Bitmap bitmap) {
+//        this.bitmap = bitmap;
+//        mCurrentImageMatrix = calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
+//    }
 
-    private Matrix calMatrix(int width, int height) {
-        if (width == 0 || height == 0 || bitmap == null) {
-            return null;
-        }
-        Matrix matrix = new Matrix();
-        // 1.将图片居中
-        // 2.旋转图片
-        float scaleX = ((width) / 1.0F / bitmap.getWidth());
-        float scaleY = (height / 1.0F / bitmap.getHeight());
-        originScale = Math.min(scaleX, scaleY);
-        matrix.postScale(originScale, originScale, bitmap.getWidth() / 2,
-                bitmap.getHeight() / 2);
-        matrix.postTranslate((width - bitmap.getWidth()) / 2,
-                (height - bitmap.getHeight()) / 2);
-        return matrix;
-    }
 
     @Override
     protected void onAvailable(int width, int height) {
-        mCurrentImageMatrix = calMatrix(width,height);
-        mRenderThread.notifyDirty(System.currentTimeMillis());
+        mCurrentImageMatrix = drawContentProvider.getCurrentDrawContent().calMatrix(width,height);
+        if (mRenderThread != null) {
+            mRenderThread.notifyDirty(System.currentTimeMillis());
+        }
     }
 
     @Override
@@ -448,7 +530,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     @Override
     protected void onSizeChanged(int width, int height) {
-        mCurrentImageMatrix = calMatrix(width,height);
+        mCurrentImageMatrix = drawContentProvider.getCurrentDrawContent().calMatrix(width,height);
     }
 
     public void enable() {
@@ -470,8 +552,17 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     protected boolean processTouchEvent(MotionEvent event) {
         mScaleDetector.onTouchEvent(event);
         mGestureDetector.onTouchEvent(event);
-        PointF curr = new PointF(event.getX(), event.getY());
+        if (isInFilmMode) {
+            processFilmTouchEvent(event);
+        } else {
+            processNormalTouchEvent(event);
+        }
 
+        return true;
+    }
+
+    private void processNormalTouchEvent(MotionEvent event) {
+        PointF curr = new PointF(event.getX(), event.getY());
         if (state == STATE_NONE || state == STATE_DRAG || state == STATE_FLING) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -482,26 +573,54 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                     break;
 
                 case MotionEvent.ACTION_MOVE:
+                    Log.e("LJL", "ACTION MOVE");
                     if (state == STATE_DRAG) {
                         float deltaX = curr.x - last.x;
-                        float deltaY = curr.y - last.y;
-                        float fixTransX = getFixDragTrans(deltaX, mTextureView.getWidth(), getShowImageWidth());
-                        float fixTransY = getFixDragTrans(deltaY, mTextureView.getHeight(), getShowImageHeight());
-                        mCurrentImageMatrix.postTranslate(fixTransX, fixTransY);
-                        fixTrans();
+                        mCurrentImageMatrix.postTranslate(deltaX, 0);
+                        RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+                        if (Float.compare(showRect.left, 0.0F) < 0 && !drawContentProvider.hasNext()) {
+                            mCurrentImageMatrix.postTranslate(-deltaX, 0);
+                        } else if (Float.compare(showRect.right, mTextureView.getWidth()) > 0
+                                && !drawContentProvider.hasPreview()) {
+                            mCurrentImageMatrix.postTranslate(-deltaX, 0);
+                        }
                         last.set(curr.x, curr.y);
                     }
                     break;
 
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
+                    Log.e("LJL", "ACTION UP");
+                    RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+                    if (state == STATE_DRAG && (
+                            Float.compare(showRect.left, 0.0F) > 0
+                                    || Float.compare(showRect.right, mTextureView.getWidth()) < 0)) {
+                        int pos = 0;
+
+                        if (Float.compare(showRect.left, 0.0F) >
+                                0) {
+                            pos = Float.compare(showRect.left, mTextureView.getWidth() / 3.0F) > 0 ? -1 : 0;
+
+                        } else if (Float.compare(showRect.right, mTextureView.getWidth()) < 0){
+                            pos = Float.compare(mTextureView.getWidth() - showRect.right,
+                                    mTextureView.getWidth() / 3.0F) > 0 ? 1 : 0;
+                        }
+                        NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect,
+                                pos);
+                        compatPostOnAnimation(normalScroll2Center);
+                    }
                     setState(STATE_NONE);
                     break;
             }
         }
-        mRenderThread.notifyDirty(System.currentTimeMillis());
+        if (mRenderThread != null) {
+            // #TODO split screen error
+            mRenderThread.notifyDirty(System.currentTimeMillis());
+        }
+    }
 
-        return true;
+    private void processFilmTouchEvent(MotionEvent event) {
+
     }
 
     private float getFixDragTrans(float delta, float viewSize, float contentSize) {
@@ -518,9 +637,36 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             Canvas canvas = mTextureView.lockCanvas();
             if (canvas != null) {
                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);// 清空画布
-                canvas.drawBitmap(bitmap, mCurrentImageMatrix, null);
+                if (isInFilmMode) {
+                    renderFilm(canvas);
+                } else {
+                    renderNormal(canvas);
+                }
                 mTextureView.unlockCanvasAndPost(canvas);
             }
+        }
+    }
+
+    private void renderFilm(Canvas canvas) {
+    }
+
+    private void renderNormal(Canvas canvas) {
+        // render the main
+        canvas.drawBitmap(drawContentProvider.getCurrentDrawContent().content, mCurrentImageMatrix, null);
+        // cal whether need to render the left and right
+        RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+        if (showRect.left > DIVIDER_WIDTH) {
+            // render the pre pic
+            DrawContent preDrawContent = drawContentProvider.getPreDrawContent();
+            Matrix matrix = preDrawContent.calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
+            matrix.postTranslate(showRect.left -mTextureView.getWidth() - DIVIDER_WIDTH,0);
+            canvas.drawBitmap(preDrawContent.content, matrix, null);
+        } else if (showRect.right < (mTextureView.getWidth() - DIVIDER_WIDTH)) {
+            // render the next pic
+            DrawContent nextDrawContent = drawContentProvider.getNextDrawContent();
+            Matrix matrix = nextDrawContent.calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
+            matrix.postTranslate(showRect.right + DIVIDER_WIDTH,0);
+            canvas.drawBitmap(nextDrawContent.content, matrix, null);
         }
     }
 
@@ -564,11 +710,11 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     }
 
     private int getShowImageWidth() {
-        return (int) (bitmap.getWidth() * normalizedScale * originScale);
+        return (int) (drawContentProvider.getCurrentDrawContent().getShowWidth() * normalizedScale);
     }
 
     private int getShowImageHeight() {
-        return (int) (bitmap.getHeight() * normalizedScale * originScale);
+        return (int) (drawContentProvider.getCurrentDrawContent().getShowHeight() * normalizedScale);
     }
 
 
@@ -718,6 +864,67 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 mRenderThread.notifyDirty(System.currentTimeMillis());
                 compatPostOnAnimation(this);
             }
+        }
+    }
+
+    public static abstract class DrawContentProvider {
+        private BigImageViewController controller;
+
+        public DrawContentProvider(BigImageViewController controller) {
+            this.controller = controller;
+        }
+
+        private void updateContent() {
+            controller.mRenderThread.notifyDirty(System.currentTimeMillis());
+        }
+
+        public abstract boolean hasPreview();
+
+        public abstract boolean hasNext();
+
+        public abstract DrawContent getCurrentDrawContent();
+        public abstract DrawContent getPreDrawContent();
+        public abstract DrawContent getNextDrawContent();
+        public abstract void switchToPre();
+        public abstract void switchToNext();
+    }
+
+    public static class DrawContent {
+        public int width;
+        public int height;
+        public Bitmap content;
+        public float originScale;
+
+        public int getShowWidth() {
+            return (int) (width * originScale);
+        }
+
+        public int getShowHeight() {
+            return (int) (height * originScale);
+        }
+
+        public RectF getShowRect(Matrix matrix) {
+            RectF rectF = new RectF(0, 0, width, height);
+            matrix.mapRect(rectF);
+            return rectF;
+        }
+
+        public Matrix calMatrix(int width, int height) {
+            if (width == 0 || height == 0) {
+                return null;
+            }
+            Matrix matrix = new Matrix();
+            // 1.将图片居中
+            // 2.旋转图片
+            float scaleX = ((width) / 1.0F / this.width);
+            float scaleY = (height / 1.0F / this.height);
+            originScale = Math.min(scaleX, scaleY);
+            matrix.postScale(originScale, originScale,
+                    this.width / 2,
+                    this.height / 2);
+            matrix.postTranslate((width - this.width) / 2,
+                    (height - this.height) / 2);
+            return matrix;
         }
     }
 }
