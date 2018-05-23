@@ -6,10 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.IntDef;
@@ -21,7 +19,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.OverScroller;
 import android.widget.Scroller;
 
-import com.ortiz.touch.TouchImageView;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.utils.ThreadUtils;
 
@@ -112,16 +109,20 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            int scaleType = scaleImage(detector.getScaleFactor(),
-                    detector.getFocusX(),
-                    detector.getFocusY(),
-                    false);
-//            if (isFilmModeEnable && !isInFilmMode && scaleType == 1) {
-//                // enter the film mode
-//                isInFilmMode = true;
-//                // start the film anim
-//            }
-            mRenderThread.notifyDirty(System.currentTimeMillis());
+            if (isFilmModeEnable && !isInFilmMode && Float.compare(normalizedScale, 1.0F) == 0
+                    && Float.compare(detector.getScaleFactor(), 1.0F) < 0) {
+                // enter the film mode
+                isInFilmMode = true;
+                EnterFilmModeAnim anim = new EnterFilmModeAnim();
+                compatPostOnAnimation(anim);
+                // start the film anim
+            } else {
+                scaleImage(detector.getScaleFactor(),
+                        detector.getFocusX(),
+                        detector.getFocusY(),
+                        false);
+                mRenderThread.notifyDirty(System.currentTimeMillis());
+            }
             return true;
         }
 
@@ -241,10 +242,11 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
-            if (Float.compare(normalizedScale, 1.0F) == 0 ||
+            if (Math.abs(velocityX) > Math.abs(velocityY) && (
+                    Float.compare(normalizedScale, 1.0F) == 0 ||
                     Float.compare(showRect.left, 1.0F) > 0 ||
                     Float.compare(showRect.right, mTextureView.getWidth()) < 0
-                    ) {
+                    )) {
 
                 if (state == STATE_DRAG) {
                     int pos = 0;
@@ -307,10 +309,42 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
      * apply the anim for enter film mode
      */
     private class EnterFilmModeAnim implements Runnable {
+        private static final float ZOOM_TIME = 100;
+        private long startTime;
+        private float target = 0.35F;
+        private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+
+        public EnterFilmModeAnim() {
+            this.startTime = System.currentTimeMillis();
+            setState(STATE_ANIMATE_ZOOM);
+        }
 
         @Override
         public void run() {
+            float t = interpolate();
+            mCurrentImageMatrix = drawContentProvider.getCurrentDrawContent().calMatrix(mTextureView.getWidth(),
+                    mTextureView.getHeight());
+            float df = 1 - target * t;
+            mCurrentImageMatrix.postScale(df, df, mTextureView.getWidth() / 2,
+                    mTextureView.getHeight() / 2);
+            mRenderThread.notifyDirty(System.currentTimeMillis());
 
+            if (t < 1f) {
+                compatPostOnAnimation(this);
+            } else {
+                setState(STATE_NONE);
+            }
+        }
+
+        /**
+         * Use interpolator to get t
+         * @return
+         */
+        private float interpolate() {
+            long currTime = System.currentTimeMillis();
+            float elapsed = (currTime - startTime) / ZOOM_TIME;
+            elapsed = Math.min(1f, elapsed);
+            return interpolator.getInterpolation(elapsed);
         }
     }
 
@@ -550,11 +584,11 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     @Override
     protected boolean processTouchEvent(MotionEvent event) {
-        mScaleDetector.onTouchEvent(event);
-        mGestureDetector.onTouchEvent(event);
         if (isInFilmMode) {
             processFilmTouchEvent(event);
         } else {
+            mScaleDetector.onTouchEvent(event);
+            mGestureDetector.onTouchEvent(event);
             processNormalTouchEvent(event);
         }
 
@@ -632,6 +666,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     @Override
     protected void renderContent() {
+        long time = System.currentTimeMillis();
         if (mTextureView.isAvailable()) {
             // render the content
             Canvas canvas = mTextureView.lockCanvas();
@@ -645,9 +680,12 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 mTextureView.unlockCanvasAndPost(canvas);
             }
         }
+        Log.e("LJL", "RENDER TIME" + (System.currentTimeMillis() - time));
     }
 
     private void renderFilm(Canvas canvas) {
+        canvas.drawBitmap(drawContentProvider.getCurrentDrawContent().content, mCurrentImageMatrix, null);
+        //TODO  render the blank space
     }
 
     private void renderNormal(Canvas canvas) {
