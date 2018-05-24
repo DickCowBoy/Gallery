@@ -712,6 +712,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 animMatrix.mapRect(rectF);
                 animMatrix.postTranslate(left - divide * mCurrentImageMatrix.baseScale - rectF.right,
                         0);
+                left = rectF.left + (left - divide * mCurrentImageMatrix.baseScale - rectF.right);
                 canvas.drawBitmap(drawContent.content, animMatrix, null);
             }
         }
@@ -734,6 +735,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 animMatrix.mapRect(rectF);
                 animMatrix.postTranslate(right + divide * mCurrentImageMatrix.baseScale - rectF.left,
                         0);
+                right = rectF.right + (right + divide * mCurrentImageMatrix.baseScale - rectF.left);
                 canvas.drawBitmap(drawContent.content, animMatrix, null);
             }
         }

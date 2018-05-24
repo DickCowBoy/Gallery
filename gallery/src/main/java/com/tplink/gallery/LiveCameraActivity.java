@@ -49,8 +49,7 @@ public class LiveCameraActivity extends Activity {
                 return true;
             }
 
-            @Override
-            public BigImageViewController.DrawContent getCurrentDrawContent() {
+            private BigImageViewController.DrawContent getContentByIndex(int index) {
                 if (index % 3 == 0) {
                     if (content != null) return content;
                     content = new BigImageViewController.DrawContent();
@@ -75,57 +74,22 @@ public class LiveCameraActivity extends Activity {
                 }
             }
 
+
+            @Override
+            public BigImageViewController.DrawContent getCurrentDrawContent() {
+                return getContentByIndex(index);
+            }
+
             @Override
             public BigImageViewController.DrawContent getPreDrawContent(int offset) {
-                offset += 3;
-                if (offset % 3 == 1) {
-                    if (content != null) return content;
-                    content = new BigImageViewController.DrawContent();
-                    content.content = drawable.getBitmap();
-                    content.width = content.content.getWidth();
-                    content.height = content.content.getHeight();
-                    return content;
-                } else if (offset % 3 == 2) {
-                    if (content1 != null) return content1;
-                    content1 = new BigImageViewController.DrawContent();
-                    content1.content = drawable1.getBitmap();
-                    content1.width = content1.content.getWidth();
-                    content1.height = content1.content.getHeight();
-                    return content1;
-                } else {
-                    if (content2 != null) return content2;
-                    content2 = new BigImageViewController.DrawContent();
-                    content2.content = drawable2.getBitmap();
-                    content2.width = content2.content.getWidth();
-                    content2.height = content2.content.getHeight();
-                    return content2;
-                }
+                offset += index;
+                return getContentByIndex(offset);
             }
 
             @Override
             public BigImageViewController.DrawContent getNextDrawContent(int offset) {
-                if (index % 3 == 2) {
-                    if (content != null) return content;
-                    content = new BigImageViewController.DrawContent();
-                    content.content = drawable.getBitmap();
-                    content.width = content.content.getWidth();
-                    content.height = content.content.getHeight();
-                    return content;
-                } else if (index % 3 == 0) {
-                    if (content1 != null) return content1;
-                    content1 = new BigImageViewController.DrawContent();
-                    content1.content = drawable1.getBitmap();
-                    content1.width = content1.content.getWidth();
-                    content1.height = content1.content.getHeight();
-                    return content1;
-                } else {
-                    if (content2 != null) return content2;
-                    content2 = new BigImageViewController.DrawContent();
-                    content2.content = drawable2.getBitmap();
-                    content2.width = content2.content.getWidth();
-                    content2.height = content2.content.getHeight();
-                    return content2;
-                }
+                offset += index;
+                return getContentByIndex(offset);
             }
 
             @Override
