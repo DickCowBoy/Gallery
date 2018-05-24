@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:name="com.tplink.gallery.GalleryApplication"
         android:theme="@style/AppTheme">
-        <activity android:name="com.tplink.gallery.LiveCameraActivity"
+        <activity android:name="com.tplink.gallery.GalleryActivity"
             android:hardwareAccelerated="true"
             android:theme="@style/PhotoAppTheme">
             <intent-filter>

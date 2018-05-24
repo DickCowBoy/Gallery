@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
@@ -90,6 +91,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     public BigImageViewController(GalleryTextureView mTextureView, DrawContentProvider drawContentProvider) {
         super(mTextureView);
         this.drawContentProvider = drawContentProvider;
+        drawContentProvider.setController(this);
         init();
     }
 
@@ -804,9 +806,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     private void centerFilmPic() {
         RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
         int pos = 0;
-        if (Float.compare(showRect.centerX(), mTextureView.getWidth() / 4) < 0) {
+        if (drawContentProvider.hasNext() && Float.compare(showRect.centerX(), mTextureView.getWidth() / 4) < 0) {
             pos = 1;
-        } else if (Float.compare(showRect.centerX(), mTextureView.getWidth() * 0.75F) > 0) {
+        } else if (drawContentProvider.hasPreview() && Float.compare(showRect.centerX(), mTextureView.getWidth() * 0.75F) > 0) {
             pos = -1;
         }
         NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect, pos,
@@ -844,9 +846,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     // in aosp gallery render <=7 images
     private void renderFilm(Canvas canvas) {
-        canvas.drawBitmap(drawContentProvider.getCurrentDrawContent().content, mCurrentImageMatrix, null);
-        //TODO  render the blank space
+        drawContentProvider.getCurrentDrawContent().drawContent(canvas, mCurrentImageMatrix);
         RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+        //TODO  render the blank space
         Log.e("renderFilm", "showRect: " + showRect.toShortString());
         float divide = DIVIDER_WIDTH * mCurrentImageMatrix.baseScale;
         float left = showRect.left;
@@ -872,7 +874,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 animMatrix.postTranslate(left - divide * mCurrentImageMatrix.baseScale - rectF.right,
                         0);
                 left = rectF.left + (left - divide * mCurrentImageMatrix.baseScale - rectF.right);
-                canvas.drawBitmap(drawContent.content, animMatrix, null);
+                drawContent.drawContent(canvas, animMatrix);
             }
         }
         // render the right side
@@ -895,7 +897,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 animMatrix.postTranslate(right + divide * mCurrentImageMatrix.baseScale - rectF.left,
                         0);
                 right = rectF.right + (right + divide * mCurrentImageMatrix.baseScale - rectF.left);
-                canvas.drawBitmap(drawContent.content, animMatrix, null);
+                drawContent.drawContent(canvas, animMatrix);
             }
         }
 
@@ -903,21 +905,21 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     private void renderNormal(Canvas canvas) {
         // render the main
-        canvas.drawBitmap(drawContentProvider.getCurrentDrawContent().content, mCurrentImageMatrix, null);
+        drawContentProvider.getCurrentDrawContent().drawContent(canvas, mCurrentImageMatrix);
         // cal whether need to render the left and right
         RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
-        if (showRect.left > DIVIDER_WIDTH) {
+        if (showRect.left > DIVIDER_WIDTH && drawContentProvider.hasPreview()) {
             // render the pre pic
             DrawContent preDrawContent = drawContentProvider.getPreDrawContent(-1);
             Matrix matrix = preDrawContent.calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
             matrix.postTranslate(showRect.left -mTextureView.getWidth() - DIVIDER_WIDTH,0);
-            canvas.drawBitmap(preDrawContent.content, matrix, null);
-        } else if (showRect.right < (mTextureView.getWidth() - DIVIDER_WIDTH)) {
+            preDrawContent.drawContent(canvas, matrix);
+        } else if (showRect.right < (mTextureView.getWidth() - DIVIDER_WIDTH) && drawContentProvider.hasNext()) {
             // render the next pic
             DrawContent nextDrawContent = drawContentProvider.getNextDrawContent(1);
             Matrix matrix = nextDrawContent.calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
             matrix.postTranslate(showRect.right + DIVIDER_WIDTH,0);
-            canvas.drawBitmap(nextDrawContent.content, matrix, null);
+            nextDrawContent.drawContent(canvas, matrix);
         }
     }
 
@@ -1043,7 +1045,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 currY = newY;
                 mCurrentImageMatrix.postTranslate(transX, transY);
                 fixTrans();
-                mRenderThread.notifyDirty(System.currentTimeMillis());
+                if (mRenderThread != null) {
+                    mRenderThread.notifyDirty(System.currentTimeMillis());
+                }
                 compatPostOnAnimation(this);
             }
         }
@@ -1052,7 +1056,10 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     public static abstract class DrawContentProvider {
         private BigImageViewController controller;
 
-        public DrawContentProvider(BigImageViewController controller) {
+        public DrawContentProvider() {
+        }
+
+        public void setController(BigImageViewController controller) {
             this.controller = controller;
         }
 
@@ -1070,50 +1077,6 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         public abstract DrawContent getContentByIndex(int index);
         public abstract boolean switchToPre();
         public abstract boolean switchToNext();
-    }
-
-    public static class DrawContent {
-        public int width;
-        public int height;
-        public Bitmap content;
-        public float originScale;
-
-        public int getShowWidth() {
-            return (int) (width * originScale);
-        }
-
-        public int getShowHeight() {
-            return (int) (height * originScale);
-        }
-
-        public RectF getShowRect(Matrix matrix) {
-            RectF rectF = new RectF(0, 0, width, height);
-            matrix.mapRect(rectF);
-            return rectF;
-        }
-
-        public AnimMatrix calMatrix(int width, int height, float normalScale) {
-            if (width == 0 || height == 0) {
-                return null;
-            }
-            AnimMatrix matrix = new AnimMatrix();
-            // 1.将图片居中
-            // 2.旋转图片
-            float scaleX = ((width) / 1.0F / this.width);
-            float scaleY = (height / 1.0F / this.height);
-            originScale = Math.min(scaleX, scaleY);
-            matrix.postScale(originScale * normalScale, originScale * normalScale,
-                    this.width / 2,
-                    this.height / 2);
-            matrix.postTranslate((width - this.width) / 2,
-                    (height - this.height) / 2);
-            matrix.baseScale = normalScale;
-            return matrix;
-        }
-
-        public AnimMatrix calMatrix(int width, int height) {
-            return calMatrix(width, height, 1.0F);
-        }
     }
 
     public static class AnimMatrix extends Matrix {

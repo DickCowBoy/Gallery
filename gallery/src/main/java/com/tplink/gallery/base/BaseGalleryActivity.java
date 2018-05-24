@@ -28,6 +28,7 @@ import com.tplink.gallery.data.DataCacheManager;
 import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.ui.BigImagePreview;
 import com.tplink.gallery.view.AutoFitToolBar;
+import com.tplink.gallery.view.GalleryTextureView;
 import com.tplink.gallery.view.LoadingView;
 import com.tplink.gallery.view.SelectViewPager;
 import com.tplink.widget.SlidingTabStripTP;
@@ -46,8 +47,6 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private boolean isActive = false;
     private MediaContract.MediaPresenter mediaPresenter;
     private BigImagePreview bigImagePreview;
-    private  RecyclerView bigImageView;
-    private RecyclerView filmImageView;
     private boolean firstLoad = true;
     private String currentKey;
 
@@ -92,9 +91,8 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         shapeIndicatorView.setupWithTabLayout(mTabLayout);
         shapeIndicatorView.setupWithViewPager(mPager);
 
-        RecyclerView bigImageView = findViewById(R.id.rcl_gallery);
-        RecyclerView filmImageView = findViewById(R.id.rcl_sub_gallery);
-        bigImagePreview = new BigImagePreview(this, bigImageView, filmImageView);
+        GalleryTextureView bigImageView = findViewById(R.id.rcl_gallery);
+        bigImagePreview = new BigImagePreview(this, bigImageView);
     }
 
     @Override

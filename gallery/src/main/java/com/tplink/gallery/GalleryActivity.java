@@ -18,7 +18,6 @@ public class GalleryActivity extends BaseGalleryActivity {
 
     @Override
     protected boolean needImage() {
-        int id = R.string.xx;
         return true;
     }
 
