@@ -351,6 +351,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         public void run() {
             if (scroller.isFinished()) {
                 scroller = null;
+                centerFilmPic();
                 return;
             }
 
@@ -371,6 +372,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                         } else {
                             // there is no next view, need to stop the scroll
                             this.cancelFling();
+                            centerFilmPic();
+                            return;
                         }
                     }
                 } else if (transX > 0) {
@@ -385,6 +388,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                         } else {
                             // there is no pre view, need to stop the scroll
                             this.cancelFling();
+                            centerFilmPic();
+                            return;
                         }
                     }
                 }
@@ -784,18 +789,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
                     if (state == STATE_DRAG) {
-                        RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
-                        int pos = 0;
-                        if (Float.compare(showRect.centerX(), mTextureView.getWidth() / 4) < 0) {
-                            pos = 1;
-                        } else if (Float.compare(showRect.centerX(), mTextureView.getWidth() * 0.75F) > 0) {
-                            pos = -1;
-                        }
-                        NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect, pos,
-                                drawContentProvider.getContentByIndex(pos).
-                                        getShowRect(drawContentProvider.getContentByIndex(pos)
-                                                .calMatrix(mTextureView.getWidth(), mTextureView.getHeight(), FILM_RATIO)));
-                        compatPostOnAnimation(normalScroll2Center);
+                        centerFilmPic();
                     }
                     setState(STATE_NONE);
                     break;
@@ -805,6 +799,21 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             // #TODO split screen error
             mRenderThread.notifyDirty(System.currentTimeMillis());
         }
+    }
+
+    private void centerFilmPic() {
+        RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+        int pos = 0;
+        if (Float.compare(showRect.centerX(), mTextureView.getWidth() / 4) < 0) {
+            pos = 1;
+        } else if (Float.compare(showRect.centerX(), mTextureView.getWidth() * 0.75F) > 0) {
+            pos = -1;
+        }
+        NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect, pos,
+                drawContentProvider.getContentByIndex(pos).
+                        getShowRect(drawContentProvider.getContentByIndex(pos)
+                                .calMatrix(mTextureView.getWidth(), mTextureView.getHeight(), FILM_RATIO)));
+        compatPostOnAnimation(normalScroll2Center);
     }
 
     private float getFixDragTrans(float delta, float viewSize, float contentSize) {
