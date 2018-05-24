@@ -31,8 +31,8 @@ public class LiveCameraActivity extends Activity {
         super.onCreate(savedInstanceState);
         setWindow();
         drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.cba872e4e0a4b47596613ff39846ec8c);
-        drawable1 = (BitmapDrawable) getResources().getDrawable(R.drawable.nature_4);
-        drawable2 = (BitmapDrawable) getResources().getDrawable(R.drawable.nature_3);
+        drawable1 = (BitmapDrawable) getResources().getDrawable(R.drawable.cute);
+        drawable2 = (BitmapDrawable) getResources().getDrawable(R.drawable.f82143e4cbee57451ca9bb6a7a32609e);
         GalleryTextureView mTextureView = new GalleryTextureView(this);
         bigImageViewController = new BigImageViewController(mTextureView, new BigImageViewController.DrawContentProvider(bigImageViewController) {
             int index = 0;
