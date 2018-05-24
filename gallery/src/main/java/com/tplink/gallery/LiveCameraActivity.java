@@ -93,13 +93,18 @@ public class LiveCameraActivity extends Activity {
             }
 
             @Override
-            public void switchToPre() {
-                index --;
+            public boolean switchToPre() {
+                if (index > 0) {
+                    index--;
+                    return true;
+                }
+                return false;
             }
 
             @Override
-            public void switchToNext() {
+            public boolean switchToNext() {
                 index ++;
+                return true;
             }
         });
         mTextureView.setViewController(bigImageViewController);

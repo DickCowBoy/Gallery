@@ -1,7 +1,6 @@
 package com.tplink.gallery.view;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,7 +15,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.OverScroller;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
 import com.tplink.gallery.bean.MediaBean;
@@ -35,6 +34,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     public static final int STATE_FLING = 4;
 
     private static final int DIVIDER_WIDTH = 40;// todo
+
+    // threshold for swipe
+    private static final float SWIPE_THRESHOLD = 300f;
 
     private static final float SUPER_MIN_MULTIPLIER = .75f;
     private static final float SUPER_MAX_MULTIPLIER = 1.25f;
@@ -59,6 +61,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     // Remember last point position for dragging
     private PointF last = new PointF();
     private Fling fling;
+    private FilmFlingAnim filmFling;
 
     private boolean isFilmModeEnable = true;
     private boolean isInFilmMode = false;
@@ -290,6 +293,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     private void onFilmFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
+        filmFling = new FilmFlingAnim(velocityX, velocityY);
+        // get the scroll length
+        compatPostOnAnimation(filmFling);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -320,6 +326,77 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         return new PointF(finalX , finalY);
     }
 
+    private class FilmFlingAnim implements Runnable {
+
+        private Scroller scroller = null;
+        int currX;
+
+        public FilmFlingAnim(float velocityX, float velocityY) {
+            setState(STATE_FLING);
+            int vx = (int) (velocityX + 0.5f);
+            scroller = new Scroller(mTextureView.getContext());
+            RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+            scroller.fling((int)showRect.left , 0, vx, (int)velocityY, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 0);
+            currX = (int)showRect.left;
+        }
+
+        public void cancelFling() {
+            if (scroller != null) {
+                setState(STATE_NONE);
+                scroller.forceFinished(true);
+            }
+        }
+
+        @Override
+        public void run() {
+            if (scroller.isFinished()) {
+                scroller = null;
+                return;
+            }
+
+            if (scroller.computeScrollOffset()) {
+                int newX = scroller.getCurrX();
+                int transX = newX - currX;
+                currX = newX;
+                if (transX < 0) {
+                    // whether scroll to out of left
+                    RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+                    if (Float.compare(showRect.right, 0.0F) < 0) {
+                        if (drawContentProvider.switchToNext()) {
+                            // cal the new matrix
+                            mCurrentImageMatrix = drawContentProvider.getCurrentDrawContent()
+                                    .calMatrix(mTextureView.getWidth(), mTextureView.getHeight(), FILM_RATIO);
+                            RectF showRect1 = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+                            mCurrentImageMatrix.postTranslate(-showRect1.left + DIVIDER_WIDTH * FILM_RATIO + showRect.right,0);
+                        } else {
+                            // there is no next view, need to stop the scroll
+                            this.cancelFling();
+                        }
+                    }
+                } else if (transX > 0) {
+                    RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+                    if (Float.compare(showRect.left, mTextureView.getWidth()) > 0) {
+                        if (drawContentProvider.switchToPre()) {
+                            // cal the new matrix
+                            mCurrentImageMatrix = drawContentProvider.getCurrentDrawContent()
+                                    .calMatrix(mTextureView.getWidth(), mTextureView.getHeight(), FILM_RATIO);
+                            RectF showRect1 = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+                            mCurrentImageMatrix.postTranslate(showRect.left + showRect1.left - DIVIDER_WIDTH * FILM_RATIO - mTextureView.getWidth(),0);
+                        } else {
+                            // there is no pre view, need to stop the scroll
+                            this.cancelFling();
+                        }
+                    }
+                }
+//                Log.e("renderFilm", "transX: " + transX +" currx" + currX );
+                mCurrentImageMatrix.postTranslate(transX, 0);
+                compatPostOnAnimation(this);
+                if (mRenderThread != null) {
+                    mRenderThread.notifyDirty(System.currentTimeMillis());
+                }
+            }
+        }
+    }
 
     /**
      * apply the anim for enter film mode
@@ -378,7 +455,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         private int prePos;
         private float endX;
         private float preAnim = 0;
-        private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+        private DecelerateInterpolator interpolator = new DecelerateInterpolator();
 
         /**
          * @param prePos -1 means switch to the pre image 0 means no changes and 1 means next image
@@ -684,8 +761,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     last.set(curr);
-                    if (fling != null)
-                        fling.cancelFling();
+                    if (filmFling != null)
+                        filmFling.cancelFling();
                     setState(STATE_DRAG);
                     break;
 
@@ -761,6 +838,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         canvas.drawBitmap(drawContentProvider.getCurrentDrawContent().content, mCurrentImageMatrix, null);
         //TODO  render the blank space
         RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+        Log.e("renderFilm", "showRect: " + showRect.toShortString());
         float divide = DIVIDER_WIDTH * mCurrentImageMatrix.baseScale;
         float left = showRect.left;
         DrawContent drawContent;
@@ -882,74 +960,6 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     }
 
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private class CompatScroller {
-        Scroller scroller;
-        OverScroller overScroller;
-        boolean isPreGingerbread;
-
-        public CompatScroller(Context context) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
-                isPreGingerbread = true;
-                scroller = new Scroller(context);
-
-            } else {
-                isPreGingerbread = false;
-                overScroller = new OverScroller(context);
-            }
-        }
-
-        public void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY) {
-            if (isPreGingerbread) {
-                scroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
-            } else {
-                overScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
-            }
-        }
-
-        public void forceFinished(boolean finished) {
-            if (isPreGingerbread) {
-                scroller.forceFinished(finished);
-            } else {
-                overScroller.forceFinished(finished);
-            }
-        }
-
-        public boolean isFinished() {
-            if (isPreGingerbread) {
-                return scroller.isFinished();
-            } else {
-                return overScroller.isFinished();
-            }
-        }
-
-        public boolean computeScrollOffset() {
-            if (isPreGingerbread) {
-                return scroller.computeScrollOffset();
-            } else {
-                overScroller.computeScrollOffset();
-                return overScroller.computeScrollOffset();
-            }
-        }
-
-        public int getCurrX() {
-            if (isPreGingerbread) {
-                return scroller.getCurrX();
-            } else {
-                return overScroller.getCurrX();
-            }
-        }
-
-        public int getCurrY() {
-            if (isPreGingerbread) {
-                return scroller.getCurrY();
-            } else {
-                return overScroller.getCurrY();
-            }
-        }
-    }
-
-
     /**
      * Fling launches sequential runnables which apply
      * the fling graphic to the image. The values for the translation
@@ -959,12 +969,12 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
      */
     private class Fling implements Runnable {
 
-        CompatScroller scroller;
+        Scroller scroller;
         int currX, currY;
 
         Fling(int velocityX, int velocityY) {
             setState(STATE_FLING);
-            scroller = new CompatScroller(mTextureView.getContext());
+            scroller = new Scroller(mTextureView.getContext());
             mCurrentImageMatrix.getValues(m);
 
             int startX = (int) m[Matrix.MTRANS_X];
@@ -1015,7 +1025,6 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 scroller = null;
                 return;
             }
-
             if (scroller.computeScrollOffset()) {
                 int newX = scroller.getCurrX();
                 int newY = scroller.getCurrY();
@@ -1050,8 +1059,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         public abstract DrawContent getPreDrawContent(int index);
         public abstract DrawContent getNextDrawContent(int index);
         public abstract DrawContent getContentByIndex(int index);
-        public abstract void switchToPre();
-        public abstract void switchToNext();
+        public abstract boolean switchToPre();
+        public abstract boolean switchToNext();
     }
 
     public static class DrawContent {
