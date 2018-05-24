@@ -76,15 +76,16 @@ public class LiveCameraActivity extends Activity {
             }
 
             @Override
-            public BigImageViewController.DrawContent getPreDrawContent() {
-                if (index % 3 == 1) {
+            public BigImageViewController.DrawContent getPreDrawContent(int offset) {
+                offset += 3;
+                if (offset % 3 == 1) {
                     if (content != null) return content;
                     content = new BigImageViewController.DrawContent();
                     content.content = drawable.getBitmap();
                     content.width = content.content.getWidth();
                     content.height = content.content.getHeight();
                     return content;
-                } else if (index % 3 == 2) {
+                } else if (offset % 3 == 2) {
                     if (content1 != null) return content1;
                     content1 = new BigImageViewController.DrawContent();
                     content1.content = drawable1.getBitmap();
@@ -102,7 +103,7 @@ public class LiveCameraActivity extends Activity {
             }
 
             @Override
-            public BigImageViewController.DrawContent getNextDrawContent() {
+            public BigImageViewController.DrawContent getNextDrawContent(int offset) {
                 if (index % 3 == 2) {
                     if (content != null) return content;
                     content = new BigImageViewController.DrawContent();

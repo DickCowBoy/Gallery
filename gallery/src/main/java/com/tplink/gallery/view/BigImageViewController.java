@@ -65,7 +65,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mGestureDetector;
-    private Matrix mCurrentImageMatrix;
+    private AnimMatrix mCurrentImageMatrix;
 
     @IntDef({STATE_NONE, STATE_SCALE, STATE_ANIMATE_ZOOM, STATE_DRAG, STATE_FLING})
     @Retention(RetentionPolicy.SOURCE)
@@ -327,6 +327,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             float df = 1 - target * t;
             mCurrentImageMatrix.postScale(df, df, mTextureView.getWidth() / 2,
                     mTextureView.getHeight() / 2);
+            mCurrentImageMatrix.baseScale = df;
             mRenderThread.notifyDirty(System.currentTimeMillis());
 
             if (t < 1f) {
@@ -683,9 +684,60 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         Log.e("LJL", "RENDER TIME" + (System.currentTimeMillis() - time));
     }
 
+    // in aosp gallery render <=7 images
     private void renderFilm(Canvas canvas) {
         canvas.drawBitmap(drawContentProvider.getCurrentDrawContent().content, mCurrentImageMatrix, null);
         //TODO  render the blank space
+        RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+        float divide = DIVIDER_WIDTH * mCurrentImageMatrix.baseScale;
+        float left = showRect.left;
+        DrawContent drawContent;
+        AnimMatrix animMatrix;
+        RectF rectF = new RectF();
+        // render the left side
+        for (int i = -1; i > -4; i --) {
+            if (Float.compare(left, divide * mCurrentImageMatrix.baseScale) > 0) {
+                drawContent = drawContentProvider.getPreDrawContent(i);
+                if (drawContent == null) {
+                    break;
+                }
+                animMatrix = drawContent.calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
+                animMatrix.postScale(mCurrentImageMatrix.baseScale, mCurrentImageMatrix.baseScale,
+                        mTextureView.getWidth() / 2,
+                        mTextureView.getHeight() / 2);
+                rectF.left = 0;
+                rectF.top = 0;
+                rectF.right = drawContent.width;
+                rectF.bottom = drawContent.height;
+                animMatrix.mapRect(rectF);
+                animMatrix.postTranslate(left - divide * mCurrentImageMatrix.baseScale - rectF.right,
+                        0);
+                canvas.drawBitmap(drawContent.content, animMatrix, null);
+            }
+        }
+        // render the right side
+        float right = showRect.right;
+        for (int i = 1; i < 4; i ++) {
+            if (Float.compare(mTextureView.getWidth(), right + divide * mCurrentImageMatrix.baseScale) > 0) {
+                drawContent = drawContentProvider.getNextDrawContent(i);
+                if (drawContent == null) {
+                    break;
+                }
+                animMatrix = drawContent.calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
+                animMatrix.postScale(mCurrentImageMatrix.baseScale, mCurrentImageMatrix.baseScale,
+                        mTextureView.getWidth() / 2,
+                        mTextureView.getHeight() / 2);
+                rectF.left = 0;
+                rectF.top = 0;
+                rectF.right = drawContent.width;
+                rectF.bottom = drawContent.height;
+                animMatrix.mapRect(rectF);
+                animMatrix.postTranslate(right + divide * mCurrentImageMatrix.baseScale - rectF.left,
+                        0);
+                canvas.drawBitmap(drawContent.content, animMatrix, null);
+            }
+        }
+
     }
 
     private void renderNormal(Canvas canvas) {
@@ -695,13 +747,13 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
         if (showRect.left > DIVIDER_WIDTH) {
             // render the pre pic
-            DrawContent preDrawContent = drawContentProvider.getPreDrawContent();
+            DrawContent preDrawContent = drawContentProvider.getPreDrawContent(-1);
             Matrix matrix = preDrawContent.calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
             matrix.postTranslate(showRect.left -mTextureView.getWidth() - DIVIDER_WIDTH,0);
             canvas.drawBitmap(preDrawContent.content, matrix, null);
         } else if (showRect.right < (mTextureView.getWidth() - DIVIDER_WIDTH)) {
             // render the next pic
-            DrawContent nextDrawContent = drawContentProvider.getNextDrawContent();
+            DrawContent nextDrawContent = drawContentProvider.getNextDrawContent(1);
             Matrix matrix = nextDrawContent.calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
             matrix.postTranslate(showRect.right + DIVIDER_WIDTH,0);
             canvas.drawBitmap(nextDrawContent.content, matrix, null);
@@ -921,8 +973,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         public abstract boolean hasNext();
 
         public abstract DrawContent getCurrentDrawContent();
-        public abstract DrawContent getPreDrawContent();
-        public abstract DrawContent getNextDrawContent();
+        public abstract DrawContent getPreDrawContent(int index);
+        public abstract DrawContent getNextDrawContent(int index);
         public abstract void switchToPre();
         public abstract void switchToNext();
     }
@@ -947,11 +999,11 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             return rectF;
         }
 
-        public Matrix calMatrix(int width, int height) {
+        public AnimMatrix calMatrix(int width, int height) {
             if (width == 0 || height == 0) {
                 return null;
             }
-            Matrix matrix = new Matrix();
+            AnimMatrix matrix = new AnimMatrix();
             // 1.将图片居中
             // 2.旋转图片
             float scaleX = ((width) / 1.0F / this.width);
@@ -964,5 +1016,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                     (height - this.height) / 2);
             return matrix;
         }
+    }
+
+    public static class AnimMatrix extends Matrix {
+        public float baseScale;
     }
 }
