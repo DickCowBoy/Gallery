@@ -39,6 +39,10 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     private static final float SUPER_MIN_MULTIPLIER = .75f;
     private static final float SUPER_MAX_MULTIPLIER = 1.25f;
 
+
+    private static final float FILM_RATIO = 0.65F;
+
+
     private RenderThread mRenderThread;
     private List<MediaBean> mediaBeans;
 
@@ -113,7 +117,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                     && Float.compare(detector.getScaleFactor(), 1.0F) < 0) {
                 // enter the film mode
                 isInFilmMode = true;
-                EnterFilmModeAnim anim = new EnterFilmModeAnim();
+                FilmModeSwitchAnim anim = new FilmModeSwitchAnim(true);
                 compatPostOnAnimation(anim);
                 // start the film anim
             } else {
@@ -121,8 +125,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                         detector.getFocusX(),
                         detector.getFocusY(),
                         false);
-                mRenderThread.notifyDirty(System.currentTimeMillis());
             }
+            mRenderThread.notifyDirty(System.currentTimeMillis());
             return true;
         }
 
@@ -228,52 +232,64 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            Log.e("LJL", "DOUBLE TAP");
-            boolean consumed = false;
-            if (state == STATE_NONE) {
-                float targetZoom = (normalizedScale == minScale) ? maxScale : minScale;
-                DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, e.getX(), e.getY(), false);
-                compatPostOnAnimation(doubleTap);
-                consumed = true;
-            }
-            return consumed;
+            return isInFilmMode ? onFilmDoubleTap(e) : onNormalDoubleTap(e);
         }
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
-            if (Math.abs(velocityX) > Math.abs(velocityY) && (
-                    Float.compare(normalizedScale, 1.0F) == 0 ||
-                    Float.compare(showRect.left, 1.0F) > 0 ||
-                    Float.compare(showRect.right, mTextureView.getWidth()) < 0
-                    )) {
-
-                if (state == STATE_DRAG) {
-                    int pos = 0;
-
-                    if (velocityX > 0 && drawContentProvider.hasPreview()) {
-                        pos = -1;
-                    } else if ((velocityX < 0 && drawContentProvider.hasNext())) {
-                        pos = 1;
-                    }
-                    NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect,
-                            pos);
-                    compatPostOnAnimation(normalScroll2Center);
-                }
-                return super.onFling(e1, e2, velocityX, velocityY);
+            if (isInFilmMode) {
+                onFilmFling(e1, e2, velocityX, velocityY);
+            } else {
+                onNormalFling(e1, e2, velocityX, velocityY);
             }
-
-            if (fling != null) {
-                //
-                // If a previous fling is still active, it should be cancelled so that two flings
-                // are not run simultaenously.
-                //
-                fling.cancelFling();
-            }
-            fling = new Fling((int) velocityX, (int) velocityY);
-            compatPostOnAnimation(fling);
             return super.onFling(e1, e2, velocityX, velocityY);
         }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return isInFilmMode ? onFilmSingleTap(e) : onNormalSingleTap(e);
+        }
+    }
+
+    private void onNormalFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+        if (Math.abs(velocityX) > Math.abs(velocityY) && (
+                Float.compare(normalizedScale, 1.0F) == 0 ||
+                        Float.compare(showRect.left, 1.0F) > 0 ||
+                        Float.compare(showRect.right, mTextureView.getWidth()) < 0
+        )) {
+
+            if (state == STATE_DRAG) {
+                int pos = 0;
+
+                if (velocityX > 0 && drawContentProvider.hasPreview()) {
+                    pos = -1;
+                } else if ((velocityX < 0 && drawContentProvider.hasNext())) {
+                    pos = 1;
+                }
+                NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect,
+                        pos,
+                        drawContentProvider.getCurrentDrawContent().
+                                getShowRect(drawContentProvider.getCurrentDrawContent()
+                                        .calMatrix(mTextureView.getWidth(), mTextureView.getHeight())));
+                compatPostOnAnimation(normalScroll2Center);
+            }
+            return;
+        }
+
+        if (fling != null) {
+            //
+            // If a previous fling is still active, it should be cancelled so that two flings
+            // are not run simultaenously.
+            //
+            fling.cancelFling();
+        }
+        fling = new Fling((int) velocityX, (int) velocityY);
+        compatPostOnAnimation(fling);
+    }
+
+    private void onFilmFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -308,14 +324,16 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     /**
      * apply the anim for enter film mode
      */
-    private class EnterFilmModeAnim implements Runnable {
+    private class FilmModeSwitchAnim implements Runnable {
         private static final float ZOOM_TIME = 100;
         private long startTime;
         private float target = 0.35F;
+        private boolean enter = false;
         private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
 
-        public EnterFilmModeAnim() {
+        public FilmModeSwitchAnim(boolean enter) {
             this.startTime = System.currentTimeMillis();
+            this.enter = enter;
             setState(STATE_ANIMATE_ZOOM);
         }
 
@@ -325,6 +343,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             mCurrentImageMatrix = drawContentProvider.getCurrentDrawContent().calMatrix(mTextureView.getWidth(),
                     mTextureView.getHeight());
             float df = 1 - target * t;
+            if (!enter) {
+                df = 1 - (1 - t)* target;
+            }
             mCurrentImageMatrix.postScale(df, df, mTextureView.getWidth() / 2,
                     mTextureView.getHeight() / 2);
             mCurrentImageMatrix.baseScale = df;
@@ -335,6 +356,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             } else {
                 setState(STATE_NONE);
             }
+            isInFilmMode = enter;
         }
 
         /**
@@ -359,26 +381,25 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
 
         /**
-         *
          * @param prePos -1 means switch to the pre image 0 means no changes and 1 means next image
          */
-        public NormalScroll2Center(RectF preRectF, int prePos) {
+        public NormalScroll2Center(RectF preRectF, int prePos, RectF originRect) {
             this.startTime = System.currentTimeMillis();
             this.prePos = prePos;
             switch (prePos) {
                 case 0:
-                    if (Float.compare(preRectF.left, 0.0F) > 0) {
-                        endX = 0 -  preRectF.left;
+                    if (Float.compare(preRectF.left, originRect.left) > 0) {
+                        endX = originRect.left -  preRectF.left;
                     } else {
-                        endX = mTextureView.getWidth() - preRectF.right;
+                        endX = originRect.right - preRectF.right;
                     }
 
                     break;
                 case -1:
-                    endX = mTextureView.getWidth() + DIVIDER_WIDTH - preRectF.left;
+                    endX = originRect.right + DIVIDER_WIDTH * (isInFilmMode ? FILM_RATIO : 1) - preRectF.left;
                     break;
                 case 1:
-                    endX = -preRectF.right - DIVIDER_WIDTH;
+                    endX = originRect.left - preRectF.right - DIVIDER_WIDTH * (isInFilmMode ? FILM_RATIO : 1);
                     break;
             }
             preAnim = 0;
@@ -404,7 +425,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 }
                 normalizedScale = 1.0F;
                 mCurrentImageMatrix = drawContentProvider.getCurrentDrawContent()
-                        .calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
+                        .calMatrix(mTextureView.getWidth(), mTextureView.getHeight(), (isInFilmMode ? FILM_RATIO : 1));
             }
 
         }
@@ -585,11 +606,11 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
     @Override
     protected boolean processTouchEvent(MotionEvent event) {
+        mScaleDetector.onTouchEvent(event);
+        mGestureDetector.onTouchEvent(event);
         if (isInFilmMode) {
             processFilmTouchEvent(event);
         } else {
-            mScaleDetector.onTouchEvent(event);
-            mGestureDetector.onTouchEvent(event);
             processNormalTouchEvent(event);
         }
 
@@ -641,7 +662,10 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                                     mTextureView.getWidth() / 3.0F) > 0 ? 1 : 0;
                         }
                         NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect,
-                                pos);
+                                pos,
+                                drawContentProvider.getCurrentDrawContent().
+                                        getShowRect(drawContentProvider.getCurrentDrawContent()
+                                                .calMatrix(mTextureView.getWidth(), mTextureView.getHeight())));
                         compatPostOnAnimation(normalScroll2Center);
                     }
                     setState(STATE_NONE);
@@ -655,7 +679,55 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
     }
 
     private void processFilmTouchEvent(MotionEvent event) {
+        PointF curr = new PointF(event.getX(), event.getY());
+        if (state == STATE_NONE || state == STATE_DRAG || state == STATE_FLING) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    last.set(curr);
+                    if (fling != null)
+                        fling.cancelFling();
+                    setState(STATE_DRAG);
+                    break;
 
+                case MotionEvent.ACTION_MOVE:
+                    if (state == STATE_DRAG) {
+                        float deltaX = curr.x - last.x;
+                        mCurrentImageMatrix.postTranslate(deltaX, 0);
+                        RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+                        if (Float.compare(showRect.left, 0.0F) < 0 && !drawContentProvider.hasNext()) {
+                            mCurrentImageMatrix.postTranslate(-deltaX, 0);
+                        } else if (Float.compare(showRect.right, mTextureView.getWidth()) > 0
+                                && !drawContentProvider.hasPreview()) {
+                            mCurrentImageMatrix.postTranslate(-deltaX, 0);
+                        }
+                        last.set(curr.x, curr.y);
+                    }
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_POINTER_UP:
+                    if (state == STATE_DRAG) {
+                        RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+                        int pos = 0;
+                        if (Float.compare(showRect.centerX(), mTextureView.getWidth() / 4) < 0) {
+                            pos = 1;
+                        } else if (Float.compare(showRect.centerX(), mTextureView.getWidth() * 0.75F) > 0) {
+                            pos = -1;
+                        }
+                        NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect, pos,
+                                drawContentProvider.getContentByIndex(pos).
+                                        getShowRect(drawContentProvider.getContentByIndex(pos)
+                                                .calMatrix(mTextureView.getWidth(), mTextureView.getHeight(), FILM_RATIO)));
+                        compatPostOnAnimation(normalScroll2Center);
+                    }
+                    setState(STATE_NONE);
+                    break;
+            }
+        }
+        if (mRenderThread != null) {
+            // #TODO split screen error
+            mRenderThread.notifyDirty(System.currentTimeMillis());
+        }
     }
 
     private float getFixDragTrans(float delta, float viewSize, float contentSize) {
@@ -977,6 +1049,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         public abstract DrawContent getCurrentDrawContent();
         public abstract DrawContent getPreDrawContent(int index);
         public abstract DrawContent getNextDrawContent(int index);
+        public abstract DrawContent getContentByIndex(int index);
         public abstract void switchToPre();
         public abstract void switchToNext();
     }
@@ -1001,7 +1074,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             return rectF;
         }
 
-        public AnimMatrix calMatrix(int width, int height) {
+        public AnimMatrix calMatrix(int width, int height, float normalScale) {
             if (width == 0 || height == 0) {
                 return null;
             }
@@ -1011,16 +1084,48 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             float scaleX = ((width) / 1.0F / this.width);
             float scaleY = (height / 1.0F / this.height);
             originScale = Math.min(scaleX, scaleY);
-            matrix.postScale(originScale, originScale,
+            matrix.postScale(originScale * normalScale, originScale * normalScale,
                     this.width / 2,
                     this.height / 2);
             matrix.postTranslate((width - this.width) / 2,
                     (height - this.height) / 2);
+            matrix.baseScale = normalScale;
             return matrix;
+        }
+
+        public AnimMatrix calMatrix(int width, int height) {
+            return calMatrix(width, height, 1.0F);
         }
     }
 
     public static class AnimMatrix extends Matrix {
         public float baseScale;
+    }
+
+    private boolean onFilmDoubleTap(MotionEvent e) {
+        return true;
+    }
+
+    private boolean onFilmSingleTap(MotionEvent e) {
+        FilmModeSwitchAnim anim = new FilmModeSwitchAnim(false);
+        compatPostOnAnimation(anim);
+        mRenderThread.notifyDirty(System.currentTimeMillis());
+        return true;
+    }
+
+    private boolean onNormalSingleTap(MotionEvent e) {
+        return false;
+    }
+
+    private boolean onNormalDoubleTap(MotionEvent e) {
+        Log.e("LJL", "onNormalDoubleTap TAP");
+        boolean consumed = false;
+        if (state == STATE_NONE) {
+            float targetZoom = (normalizedScale == minScale) ? maxScale : minScale;
+            DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, e.getX(), e.getY(), false);
+            compatPostOnAnimation(doubleTap);
+            consumed = true;
+        }
+        return consumed;
     }
 }

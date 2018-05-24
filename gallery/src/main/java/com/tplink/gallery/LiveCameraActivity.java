@@ -49,7 +49,7 @@ public class LiveCameraActivity extends Activity {
                 return true;
             }
 
-            private BigImageViewController.DrawContent getContentByIndex(int index) {
+            public BigImageViewController.DrawContent getContentByIndex(int index) {
                 if (index % 3 == 0) {
                     if (content != null) return content;
                     content = new BigImageViewController.DrawContent();
