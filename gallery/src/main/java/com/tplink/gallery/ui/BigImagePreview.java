@@ -67,6 +67,11 @@ public class BigImagePreview {
                 return drawContents.get(index);
             }
 
+            @Override
+            public DrawContent getContentByOffset(int offset) {
+                return getContentByIndex(this.index + offset);
+            }
+
 
             @Override
             public DrawContent getCurrentDrawContent() {
@@ -125,7 +130,7 @@ public class BigImagePreview {
     public void showIndex(int index) {
         this.mLargeImageRecycle.setVisibility(View.VISIBLE);
         bigImageViewController.enable();
-
+        bigImageViewController.updateMatrix();
     }
 
     public void hide() {
@@ -136,4 +141,5 @@ public class BigImagePreview {
     public boolean isShow() {
         return this.mLargeImageRecycle.getVisibility() == View.VISIBLE;
     }
+
 }

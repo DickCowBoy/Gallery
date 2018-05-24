@@ -492,6 +492,9 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
 
         @Override
         public void run() {
+            if (mRenderThread == null) {
+                return;
+            }
             float t = interpolate();
 
             mCurrentImageMatrix.postTranslate((t- preAnim) * endX, 0);
@@ -686,6 +689,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             mRenderThread.quit();
             mRenderThread = null;
         }
+        isInFilmMode = false;
     }
 
     @Override
@@ -812,8 +816,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             pos = -1;
         }
         NormalScroll2Center normalScroll2Center = new NormalScroll2Center(showRect, pos,
-                drawContentProvider.getContentByIndex(pos).
-                        getShowRect(drawContentProvider.getContentByIndex(pos)
+                drawContentProvider.getContentByOffset(pos).
+                        getShowRect(drawContentProvider.getContentByOffset(pos)
                                 .calMatrix(mTextureView.getWidth(), mTextureView.getHeight(), FILM_RATIO)));
         compatPostOnAnimation(normalScroll2Center);
     }
@@ -939,10 +943,8 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         }
 
         private synchronized void quit() {
-
             enable = false;
             this.notifyAll();
-
         }
 
         @Override
@@ -1075,6 +1077,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         public abstract DrawContent getPreDrawContent(int index);
         public abstract DrawContent getNextDrawContent(int index);
         public abstract DrawContent getContentByIndex(int index);
+        public abstract DrawContent getContentByOffset(int index);
         public abstract boolean switchToPre();
         public abstract boolean switchToNext();
     }
@@ -1108,5 +1111,10 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             consumed = true;
         }
         return consumed;
+    }
+
+    public void updateMatrix() {
+        mCurrentImageMatrix = drawContentProvider.getCurrentDrawContent()
+                .calMatrix(mTextureView.getWidth(), mTextureView.getHeight());
     }
 }

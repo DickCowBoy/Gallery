@@ -46,6 +46,11 @@ public class LiveCameraActivity extends Activity {
             }
 
             @Override
+            public DrawContent getContentByOffset(int offset) {
+                return getContentByIndex(this.index + offset);
+            }
+
+            @Override
             public boolean hasNext() {
                 return true;
             }
