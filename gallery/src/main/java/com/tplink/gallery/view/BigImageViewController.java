@@ -1,11 +1,9 @@
 package com.tplink.gallery.view;
 
 import android.annotation.TargetApi;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
@@ -125,7 +123,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
                 FilmModeSwitchAnim anim = new FilmModeSwitchAnim(true);
                 compatPostOnAnimation(anim);
                 // start the film anim
-            } else {
+            } else if (!isInFilmMode){
                 scaleImage(detector.getScaleFactor(),
                         detector.getFocusX(),
                         detector.getFocusY(),
@@ -912,6 +910,7 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
         drawContentProvider.getCurrentDrawContent().drawContent(canvas, mCurrentImageMatrix);
         // cal whether need to render the left and right
         RectF showRect = drawContentProvider.getCurrentDrawContent().getShowRect(mCurrentImageMatrix);
+        Log.e("ljl", "RENDER TIME " + showRect.left +" |" + showRect.right);
         if (showRect.left > DIVIDER_WIDTH && drawContentProvider.hasPreview()) {
             // render the pre pic
             DrawContent preDrawContent = drawContentProvider.getPreDrawContent(-1);
@@ -1065,8 +1064,10 @@ public class BigImageViewController extends GalleryTextureView.ViewController {
             this.controller = controller;
         }
 
-        private void updateContent() {
-            controller.mRenderThread.notifyDirty(System.currentTimeMillis());
+        public void updateContent() {
+            if (controller.mRenderThread != null) {
+                controller.mRenderThread.notifyDirty(System.currentTimeMillis());
+            }
         }
 
         public abstract boolean hasPreview();

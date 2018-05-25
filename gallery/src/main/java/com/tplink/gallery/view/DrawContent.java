@@ -1,26 +1,37 @@
 package com.tplink.gallery.view;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 
 public class DrawContent {
     public int width;
     public int height;
-    private Bitmap content;
+    private Drawable content;
     public float originScale;
+    public static Paint paint;
+    static {
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setAntiAlias(true);
+        paint.setDither(true);
+    }
 
-    public void setContent(Bitmap content) {
+    public void setContent(Drawable content) {
         this.content = content;
     }
 
-    public static Paint bgPaint = new Paint();
+    public Drawable getContent() {
+        return content;
+    }
+
+    public static Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     static {
-        bgPaint.setColor(Color.RED);
+        bgPaint.setColor(Color.GRAY);
+        bgPaint.setAntiAlias(true);
         bgPaint.setStyle(Paint.Style.FILL);
     }
 
@@ -29,8 +40,18 @@ public class DrawContent {
     }
 
     public void drawContent(Canvas canvas, Matrix matrix) {
-        if (content != null && !content.isRecycled()) {
-            canvas.drawBitmap(content, matrix, null);
+        if (content != null) {
+            final int saveCount = canvas.getSaveCount();
+            canvas.save();
+            canvas.concat(matrix);
+            content.setBounds(0, 0, width, height);
+            content.draw(canvas);
+            canvas.restoreToCount(saveCount);
+//            if (content instanceof BitmapDrawable) {
+//                canvas.drawBitmap(((BitmapDrawable)content).getBitmap(), matrix, paint);
+//            }
+//            canvas.setMatrix(matrix);
+//            content.draw(canvas);
         } else {
             canvas.drawRect(getShowRect(matrix), bgPaint);
         }

@@ -16,11 +16,12 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
@@ -92,13 +93,33 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         shapeIndicatorView.setupWithViewPager(mPager);
 
         GalleryTextureView bigImageView = findViewById(R.id.rcl_gallery);
+        show = findViewById(R.id.img_show);
+        show.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        show.setAlpha(0.0F);
+                        show.invalidate();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        show.setAlpha(1.0F);
+                        show.invalidate();
+                        break;
+                }
+                return true;
+            }
+        });
+        show.setVisibility(View.GONE);
         bigImagePreview = new BigImagePreview(this, bigImageView);
     }
+    public ImageView show;
 
     @Override
     public void onBackPressed() {
         if (bigImagePreview.isShow()) {
             bigImagePreview.hide();
+            show.setVisibility(View.GONE);
             currentKey = null;
             return;
         }
@@ -224,6 +245,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         currentKey = key;
         bigImagePreview.setData(DataCacheManager.dataManager.getMediaBeanCollectionByKey(key).mediaBeans);
         bigImagePreview.showIndex(index);
+        //show.setVisibility(View.VISIBLE);
     }
 
     @Override
