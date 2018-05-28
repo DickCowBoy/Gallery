@@ -100,6 +100,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
 
     public void showMediaBeans(List<MediaBean> beans) {
         thumbView.showMediaBeans(beans);
+        showSelected();
         if (imageSlotDataProvider != null) {
             imageSlotDataProvider.updateMediaIfNeed();
         }
@@ -150,7 +151,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
 
     @Override
     public void showSelected() {
-        if (thumbView != null && imageSlotDataProvider) {
+        if (thumbView != null && imageSlotDataProvider != null) {
             thumbView.setSelectItems(imageSlotDataProvider.getSelectedDataBeans(getSelectedSetKey()));
         } else {
             needUpdateSelect = true;
