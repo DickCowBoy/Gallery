@@ -17,7 +17,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,6 +28,7 @@ import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.data.DataCacheManager;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.selector.AlbumChangedListener;
 import com.tplink.gallery.ui.BigImagePreview;
 import com.tplink.gallery.view.AutoFitToolBar;
 import com.tplink.gallery.view.LoadingView;
@@ -33,13 +36,14 @@ import com.tplink.gallery.view.SelectViewPager;
 import com.tplink.widget.SlidingTabStripTP;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class BaseGalleryActivity extends PermissionActivity implements AutoFitToolBar.OnPaddingListener,
-        ImageSlotFragment.ImageSlotDataProvider, MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider {
+        ImageSlotFragment.ImageSlotDataProvider, MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider, Toolbar.OnMenuItemClickListener {
 
     private LoadingView mLoadingView;
-    private AutoFitToolBar mNormalToolbar;
+    protected AutoFitToolBar mNormalToolbar;
     private TabLayout mTabLayout;
     private SelectViewPager mPager;
     private ContainerPagerAdapter mPagerAdapter;
@@ -51,11 +55,13 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private boolean firstLoad = true;
     private String currentKey;
 
+    protected List<AlbumChangedListener> albumChangedListeners = new ArrayList<>();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        mediaPresenter = new MediaPresenter(this, this, getAllowMimeTypes(), getNotAllowMimeTypes(), needResolveBurst());
+        mediaPresenter = new MediaPresenter(this, this, getAllowMimeTypes(), getNotAllowMimeTypes(), needResolveBurst(), needImage(), needVideo());
         loadData();
     }
 
@@ -72,6 +78,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         setSupportActionBar(mNormalToolbar);
         mNormalToolbar.setNavigationIcon(R.drawable.photo_ic_menu_back_button);
         mNormalToolbar.setNavigationOnClickListener((v) -> onBackPressed());
+        mNormalToolbar.setOnMenuItemClickListener(this);
 
         mPager = findViewById(R.id.pager);
         mTabLayout = findViewById(R.id.tab_layout);
@@ -145,6 +152,16 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (getMenuId() != 0) {
+            getMenuInflater().inflate(getMenuId(), menu);
+        }
+        return true;
+    }
+
+    protected abstract int getMenuId();
+
+    @Override
     public void onPadding(int left, int top, int right, int bottom) {
 
     }
@@ -212,7 +229,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     @Override
     public void showAlbumDetail(AlbumBean bean) {
         AlbumImageSlotFragment albumImageSlotFragment = AlbumImageSlotFragment.newInstance(bean.bucketId,
-                getAllowMimeTypes(), getNotAllowMimeTypes());
+                getAllowMimeTypes(), getNotAllowMimeTypes(), awaysInSelectMode());
         showViewFragment(albumImageSlotFragment);
     }
 
@@ -232,4 +249,34 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
     public abstract ArrayList<String> getAllowMimeTypes();
     public abstract ArrayList<String> getNotAllowMimeTypes();
+
+    public abstract boolean needVideo();
+    public abstract boolean needImage();
+
+    @Override
+    public Collection<MediaBean> getSelectedDataBeans(long key) {
+        return null;
+    }
+
+    public boolean isSelectionLoading() {
+        return false;
+    }
+
+    public void regAlbumChangedListeners(AlbumChangedListener albumChangedListener) {
+        this.albumChangedListeners.add(albumChangedListener);
+    }
+
+    public void unregAlbumChangedListeners(AlbumChangedListener albumChangedListener) {
+        this.albumChangedListeners.remove(albumChangedListener);
+    }
+
+    @Override
+    public boolean isAlbumSelected(long bucketId) {
+        return false;
+    }
+
+    @Override
+    public int getAlbumSelectedCount(AlbumBean bean) {
+        return 0;
+    }
 }

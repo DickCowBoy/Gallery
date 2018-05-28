@@ -20,6 +20,7 @@ import com.tplink.view.CommonDataView;
 import com.tplink.view.CommonDataViewProxy;
 import com.tplink.view.SpaceItemDecoration;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -55,6 +56,10 @@ public class PhotoThumbView implements CommonDataViewProxy.OnDataItemClick<Media
             mDataProxy.updateData(data);
         }
         
+    }
+
+    public void addSelectItem(MediaBean entity) {
+        mDataProxy.addSelectItem(entity);
     }
 
     private class MediaBeanDiffCallback extends DiffUtil.Callback {
@@ -96,8 +101,12 @@ public class PhotoThumbView implements CommonDataViewProxy.OnDataItemClick<Media
         mDataProxy.delSelectItems(items);
     }
 
-    public void setSelectItems(Set<MediaBean> items) {
+    public void setSelectItems(Collection<MediaBean> items) {
         mDataProxy.setSelectItems(items);
+    }
+
+    public void  deleteSelectedItems(){
+        mDataProxy.deleteSelectedItems();
     }
 
 

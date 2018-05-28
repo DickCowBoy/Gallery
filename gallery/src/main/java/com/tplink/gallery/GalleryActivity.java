@@ -11,11 +11,18 @@
  */
 package com.tplink.gallery;
 
+import android.view.MenuItem;
+
 import com.tplink.gallery.base.BaseGalleryActivity;
 
 import java.util.ArrayList;
 
 public class GalleryActivity extends BaseGalleryActivity {
+
+    @Override
+    protected int getMenuId() {
+        return 0;
+    }
 
     @Override
     protected boolean awaysInSelectMode() {
@@ -29,15 +36,27 @@ public class GalleryActivity extends BaseGalleryActivity {
 
     @Override
     public ArrayList<String> getAllowMimeTypes() {
-        ArrayList<String> ret = new ArrayList<>();
-        ret.add("video/3gpp");
-        ret.add("image/png");
-        return ret;
+        return null;
 
     }
 
     @Override
     public ArrayList<String> getNotAllowMimeTypes() {
         return null;
+    }
+
+    @Override
+    public boolean needVideo() {
+        return true;
+    }
+
+    @Override
+    public boolean needImage() {
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        return false;
     }
 }

@@ -23,6 +23,7 @@ import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.media.MediaColumn;
 import com.tplink.gallery.utils.MediaUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MediaDao extends BaseMediaDao {
@@ -161,6 +162,22 @@ public class MediaDao extends BaseMediaDao {
         } else {
             return SELECTION_ALL;
         }
+    }
+
+    public List<MediaBean> getMediasByIds(Context context, List<Integer> allWallPaper) {
+        return queryFile("_id in " + buildInArgs(allWallPaper), null);
+    }
+
+    private static String buildInArgs(List<Integer> allWallPaper) {
+        StringBuilder sb = new StringBuilder("(");
+        String flag = "";
+        for (Integer integer : allWallPaper) {
+            sb.append(flag+ integer);
+            flag = ",";
+        }
+        sb.append(")");
+
+        return sb.toString();
     }
 
 }

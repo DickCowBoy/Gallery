@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:name="com.tplink.gallery.GalleryApplication"
         android:theme="@style/AppTheme">
-        <activity android:name="com.tplink.gallery.GalleryActivity"
+        <activity android:name="com.tplink.gallery.selector.wallpaper.WallPaperActivity"
             android:theme="@style/PhotoAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -33,6 +33,7 @@ import com.tplink.common.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -581,7 +582,7 @@ public abstract class CommonDataViewProxy<T, M extends CommonDataViewHolder>
         }
     }
 
-    public void setSelectItems(List<T> items) {
+    public void setSelectItems(Collection<T> items) {
         if (mData == null) return;
         int index = -1;
         for (T item : items) {

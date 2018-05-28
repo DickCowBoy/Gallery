@@ -76,6 +76,9 @@ public class AlbumAdapter extends CommonDataViewProxy<AlbumBean, AlbumAdapter.Al
                 picAlbum.getContentUri());
         viewHolder.mAlbumName.setText(picAlbum.displayName);
         viewHolder.mAlbumPicCount.setText(getCountText(picAlbum));
+        if (mSelector.inSelectionMode()) {
+            viewHolder.getCheckBox().setChecked(mAlbumInfoInterface.isAlbumSelected(picAlbum));
+        }
     }
 
     protected String getCountText(AlbumBean picAlbum) {
@@ -144,6 +147,7 @@ public class AlbumAdapter extends CommonDataViewProxy<AlbumBean, AlbumAdapter.Al
 
     public interface AlbumInfoInterface {
         int getAlbumSelectCount(AlbumBean entity);
+        boolean isAlbumSelected(AlbumBean entity);
     }
 
     public void updateBucket(int bucketId, int selectCount) {

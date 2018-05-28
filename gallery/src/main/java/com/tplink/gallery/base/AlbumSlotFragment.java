@@ -10,13 +10,16 @@ import android.view.ViewGroup;
 
 import com.tplink.base.DragSelectTouchHelper;
 import com.tplink.gallery.bean.AlbumBean;
+import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.selector.ItemChangedListener;
 import com.tplink.gallery.ui.AlbumView;
 import com.tplink.view.CommonDataView;
 
+import java.util.Collection;
 import java.util.List;
 
 
-public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperateProcessor {
+public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperateProcessor, ItemChangedListener{
     private static final String KEY_AWAYS_IN_SELECT_MODE = "KEY_AWAYS_IN_SELECT_MODE";
     private static final String KEY_DATA_KEY = "KEY_DATA_KEY";
 
@@ -80,9 +83,31 @@ public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperat
 
     }
 
+    @Override
+    public boolean isItemChecked(AlbumBean item) {
+        return imageSlotDataProvider.isAlbumSelected(item.bucketId);
+    }
+
+    @Override
+    public int getAlbumSelectCount(AlbumBean item) {
+        return imageSlotDataProvider.getAlbumSelectedCount(item);
+    }
+
+    @Override
+    public void onChanged(MediaBean entity) {
+
+    }
+
     public interface AlbumSlotDataProvider {
         List<AlbumBean> getAlbumDataBeans(String key);
+        boolean isAlbumSelected(long bucketId);
         void showAlbumDetail(AlbumBean bean);
+        int getAlbumSelectedCount(AlbumBean bean);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

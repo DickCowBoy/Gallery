@@ -100,15 +100,17 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
         }
         dataVersion = version;
         showMediaBeans(beans);
+        showSelected();
     }
 
-    public static AlbumImageSlotFragment newInstance(long bucketId, ArrayList<String> allowMimeTypes, ArrayList<String> notAllowMimeTypes) {
+    public static AlbumImageSlotFragment newInstance(long bucketId, ArrayList<String> allowMimeTypes, ArrayList<String> notAllowMimeTypes, boolean selectMode) {
 
         Bundle args = new Bundle();
 
         args.putLong(KEY_BUCKET_ID, bucketId);
         args.putStringArrayList(KEY_ALLOW_MIME_TYPES, allowMimeTypes);
         args.putStringArrayList(KEY_NOT_ALLOW_MIME_TYPES, notAllowMimeTypes);
+        args.putBoolean(KEY_AWAYS_IN_SELECT_MODE , selectMode);
 
         args.putString(KEY_DATA_KEY , MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes));
 
@@ -117,4 +119,8 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
         return fragment;
     }
 
+    @Override
+    public long getSelectedSetKey() {
+        return bucketId;
+    }
 }

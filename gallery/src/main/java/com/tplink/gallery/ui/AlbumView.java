@@ -8,6 +8,7 @@ import com.tplink.view.CommonDataView;
 import com.tplink.view.CommonDataViewProxy;
 import com.tplink.view.SpaceItemDecoration;
 
+import java.util.Collection;
 import java.util.List;
 
 public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>,
@@ -59,7 +60,12 @@ public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>
 
     @Override
     public int getAlbumSelectCount(AlbumBean entity) {
-        return 0;
+        return albumOperateProcessor.getAlbumSelectCount(entity);
+    }
+
+    @Override
+    public boolean isAlbumSelected(AlbumBean entity) {
+        return albumOperateProcessor.isItemChecked(entity);
     }
 
     public void showAlbums(List<AlbumBean> beans) {
@@ -70,5 +76,17 @@ public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>
         void onItemClick(AlbumBean data, int index);
         boolean canSelectItem(AlbumBean item);
         void delSelectItem(AlbumBean item);
+        boolean isItemChecked(AlbumBean item);
+        int getAlbumSelectCount(AlbumBean item);
     }
+
+    public void setSelectItems(Collection<AlbumBean> items) {
+        mDataProxy.setSelectItems(items);
+    }
+
+    public void  deleteSelectedItems(){
+        mDataProxy.deleteSelectedItems();
+    }
+
+
 }

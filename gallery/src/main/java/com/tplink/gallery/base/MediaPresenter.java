@@ -39,24 +39,13 @@ public class MediaPresenter extends MediaContract.MediaPresenter implements Data
     private boolean needVideo = true;
 
     public MediaPresenter(MediaContract.MediaView view, Context context, List<String> allowMimeTypes,List<String> notAllowMimeTypes,
-                          boolean needResolveBurst) {
+                          boolean needResolveBurst, boolean needImage, boolean needVideo) {
         super(view);
         this.allowMimeTypes = allowMimeTypes;
         this.notAllowMimeTypes = notAllowMimeTypes;
-        if (allowMimeTypes != null) {
-            needImage = false;
-            needVideo = false;
-            for (String allowMimeType : allowMimeTypes) {
-                if (!needImage && allowMimeType.startsWith("image")) {
-                    needImage = true;
-                }
-
-                if (!needVideo && allowMimeType.startsWith("video")) {
-                    needVideo = true;
-                }
-            }
-        }
         mediaDao = new MediaDao(context);
+        this.needVideo = needVideo;
+        this.needImage = needImage;
         this.needResolveBurst = needResolveBurst;
     }
 
