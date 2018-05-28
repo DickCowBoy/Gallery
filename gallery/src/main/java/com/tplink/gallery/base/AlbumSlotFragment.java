@@ -75,12 +75,12 @@ public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperat
 
     @Override
     public boolean canSelectItem(AlbumBean item) {
-        return false;
+        return imageSlotDataProvider.canSelectAlbum(item);
     }
 
     @Override
     public void delSelectItem(AlbumBean item) {
-
+        imageSlotDataProvider.delSelectAlbum(item);
     }
 
     @Override
@@ -101,6 +101,8 @@ public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperat
     public interface AlbumSlotDataProvider {
         List<AlbumBean> getAlbumDataBeans(String key);
         boolean isAlbumSelected(long bucketId);
+        void delSelectAlbum(AlbumBean item);
+        boolean canSelectAlbum(AlbumBean item);
         void showAlbumDetail(AlbumBean bean);
         int getAlbumSelectedCount(AlbumBean bean);
     }

@@ -123,4 +123,24 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity implements 
         Set<MediaBean> selectBucketMedia = mediaSelectorPresenter.getSelectBucketMedia(bean.bucketId);
         return selectBucketMedia == null ? 0 : selectBucketMedia.size();
     }
+
+    @Override
+    public boolean canSelectItem(MediaBean item) {
+        return mediaSelectorPresenter.addSingleMedia(item);
+    }
+
+    @Override
+    public void delSelectItem(MediaBean item) {
+        mediaSelectorPresenter.removeSingleMedia(item);
+    }
+
+    @Override
+    public boolean canSelectAlbum(AlbumBean item) {
+        return mediaSelectorPresenter.addAlbumMedia(item.bucketId);
+    }
+
+    @Override
+    public void delSelectAlbum(AlbumBean item) {
+        mediaSelectorPresenter.delAlbumMedia(item.bucketId);
+    }
 }

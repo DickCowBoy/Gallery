@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.BackpressureStrategy;
@@ -36,6 +38,8 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
     protected ResultContainer mContainer = new ResultContainer();
 
     private Context context;
+
+    private Map<Long, List<MediaBean>> bucketInfo = new HashMap<>();
 
     private boolean isLoading = false;
 
@@ -75,6 +79,9 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
                 mView.showErrorMsg(context.getString(R.string.select_count_over));
             }
         }
+        if (result == 0 && mView != null) {
+            showTitle();
+        }
         return result == 0;
     }
 
@@ -86,15 +93,21 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
     @Override
     public void removeSingleMedia(MediaBean bean) {
         mContainer.delItem(bean);
+        if (mView != null) {
+            showTitle();
+        }
     }
 
     @Override
-    public boolean addAlbumMedia(long bucketId, List<MediaBean> datas) {
-        int result = mContainer.addBucketItems(bucketId, datas);
+    public boolean addAlbumMedia(long bucketId) {
+        int result = mContainer.addBucketItems(bucketId, bucketInfo.get(bucketId));
         if (result != 0) {
             if (mView != null) {
                 mView.showErrorMsg(context.getString(R.string.select_count_over));
             }
+        }
+        if (result == 0 && mView != null) {
+            showTitle();
         }
         return result == 0;
     }
@@ -128,7 +141,57 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
 
     @Override
     public void initDataByAllMedia(List<MediaBean> datas, long version) {
+        if (datas == null) {
+            bucketInfo.clear();
+            return;
+        }
+        Flowable.create(new FlowableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(
+                    @NonNull FlowableEmitter<Integer> flowableEmitter)
+                    throws Exception {
+                bucketInfo.clear();
+                List<MediaBean> mediaBeans = null;
+                for (MediaBean data : datas) {
+                    mediaBeans = bucketInfo.get(data.bucketId);
+                    if (mediaBeans == null) {
+                        mediaBeans = new ArrayList<>();
+                        bucketInfo.put(data.bucketId, mediaBeans);
+                    }
+                    mediaBeans.add(data);
+                }
+                // 剩下的allWallPaper未不存在内容，此处可以进行删除冗余数据
+                flowableEmitter.onNext(1);
+                flowableEmitter.onComplete();
+            }
+        }, BackpressureStrategy.LATEST)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSubscriber<Integer>() {
+                    @Override
+                    public void onNext(Integer path) {
+                        if (mView != null && mView.isActive()) {
+                        }
+                    }
 
+                    @Override
+                    public void onError(Throwable throwable) {
+                        if (mView != null && mView.isActive()) {
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    protected void onStart() {
+                        super.onStart();
+                        if (mView != null && mView.isActive()) {
+                        }
+                    }
+                });
     }
 
     @Override
@@ -246,16 +309,7 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
                     public void onNext(List<MediaBean> path) {
                         isLoading = false;
                         if (mView != null && mView.isActive()) {
-                            int[] count = mContainer.getCount();
-                            String title =  context.getResources().getString(R.string.select_pic);
-                            if (count[0] != 0) {
-                                title = context.getResources()
-                                                .getQuantityString(R.plurals.select_pic_count_limit, count[0], count[0], count[1]);
-                            } else {
-                                title = context.getResources()
-                                        .getQuantityString(R.plurals.select_pic_count, count[0], count[0]);
-                            }
-                            mView.showHeader(title);
+                            showTitle();
                             mView.showSelected(path);
                         }
                     }
@@ -278,6 +332,16 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
                         super.onStart();
                     }
                 });
+    }
+
+    private void showTitle() {
+        int[] count = mContainer.getCount();
+        String title =  context.getResources().getString(R.string.select_pic);
+        if (count[0] != 0) {
+            title = context.getResources()
+                    .getQuantityString(R.plurals.select_pic_count_limit, count[0], count[0], count[1]);
+        }
+        mView.showHeader(title);
     }
 
     @Override

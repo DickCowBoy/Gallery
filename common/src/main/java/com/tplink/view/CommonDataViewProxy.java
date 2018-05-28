@@ -583,7 +583,7 @@ public abstract class CommonDataViewProxy<T, M extends CommonDataViewHolder>
     }
 
     public void setSelectItems(Collection<T> items) {
-        if (mData == null) return;
+        if (mData == null || items == null) return;
         int index = -1;
         for (T item : items) {
             if (mSelector.isItemSelected(item)) {

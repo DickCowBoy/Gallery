@@ -39,7 +39,7 @@ public interface MediaSelectorContract {
         public abstract boolean needPreview();
         public abstract boolean addSingleMedia(MediaBean bean);
         public abstract void removeSingleMedia(MediaBean bean);
-        public abstract boolean addAlbumMedia(long bucketId, List<MediaBean> datas);
+        public abstract boolean addAlbumMedia(long bucketId);
         public abstract void delAlbumMedia(long bucketId);
 
         public abstract List<MediaBean> getSelectMedia();
@@ -58,6 +58,7 @@ public interface MediaSelectorContract {
         public abstract void loadSelectInfo(Context context, Intent intent);
 
         public abstract boolean isItemSelected(MediaBean item);
+
     }
 
 }

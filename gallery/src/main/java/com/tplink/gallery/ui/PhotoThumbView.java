@@ -15,6 +15,7 @@ import android.content.Context;
 import android.support.v7.util.DiffUtil;
 
 import com.tplink.base.CommonUtils;
+import com.tplink.base.DragSelectTouchHelper;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.view.CommonDataView;
 import com.tplink.view.CommonDataViewProxy;
@@ -60,6 +61,10 @@ public class PhotoThumbView implements CommonDataViewProxy.OnDataItemClick<Media
 
     public void addSelectItem(MediaBean entity) {
         mDataProxy.addSelectItem(entity);
+    }
+
+    public void setParentView(DragSelectTouchHelper.InterceptController parentView) {
+        mDataProxy.setParentView(parentView);
     }
 
     private class MediaBeanDiffCallback extends DiffUtil.Callback {

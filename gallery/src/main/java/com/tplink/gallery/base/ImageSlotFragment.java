@@ -51,6 +51,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
             awaysInSelectMode = arguments.getBoolean(KEY_AWAYS_IN_SELECT_MODE);
             dataKey = arguments.getString(KEY_DATA_KEY);
         }
+
     }
 
     @Nullable
@@ -59,8 +60,18 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
         CommonDataView commonDataView = new CommonDataView(getContext(), null);
         thumbView = new PhotoThumbView(getContext(), commonDataView, awaysInSelectMode);
         thumbView.setPhotoThumbListener(this);
+        if (interceptController != null) {
+            thumbView.setParentView(interceptController);
+        }
         loadDataForView();
         return commonDataView;
+    }
+
+    public void setInterceptController(DragSelectTouchHelper.InterceptController interceptController) {
+        this.interceptController = interceptController;
+        if (thumbView != null) {
+            thumbView.setParentView(interceptController);
+        }
     }
 
     protected void loadDataForView() {
@@ -80,12 +91,12 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
 
     @Override
     public boolean canSelectItem(MediaBean item) {
-        return false;
+        return imageSlotDataProvider.canSelectItem(item);
     }
 
     @Override
     public void delSelectItem(MediaBean item) {
-
+        imageSlotDataProvider.delSelectItem(item);
     }
 
     @Override
@@ -104,10 +115,6 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
         if (imageSlotDataProvider != null) {
             imageSlotDataProvider.updateMediaIfNeed();
         }
-    }
-
-    public void setInterceptController(DragSelectTouchHelper.InterceptController interceptController) {
-        this.interceptController = interceptController;
     }
 
     public static ImageSlotFragment newInstance(boolean selectMode, String key) {
@@ -163,6 +170,8 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
         void showAllImage(MediaBean data, int index, String key);
         void updateMediaIfNeed();
         Collection<MediaBean> getSelectedDataBeans(long key);
+        void delSelectItem(MediaBean item);
+        boolean canSelectItem(MediaBean item);
         void regAlbumChangedListeners(AlbumChangedListener albumChangedListener);
 
         void unregAlbumChangedListeners(AlbumChangedListener albumChangedListener);

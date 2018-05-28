@@ -279,4 +279,24 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     public int getAlbumSelectedCount(AlbumBean bean) {
         return 0;
     }
+
+    @Override
+    public boolean canSelectItem(MediaBean item) {
+        return true;
+    }
+
+    @Override
+    public void delSelectItem(MediaBean item) {
+
+    }
+
+    @Override
+    public boolean canSelectAlbum(AlbumBean item) {
+        return false;
+    }
+
+    @Override
+    public void delSelectAlbum(AlbumBean item) {
+
+    }
 }
