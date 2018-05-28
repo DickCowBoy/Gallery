@@ -115,6 +115,7 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
     @Override
     public void delAlbumMedia(long bucketId) {
         mContainer.delBucketItems(bucketId);
+        showTitle();
     }
 
     @Override

@@ -143,3 +143,5 @@
 
 -keep class javax.lang.** { *; }
 -dontwarn javax.lang.****
+
+-keep class com.tplink.gallery.bean.* { *; }
