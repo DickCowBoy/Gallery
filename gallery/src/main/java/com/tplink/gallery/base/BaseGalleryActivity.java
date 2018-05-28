@@ -46,7 +46,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private boolean isActive = false;
     private MediaContract.MediaPresenter mediaPresenter;
     private BigImagePreview bigImagePreview;
-    private  RecyclerView bigImageView;
+    private RecyclerView bigImageView;
     private RecyclerView filmImageView;
     private boolean firstLoad = true;
     private String currentKey;
@@ -55,7 +55,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        mediaPresenter = new MediaPresenter(this, this, needImage(), needVideo(), needGif(), needResolveBurst());
+        mediaPresenter = new MediaPresenter(this, this, getAllowMimeTypes(), getNotAllowMimeTypes(), needResolveBurst());
         loadData();
     }
 
@@ -78,7 +78,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
         if (mPagerAdapter == null) {
             mPagerAdapter = new ContainerPagerAdapter(getFragmentManager(),
-                    this, mPager, awaysInSelectMode(), needImage(), needVideo(), needGif(), needResolveBurst());
+                    this, mPager, awaysInSelectMode(), getAllowMimeTypes(),getNotAllowMimeTypes(), needResolveBurst());
         } else {
             mPagerAdapter.setInterceptController(mPager);
         }
@@ -165,12 +165,6 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         return beans == null ? new ArrayList<>() : beans;
     }
 
-    protected abstract boolean needImage();
-
-    protected abstract boolean needVideo();
-
-    protected abstract boolean needGif();
-
     protected abstract boolean awaysInSelectMode();
     protected abstract boolean needResolveBurst();
 
@@ -217,7 +211,8 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
     @Override
     public void showAlbumDetail(AlbumBean bean) {
-        AlbumImageSlotFragment albumImageSlotFragment = AlbumImageSlotFragment.newInstance(bean.bucketId, needImage(), needVideo(), needGif());
+        AlbumImageSlotFragment albumImageSlotFragment = AlbumImageSlotFragment.newInstance(bean.bucketId,
+                getAllowMimeTypes(), getNotAllowMimeTypes());
         showViewFragment(albumImageSlotFragment);
     }
 
@@ -234,4 +229,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
             bigImagePreview.setData(DataCacheManager.dataManager.getMediaBeanCollectionByKey(currentKey).mediaBeans);
         }
     }
+
+    public abstract ArrayList<String> getAllowMimeTypes();
+    public abstract ArrayList<String> getNotAllowMimeTypes();
 }

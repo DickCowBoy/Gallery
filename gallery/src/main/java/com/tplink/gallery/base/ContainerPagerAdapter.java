@@ -24,6 +24,8 @@ import com.tplink.base.DragSelectTouchHelper;
 import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.utils.MediaUtils;
 
+import java.util.List;
+
 public class ContainerPagerAdapter extends FragmentPagerAdapter {
     public static final String TAG = "PicPagerAdapter";
 
@@ -40,9 +42,9 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
     private ImageSlotFragment mMediaFragment = null;
     private AlbumSlotFragment mAlbumFragment = null;
 
-    private boolean needImage;
-    private boolean needVideo;
-    private boolean needGif;
+
+    private List<String> allowMimeTyppes;
+    private List<String> notAllowMimeTyppes;
     private boolean needResolveBurst;
 
 
@@ -50,16 +52,15 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
 
     public ContainerPagerAdapter(FragmentManager fm, Context context,
                                  DragSelectTouchHelper.InterceptController interceptController,
-                                 boolean awaysInSelectMode, boolean needImage, boolean needVideo, boolean needGif,
+                                 boolean awaysInSelectMode, List<String> allowMimeTyppes,List<String> notAllowMimeTyppes,
                                  boolean needResolveBurst) {
         super(fm);
         mContext = context;
         mFragmentManager = fm;
         this.interceptController = interceptController;
         this.awaysInSelectMode = awaysInSelectMode;
-        this.needGif = needGif;
-        this.needImage = needImage;
-        this.needVideo = needVideo;
+        this.allowMimeTyppes = allowMimeTyppes;
+        this.notAllowMimeTyppes = notAllowMimeTyppes;
         this.needResolveBurst = needResolveBurst;
     }
 
@@ -91,13 +92,13 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
         if (getPosInDirection(i) == ALBUM_TAB) {
             if (mAlbumFragment == null) {
                 mAlbumFragment = AlbumSlotFragment.newInstance(awaysInSelectMode,
-                        MediaUtils.getAllAlbumKey(needVideo, needImage, needGif, needResolveBurst));
+                        MediaUtils.getAllAlbumKey(allowMimeTyppes, notAllowMimeTyppes, needResolveBurst));
             }
             return mAlbumFragment;
         } else {
             if (mMediaFragment == null) {
                 mMediaFragment = ImageSlotFragment.newInstance(awaysInSelectMode,
-                        MediaUtils.getAllMediaKey (needVideo, needImage, needGif, needResolveBurst));
+                        MediaUtils.getAllMediaKey (allowMimeTyppes, notAllowMimeTyppes, needResolveBurst));
             }
             mMediaFragment.setInterceptController(interceptController);
             return mMediaFragment;

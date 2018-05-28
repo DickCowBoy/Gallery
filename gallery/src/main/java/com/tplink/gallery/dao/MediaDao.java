@@ -31,51 +31,31 @@ public class MediaDao extends BaseMediaDao {
         super(context);
     }
 
-    public List<MediaBean> queryAllMedia(boolean queryVideo, boolean queryImage, boolean queryGif, boolean needResolveBurst) {
+    public List<MediaBean> queryAllMedia(List<String> allowMimeTypes, List<String> notAllowMimeTypes, boolean needResolveBurst, boolean needVideo, boolean needImage) {
 
-        String selection = null;
-        String[] selectionArgs = null;
-        if (queryVideo && ! queryImage) {
-            return queryVideo(null, null);
-        }  else if (queryImage && !queryVideo) {
-            return queryImage(null, null, queryGif);
-        } else if (queryImage && queryVideo) {
-            selection = SELECTION_ALL;
-            selectionArgs = SELECTION_ALL_ARGS;
+        String selection = getSqlSelection(allowMimeTypes, notAllowMimeTypes);
+        if (needVideo && ! needImage) {
+            return queryVideo(selection, null);
+        }  else if (needImage && !needVideo) {
+            return queryImage(selection, null);
+        } else if (needVideo && needVideo) {
         }
-        return queryFile(selection, selectionArgs, queryGif);
+        return queryFile(selection, null);
     }
 
-    public List<AlbumBean> queryAllAlbum(boolean queryVideo, boolean queryImage, boolean queryGif, boolean needResolveBurst) {
-        String selection = null;
+    public List<AlbumBean> queryAllAlbum(List<String> allowMimeTypes, List<String> notAllowMimeTypes, boolean needResolveBurst, boolean queryVideo, boolean queryImage) {
+        String selection = getSqlSelection(allowMimeTypes, notAllowMimeTypes);
         String[] selectionArgs = null;
+        Uri uri = MediaUtils.getFileUri();
 
         if (queryVideo && ! queryImage) {
-            return query(MediaUtils.getVideoUri(),
-                    MediaColumn.ALBUM_PROJECTION,
-                    ") GROUP BY (bucket_id",
-                    null, DATA_MODIFY_DESC,
-                    cursor -> MediaColumn.parseAlbum(cursor));
+            uri = MediaUtils.getVideoUri();
         }  else if (queryImage && !queryVideo) {
-            if (!queryGif) {
-                if (TextUtils.isEmpty(selection)) {
-                    selection = MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
-                } else {
-                    selection += " AND " + MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
-                }
-            }
-            return query(MediaUtils.getImageUri(),
-                    MediaColumn.ALBUM_PROJECTION,
-                    (TextUtils.isEmpty(selection) ? "0=0" : selection) + ") GROUP BY (bucket_id",
-                    null, DATA_MODIFY_DESC,
-                    cursor -> MediaColumn.parseAlbum(cursor));
-        } else if (queryImage && queryVideo) {
-            selection = SELECTION_ALL;
-            selectionArgs = SELECTION_ALL_ARGS;
+            uri = MediaUtils.getImageUri();
         }
-        return query(MediaUtils.getFileUri(),
+        return query(uri,
                 MediaColumn.ALBUM_PROJECTION,
-                selection + ") GROUP BY (bucket_id",
+                (TextUtils.isEmpty(selection) ? "0=0" : selection) + ") GROUP BY (bucket_id",
                 selectionArgs,
                 DATA_MODIFY_DESC,
                 cursor -> MediaColumn.parseAlbum(cursor));
@@ -91,7 +71,7 @@ public class MediaDao extends BaseMediaDao {
     }
 
     public List<MediaBean> queryImageById(List<String> ids) {
-        return queryImage(MediaStore.Files.FileColumns._ID + " in " + buildInCondition(ids), null, true);
+        return queryImage(MediaStore.Files.FileColumns._ID + " in " + buildInCondition(ids), null);
     }
 
     public SparseIntArray queryAllMediaIds() {
@@ -131,22 +111,56 @@ public class MediaDao extends BaseMediaDao {
         }
     }
 
-    public List<MediaBean> queryMediaByBucketId(long bucketId, boolean queryVideo, boolean queryImage, boolean queryGif) {
+    public List<MediaBean> queryMediaByBucketId(long bucketId,
+                                                List<String> allowMimeTypes, List<String> notAllowMimeTypes,
+                                                boolean queryVideo, boolean queryImage) {
 
         String selection = MediaStore.Images.ImageColumns.BUCKET_ID + " = ?";
+        String sqlSelection = getSqlSelection(allowMimeTypes, notAllowMimeTypes);
+        if (!TextUtils.isEmpty(sqlSelection)) {
+            selection += (" AND " + sqlSelection);
+        }
         String[] selectionArgs = new String[]{String.valueOf(bucketId)};
         if (queryVideo && ! queryImage) {
             return queryVideo(selection, selectionArgs);
         }  else if (queryImage && !queryVideo) {
-            return queryImage(selection, selectionArgs, queryGif);
-        } else if (queryImage && queryVideo) {
-            selection = selection + " AND " + SELECTION_ALL;
-            selectionArgs = new String[]{
-                    String.valueOf(bucketId),
-                    String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-                    String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
-            };
+            return queryImage(selection, selectionArgs);
         }
-        return queryFile(selection, selectionArgs, queryGif);
+        return queryFile(selection, selectionArgs);
     }
+
+    public String getSqlSelection(List<String> allowMimeTypes, List<String> notAllowMimeTypes) {
+        if (allowMimeTypes != null && allowMimeTypes.size() > 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(MediaStore.Files.FileColumns.MIME_TYPE +" IN (");
+            for (int i = 0; i < allowMimeTypes.size() - 1; i++) {
+                sb.append("\'");
+                sb.append(allowMimeTypes.get(i));
+                sb.append("\'");
+                sb.append(",");
+            }
+            sb.append("\'");
+            sb.append(allowMimeTypes.get(allowMimeTypes.size() -1));
+            sb.append("\'");
+            sb.append(" )");
+            return sb.toString();
+        } else if (notAllowMimeTypes != null && notAllowMimeTypes.size() > 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(MediaStore.Files.FileColumns.MIME_TYPE +" NOT IN (");
+            for (int i = 0; i < notAllowMimeTypes.size() - 1; i++) {
+                sb.append("\'");
+                sb.append(notAllowMimeTypes.get(i));
+                sb.append("\'");
+                sb.append(",");
+            }
+            sb.append("\'");
+            sb.append(notAllowMimeTypes.get(notAllowMimeTypes.size() -1));
+            sb.append("\'");
+            sb.append(" )");
+            return sb.toString();
+        } else {
+            return SELECTION_ALL;
+        }
+    }
+
 }

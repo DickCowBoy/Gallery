@@ -27,9 +27,9 @@ public class AlbumDao extends BaseMediaDao{
 
     public List<MediaBean> queryMediasByBucket(long bucketId, boolean queryVideo) {
         return queryVideo ? queryFile(MediaStore.Video.VideoColumns.BUCKET_ID,
-                new String[]{String.valueOf(bucketId)}, true) :
+                new String[]{String.valueOf(bucketId)}) :
                 queryImage(MediaStore.Video.VideoColumns.BUCKET_ID,
-                        new String[]{String.valueOf(bucketId)}, true);
+                        new String[]{String.valueOf(bucketId)});
     }
 
 }

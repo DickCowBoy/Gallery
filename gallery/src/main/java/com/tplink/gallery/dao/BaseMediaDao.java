@@ -13,18 +13,9 @@ import java.util.List;
 public class BaseMediaDao extends BaseDao {
 
     protected static final String SELECTION_ALL =
-            "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
+            "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
                     + " OR "
-                    + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)"
-                    + " AND " + MediaStore.MediaColumns.SIZE + ">0";
-
-    protected static final String[] SELECTION_ALL_ARGS = {
-            String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-            String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
-    };
-
-    protected static final String SELECTION_ALL_FOR_SINGLE_MEDIA_TYPE =
-            MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
+                    + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" +String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) +")"
                     + " AND " + MediaStore.MediaColumns.SIZE + ">0";
 
     protected static String DATA_MODIFY_DESC = MediaStore.Files.FileColumns.DATE_MODIFIED +" DESC";
@@ -33,15 +24,7 @@ public class BaseMediaDao extends BaseDao {
         super(context);
     }
 
-    public List<MediaBean> queryFile(String selection, String[] selectionArgs, boolean queryGif) {
-
-        if (!queryGif) {
-            if (TextUtils.isEmpty(selection)) {
-                selection = MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
-            } else {
-                selection += " AND " + MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
-            }
-        }
+    public List<MediaBean> queryFile(String selection, String[] selectionArgs) {
 
         return query(MediaUtils.getFileUri(), MediaColumn.QUERY_PROJECTION,
                 selection, selectionArgs,
@@ -50,16 +33,7 @@ public class BaseMediaDao extends BaseDao {
         );
     }
 
-    public List<MediaBean> queryImage(String selection, String[] selectionArgs, boolean queryGif) {
-
-        if (!queryGif) {
-            if (TextUtils.isEmpty(selection)) {
-                selection = MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
-            } else {
-                selection += " AND " + MediaStore.Files.FileColumns.MIME_TYPE + "!='image/gif'";
-            }
-        }
-
+    public List<MediaBean> queryImage(String selection, String[] selectionArgs) {
         return query(MediaUtils.getImageUri(), MediaColumn.QUERY_IMAGE_PROJECTION,
                 selection, selectionArgs,
                 DATA_MODIFY_DESC,

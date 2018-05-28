@@ -30,17 +30,33 @@ import io.reactivex.subscribers.DisposableSubscriber;
 public class MediaPresenter extends MediaContract.MediaPresenter implements DataCacheManager.OnMediaChanged {
 
     private MediaDao mediaDao;
-    private boolean needImage;
-    private boolean needVideo;
-    private boolean needGif;
+
     private boolean needResolveBurst;
 
-    public MediaPresenter(MediaContract.MediaView view, Context context, boolean needImage, boolean needVideo, boolean needGif, boolean needResolveBurst) {
+    private List<String> allowMimeTypes;
+    private List<String> notAllowMimeTypes;
+    private boolean needImage = true;
+    private boolean needVideo = true;
+
+    public MediaPresenter(MediaContract.MediaView view, Context context, List<String> allowMimeTypes,List<String> notAllowMimeTypes,
+                          boolean needResolveBurst) {
         super(view);
+        this.allowMimeTypes = allowMimeTypes;
+        this.notAllowMimeTypes = notAllowMimeTypes;
+        if (allowMimeTypes != null) {
+            needImage = false;
+            needVideo = false;
+            for (String allowMimeType : allowMimeTypes) {
+                if (!needImage && allowMimeType.startsWith("image")) {
+                    needImage = true;
+                }
+
+                if (!needVideo && allowMimeType.startsWith("video")) {
+                    needVideo = true;
+                }
+            }
+        }
         mediaDao = new MediaDao(context);
-        this.needImage = needImage;
-        this.needVideo = needVideo;
-        this.needGif = needGif;
         this.needResolveBurst = needResolveBurst;
     }
 
@@ -135,13 +151,8 @@ public class MediaPresenter extends MediaContract.MediaPresenter implements Data
             updateMedia();
             return;
         }
-        if (needImage && images.size() > 0) {
+        if (images.size() > 0 || videos.size() > 0) {
             updateMedia();
-            return;
-        }
-        if (needVideo && videos.size() > 0) {
-            updateMedia();
-            return;
         }
     }
 
@@ -203,20 +214,20 @@ public class MediaPresenter extends MediaContract.MediaPresenter implements Data
 
     private AllAlbumMediaCollection loadAlbum() {
         MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.getMediaBeanCollectionByKey(
-                MediaUtils.getAllAlbumKey(needVideo, needImage, needGif, needResolveBurst));
+                MediaUtils.getAllAlbumKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst));
         AllAlbumMediaCollection allAlbumMediaCollection = null;
         List<AlbumBean> mediaBeans = null;
         if (mediaBeanCollectionByKey != null) {
             allAlbumMediaCollection = (AllAlbumMediaCollection) mediaBeanCollectionByKey;
             if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad, needVideo, needImage)) {
-                mediaBeans = mediaDao.queryAllAlbum(needVideo, needImage, needGif, needResolveBurst);
+                mediaBeans = mediaDao.queryAllAlbum(allowMimeTypes, notAllowMimeTypes, needResolveBurst, needVideo, needImage);
                 allAlbumMediaCollection.updateCollection(mediaBeans);
             } else {
                 mediaBeans = allAlbumMediaCollection.mediaBeans;
             }
         } else {
-            mediaBeans = mediaDao.queryAllAlbum(needVideo, needImage, needGif, needResolveBurst);
-            allAlbumMediaCollection = new AllAlbumMediaCollection(mediaBeans, needVideo, needImage, needGif, needResolveBurst);
+            mediaBeans = mediaDao.queryAllAlbum(allowMimeTypes, notAllowMimeTypes, needResolveBurst, needVideo, needImage);
+            allAlbumMediaCollection = new AllAlbumMediaCollection(mediaBeans, allowMimeTypes, notAllowMimeTypes, needResolveBurst);
             DataCacheManager.dataManager.addMediaBeanCollection(allAlbumMediaCollection);
         }
         return allAlbumMediaCollection;
@@ -225,21 +236,20 @@ public class MediaPresenter extends MediaContract.MediaPresenter implements Data
     public AllMediaBeanCollection loadImage() {
         MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.
                 getMediaBeanCollectionByKey(
-                        MediaUtils.getAllMediaKey(needVideo, needImage, needGif, needResolveBurst));
+                        MediaUtils.getAllMediaKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst));
         AllMediaBeanCollection allAlbumMediaCollection = null;
         List<MediaBean> mediaBeans = null;
         if (mediaBeanCollectionByKey != null) {
             allAlbumMediaCollection = (AllMediaBeanCollection) mediaBeanCollectionByKey;
             if (DataCacheManager.dataManager.needReload(allAlbumMediaCollection.lastLoad, needVideo, needImage)) {
-                mediaBeans = mediaDao.queryAllMedia(needVideo, needImage, needGif, needResolveBurst);
+                mediaBeans = mediaDao.queryAllMedia(allowMimeTypes, notAllowMimeTypes, needResolveBurst, needVideo, needImage);
                 allAlbumMediaCollection.updateCollection(mediaBeans);
             }
         } else {
-            mediaBeans = mediaDao.queryAllMedia(needVideo, needImage, needGif, needResolveBurst);
+            mediaBeans = mediaDao.queryAllMedia(allowMimeTypes, notAllowMimeTypes, needResolveBurst, needVideo, needImage);
             allAlbumMediaCollection = new AllMediaBeanCollection(mediaBeans,
-                    needVideo,
-                    needImage,
-                    needGif,
+                    allowMimeTypes,
+                    notAllowMimeTypes,
                     needResolveBurst);
             DataCacheManager.dataManager.addMediaBeanCollection(allAlbumMediaCollection);
         }

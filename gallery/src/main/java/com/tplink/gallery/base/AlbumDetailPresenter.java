@@ -25,19 +25,34 @@ import io.reactivex.subscribers.DisposableSubscriber;
 
 public class AlbumDetailPresenter extends MediaContract.AlbumDetailPresenter implements DataCacheManager.OnMediaChanged {
 
+    private boolean needVideo = true;
+    private boolean needImage = true;
     private MediaDao mediaDao;
     private long bucketId;
-    private boolean needImage;
-    private boolean needVideo;
-    private boolean needGif;
+    private List<String> allowMimeTypes;
+    private List<String> notAllowMimeTypes;
 
-    public AlbumDetailPresenter(Context context, MediaContract.AlbumView view, long bucketId, boolean needImage, boolean needVideo, boolean needGif) {
+    public AlbumDetailPresenter(Context context, MediaContract.AlbumView view, long bucketId,
+                                List<String> allowMimeTypes, List<String> notAllowMimeTypes) {
         super(view);
+        this.allowMimeTypes = allowMimeTypes;
+        this.notAllowMimeTypes = notAllowMimeTypes;
         mediaDao = new MediaDao(context);
         this.bucketId = bucketId;
-        this.needImage = needImage;
-        this.needVideo = needVideo;
-        this.needGif = needGif;
+
+        if (allowMimeTypes != null) {
+            needImage = false;
+            needVideo = false;
+            for (String allowMimeType : allowMimeTypes) {
+                if (!needImage && allowMimeType.startsWith("image")) {
+                    needImage = true;
+                }
+
+                if (!needVideo && allowMimeType.startsWith("video")) {
+                    needVideo = true;
+                }
+            }
+        }
     }
 
     @Override
@@ -88,21 +103,23 @@ public class AlbumDetailPresenter extends MediaContract.AlbumDetailPresenter imp
     }
 
     private AlbumDetailCollection loadDetail() {
-        MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.getMediaBeanCollectionByKey(MediaUtils.getBucketId(bucketId, needVideo, needImage, needGif));
+        MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager
+                .getMediaBeanCollectionByKey(
+                        MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes));
         AlbumDetailCollection albumDetailCollection = null;
         List<MediaBean> mediaBeans = null;
         if (mediaBeanCollectionByKey != null) {
             albumDetailCollection = (AlbumDetailCollection) mediaBeanCollectionByKey;
 
             if (DataCacheManager.dataManager.needReload(albumDetailCollection.lastLoad, needVideo, needImage)) {
-                mediaBeans = mediaDao.queryMediaByBucketId(bucketId, needVideo, needImage, needGif);
+                mediaBeans = mediaDao.queryMediaByBucketId(bucketId, allowMimeTypes, notAllowMimeTypes, needVideo, needImage);
                 albumDetailCollection.updateCollection(mediaBeans);
             } else {
                 mediaBeans = albumDetailCollection.mediaBeans;
             }
         } else {
-            mediaBeans = mediaDao.queryMediaByBucketId(bucketId, needVideo, needImage, needGif);
-            albumDetailCollection = new AlbumDetailCollection(bucketId, mediaBeans, needImage, needVideo, needGif);
+            mediaBeans = mediaDao.queryMediaByBucketId(bucketId, allowMimeTypes, notAllowMimeTypes, needVideo, needImage);
+            albumDetailCollection = new AlbumDetailCollection(bucketId, mediaBeans, allowMimeTypes, notAllowMimeTypes);
             DataCacheManager.dataManager.addMediaBeanCollection(albumDetailCollection);
         }
         return albumDetailCollection;

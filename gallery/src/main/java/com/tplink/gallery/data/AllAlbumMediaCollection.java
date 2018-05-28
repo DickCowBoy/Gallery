@@ -8,21 +8,21 @@ import java.util.List;
 
 public class AllAlbumMediaCollection extends MediaBeanCollection<AlbumBean>{
 
-    public boolean needVideo;
-    public boolean needImage;
-    public boolean needGif;
+
+    List<String> notAllowMimeTypes;
+    List<String> allowMimeTypes;
     public boolean needResolveBurst;
 
-    public AllAlbumMediaCollection(List<AlbumBean> data, boolean needVideo, boolean needImage, boolean needGif, boolean needResolveBurst) {
+    public AllAlbumMediaCollection(List<AlbumBean> data, List<String> allowMimeTypes,
+                                   List<String> notAllowMimeTypes, boolean needResolveBurst) {
         super(data);
-        this.needVideo = needVideo;
-        this.needImage = needImage;
-        this.needGif = needGif;
+        this.allowMimeTypes = allowMimeTypes;
+        this.notAllowMimeTypes = notAllowMimeTypes;
         this.needResolveBurst = needResolveBurst;
     }
 
     @Override
     public String key() {
-        return MediaUtils.getAllAlbumKey(needVideo, needImage, needGif, needResolveBurst);
+        return MediaUtils.getAllAlbumKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst);
     }
 }

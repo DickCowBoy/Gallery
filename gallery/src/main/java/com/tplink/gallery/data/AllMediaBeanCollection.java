@@ -20,21 +20,19 @@ import java.util.List;
 
 public class AllMediaBeanCollection extends MediaBeanCollection<MediaBean> {
 
-    public boolean needVideo;
-    public boolean needImage;
-    public boolean needGif;
     public boolean needResolveBurst;
+    public List<String> allowMimeTypes;
+    public List<String> notAllowMimeTypes;
 
-    public AllMediaBeanCollection(List<MediaBean> data, boolean needVideo, boolean needImage, boolean needGif, boolean needResolveBurst) {
+    public AllMediaBeanCollection(List<MediaBean> data, List<String> allowMimeTypes, List<String> notAllowMimeTypes, boolean needResolveBurst) {
         super(data);
-        this.needVideo = needVideo;
-        this.needImage = needImage;
-        this.needGif = needGif;
+        this.allowMimeTypes = allowMimeTypes;
+        this.notAllowMimeTypes = notAllowMimeTypes;
         this.needResolveBurst = needResolveBurst;
     }
 
     @Override
     public String key() {
-        return MediaUtils.getAllMediaKey(needVideo, needImage, needGif, needResolveBurst);
+        return MediaUtils.getAllMediaKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst);
     }
 }

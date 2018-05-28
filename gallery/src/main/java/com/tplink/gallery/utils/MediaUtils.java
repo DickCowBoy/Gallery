@@ -14,6 +14,8 @@ package com.tplink.gallery.utils;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.util.List;
+
 public class MediaUtils {
 
     public static Uri getImageUri() {
@@ -30,16 +32,21 @@ public class MediaUtils {
 
     public static ImageEngine imageEngine = null;
 
-    public static String getAllMediaKey(boolean needVideo, boolean needImage, boolean needGif, boolean needResolveBurst) {
-        return "ALL_MEDIA" + "_" + needGif + "_" + needImage + "_" + needResolveBurst + "_" + needVideo;
+    public static String getAllMediaKey(List<String> allowMimeTypes,
+                                        List<String> notAllowMimeTypes, boolean needResolveBurst) {
+        return "ALL_MEDIA" + "_" + (allowMimeTypes!= null ? allowMimeTypes.toString() : "all") + "_"
+                +  (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all")  + "_" + needResolveBurst;
     }
 
-    public static String getAllAlbumKey(boolean needVideo, boolean needImage, boolean needGif, boolean needResolveBurst) {
-        return "ALL_ALBUM" + "_" + needGif + "_" + needImage + "_" + needResolveBurst + "_" + needVideo;
+    public static String getAllAlbumKey(List<String> allowMimeTypes,
+                                        List<String> notAllowMimeTypes, boolean needResolveBurst) {
+        return "ALL_ALBUM" + "_" + (allowMimeTypes!= null ? allowMimeTypes.toString() : "all") + "_"
+                + (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all")  + "_" + needResolveBurst + "_";
     }
 
-    public static String getBucketId(long bucketId, boolean needVideo, boolean needImage, boolean needGif) {
-        return String.valueOf(bucketId) + "_" + needGif + "_" + needImage + "_" + needVideo;
+    public static String getBucketId(long bucketId, List<String> allowMimeTypes,
+                                     List<String> notAllowMimeTypes) {
+        return String.valueOf(bucketId) + "_" + (allowMimeTypes!= null ? allowMimeTypes.toString() : "all")  + "_" + (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all");
     }
 
 

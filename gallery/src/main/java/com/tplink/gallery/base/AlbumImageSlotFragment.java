@@ -22,23 +22,23 @@ import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.utils.MediaUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaContract.AlbumView{
 
     public static final String KEY_BUCKET_ID = "KEY_BUCKET_ID";
-    public static final String KEY_NEED_IMAGE = "KEY_NEED_IMAGE";
-    public static final String KEY_NEED_VIDEO = "KEY_NEED_VIDEO";
-    public static final String KEY_NEED_GIF = "KEY_NEED_GIF";
+    public static final String KEY_ALLOW_MIME_TYPES = "KEY_ALLOW_MIME_TYPES";
+    public static final String KEY_NOT_ALLOW_MIME_TYPES = "KEY_NOT_ALLOW_MIME_TYPES";
 
     private MediaContract.AlbumDetailPresenter albumDetailPresenter;
     private long bucketId;
-    private boolean needImage;
-    private boolean needVideo;
-    private boolean needGif;
 
     private boolean isActive;
     private boolean firstLoad = true;
+
+    private List<String> allowMimeTypes;
+    private List<String> notAllowMimeTypes;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,11 +46,10 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
         Bundle arguments = getArguments();
         if (arguments != null) {
             bucketId = arguments.getLong(KEY_BUCKET_ID);
-            needImage = arguments.getBoolean(KEY_NEED_IMAGE);
-            needVideo = arguments.getBoolean(KEY_NEED_VIDEO);
-            needGif = arguments.getBoolean(KEY_NEED_GIF);
+            allowMimeTypes = arguments.getStringArrayList(KEY_ALLOW_MIME_TYPES);
+            notAllowMimeTypes = arguments.getStringArrayList(KEY_NOT_ALLOW_MIME_TYPES);
         }
-        albumDetailPresenter = new AlbumDetailPresenter(getContext(), this, bucketId, needImage, needVideo, needGif);
+        albumDetailPresenter = new AlbumDetailPresenter(getContext(), this, bucketId, allowMimeTypes, notAllowMimeTypes);
         albumDetailPresenter.loadAlbumDetail();
     }
 
@@ -103,16 +102,15 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
         showMediaBeans(beans);
     }
 
-    public static AlbumImageSlotFragment newInstance(long bucketId, boolean needImage, boolean needVideo, boolean needGif) {
+    public static AlbumImageSlotFragment newInstance(long bucketId, ArrayList<String> allowMimeTypes, ArrayList<String> notAllowMimeTypes) {
 
         Bundle args = new Bundle();
 
         args.putLong(KEY_BUCKET_ID, bucketId);
-        args.putBoolean(KEY_NEED_GIF, needGif);
-        args.putBoolean(KEY_NEED_IMAGE, needImage);
-        args.putBoolean(KEY_NEED_VIDEO, needVideo);
+        args.putStringArrayList(KEY_ALLOW_MIME_TYPES, allowMimeTypes);
+        args.putStringArrayList(KEY_NOT_ALLOW_MIME_TYPES, notAllowMimeTypes);
 
-        args.putString(KEY_DATA_KEY , MediaUtils.getBucketId(bucketId, needVideo, needImage, needGif));
+        args.putString(KEY_DATA_KEY , MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes));
 
         AlbumImageSlotFragment fragment = new AlbumImageSlotFragment();
         fragment.setArguments(args);

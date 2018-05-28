@@ -13,22 +13,9 @@ package com.tplink.gallery;
 
 import com.tplink.gallery.base.BaseGalleryActivity;
 
+import java.util.ArrayList;
+
 public class GalleryActivity extends BaseGalleryActivity {
-
-    @Override
-    protected boolean needImage() {
-        return true;
-    }
-
-    @Override
-    protected boolean needVideo() {
-        return true;
-    }
-
-    @Override
-    protected boolean needGif() {
-        return true;
-    }
 
     @Override
     protected boolean awaysInSelectMode() {
@@ -38,5 +25,19 @@ public class GalleryActivity extends BaseGalleryActivity {
     @Override
     protected boolean needResolveBurst() {
         return true;
+    }
+
+    @Override
+    public ArrayList<String> getAllowMimeTypes() {
+        ArrayList<String> ret = new ArrayList<>();
+        ret.add("video/3gpp");
+        ret.add("image/png");
+        return ret;
+
+    }
+
+    @Override
+    public ArrayList<String> getNotAllowMimeTypes() {
+        return null;
     }
 }
