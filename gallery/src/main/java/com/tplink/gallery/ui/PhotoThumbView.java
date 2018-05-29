@@ -102,18 +102,13 @@ public class PhotoThumbView implements CommonDataViewProxy.OnDataItemClick<Media
         mDataProxy.delSelectItem(item);
     }
 
-    public void delSelectItems(List<MediaBean> items) {
+    public void delSelectItems(Collection<MediaBean> items) {
         mDataProxy.delSelectItems(items);
     }
 
     public void setSelectItems(Collection<MediaBean> items) {
         mDataProxy.setSelectItems(items);
     }
-
-    public void  deleteSelectedItems(){
-        mDataProxy.deleteSelectedItems();
-    }
-
 
 
     @Override

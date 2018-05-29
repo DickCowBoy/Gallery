@@ -99,7 +99,8 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
     }
 
     @Override
-    public boolean addAlbumMedia(long bucketId) {
+    public Collection<MediaBean> addAlbumMedia(long bucketId) {
+        List<MediaBean> mediaBeans = bucketInfo.get(bucketId);
         int result = mContainer.addBucketItems(bucketId, bucketInfo.get(bucketId));
         if (result != 0) {
             if (mView != null) {
@@ -109,13 +110,14 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
         if (result == 0 && mView != null) {
             showTitle();
         }
-        return result == 0;
+        return result == 0 ? mediaBeans : null;
     }
 
     @Override
-    public void delAlbumMedia(long bucketId) {
-        mContainer.delBucketItems(bucketId);
+    public Collection<MediaBean> delAlbumMedia(long bucketId) {
+        Collection<MediaBean> mediaBeans = mContainer.delBucketItems(bucketId);
         showTitle();
+        return mediaBeans;
     }
 
     @Override

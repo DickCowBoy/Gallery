@@ -127,11 +127,11 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
     }
 
     @Override
-    public void onChanged(long bucketId, boolean selected) {
+    public void onChanged(long bucketId, boolean selected, Collection<MediaBean> beans) {
         if (selected) {
-            thumbView.setSelectItems(imageSlotDataProvider.getSelectedDataBeans(getSelectedSetKey()));
+            thumbView.setSelectItems(beans);
         } else {
-            thumbView.deleteSelectedItems();
+            thumbView.delSelectItems(beans);
         }
     }
 

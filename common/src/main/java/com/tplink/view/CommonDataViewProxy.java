@@ -617,7 +617,7 @@ public abstract class CommonDataViewProxy<T, M extends CommonDataViewHolder>
         }
     }
 
-    public void delSelectItems(List<T> items) {
+    public void delSelectItems(Collection<T> items) {
         if (mData == null) return;
         int index = -1;
         for (T item : items) {

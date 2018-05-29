@@ -3,6 +3,7 @@ package com.tplink.gallery.selector.wallpaper;
 import com.tplink.gallery.bean.MediaBean;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -78,9 +79,9 @@ public class ResultContainer {
         return 0;
     }
 
-    public void delBucketItems(long bucketId) {
+    public Collection<MediaBean> delBucketItems(long bucketId) {
 
-        mSelectedItems.remove(bucketId);
+        return mSelectedItems.remove(bucketId);
     }
 
     public void clear() {

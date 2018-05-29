@@ -151,20 +151,20 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity implements 
 
     @Override
     public boolean canSelectAlbum(AlbumBean item) {
-        boolean b = mediaSelectorPresenter.addAlbumMedia(item.bucketId);
-        if (b) {
+        Collection<MediaBean> mediaBeans = mediaSelectorPresenter.addAlbumMedia(item.bucketId);
+        if (mediaBeans != null) {
             for (AlbumChangedListener albumChangedListener : albumChangedListeners) {
-                albumChangedListener.onChanged(item.bucketId, true);
+                albumChangedListener.onChanged(item.bucketId, true, mediaBeans);
             }
         }
-        return b;
+        return mediaBeans != null && mediaBeans.size() > 0;
     }
 
     @Override
     public void delSelectAlbum(AlbumBean item) {
-        mediaSelectorPresenter.delAlbumMedia(item.bucketId);
+        Collection<MediaBean> mediaBeans = mediaSelectorPresenter.delAlbumMedia(item.bucketId);
         for (AlbumChangedListener albumChangedListener : albumChangedListeners) {
-            albumChangedListener.onChanged(item.bucketId, false);
+            albumChangedListener.onChanged(item.bucketId, false, mediaBeans);
         }
     }
 }
