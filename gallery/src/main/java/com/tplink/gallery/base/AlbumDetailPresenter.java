@@ -114,8 +114,6 @@ public class AlbumDetailPresenter extends MediaContract.AlbumDetailPresenter imp
             if (DataCacheManager.dataManager.needReload(albumDetailCollection.lastLoad, needVideo, needImage)) {
                 mediaBeans = mediaDao.queryMediaByBucketId(bucketId, allowMimeTypes, notAllowMimeTypes, needVideo, needImage);
                 albumDetailCollection.updateCollection(mediaBeans);
-            } else {
-                mediaBeans = albumDetailCollection.mediaBeans;
             }
         } else {
             mediaBeans = mediaDao.queryMediaByBucketId(bucketId, allowMimeTypes, notAllowMimeTypes, needVideo, needImage);

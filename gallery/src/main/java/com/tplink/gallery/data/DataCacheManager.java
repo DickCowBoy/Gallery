@@ -17,10 +17,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.SparseArray;
-import android.util.SparseIntArray;
 
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.dao.MediaDao;
 import com.tplink.gallery.utils.MediaUtils;
 
 import java.util.ArrayList;
@@ -69,7 +67,7 @@ public class DataCacheManager {
         return cacheMediaBeanCollectionMap.get(key);
     }
 
-    public void cacheMediaBean(MediaBean bean) {
+    public synchronized void cacheMediaBean(MediaBean bean) {
         cacheItems.put(bean._id, bean);
     }
 

@@ -87,4 +87,12 @@ public class MediaBean {
     public boolean isVideo() {
         return mimeType.startsWith(VIDEO);
     }
+
+    @Override
+    public String toString() {
+        return "MediaBean{" +
+                "_id=" + _id +
+                ", bucketId=" + bucketId +
+                '}';
+    }
 }

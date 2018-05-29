@@ -91,12 +91,12 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
 
     @Override
     public boolean canSelectItem(MediaBean item) {
-        return imageSlotDataProvider.canSelectItem(item);
+        return imageSlotDataProvider.canSelectItem(item, getOpeSource());
     }
 
     @Override
     public void delSelectItem(MediaBean item) {
-        imageSlotDataProvider.delSelectItem(item);
+        imageSlotDataProvider.delSelectItem(item, getOpeSource());
     }
 
     @Override
@@ -127,7 +127,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
     }
 
     @Override
-    public void onChanged(int bucketId, boolean selected) {
+    public void onChanged(long bucketId, boolean selected) {
         if (selected) {
             thumbView.setSelectItems(imageSlotDataProvider.getSelectedDataBeans(getSelectedSetKey()));
         } else {
@@ -144,7 +144,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
         if (select) {
             thumbView.addSelectItem(entity);
         } else {
-            thumbView.delSelectItem(entity);
+            thumbView.delSelectItems(entity);
         }
     }
 
@@ -165,13 +165,18 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
         }
     }
 
+    @Override
+    public String getOpeSource() {
+        return getClass().getSimpleName();
+    }
+
     public interface ImageSlotDataProvider {
         List<MediaBean> getDataBeans(String key);
         void showAllImage(MediaBean data, int index, String key);
         void updateMediaIfNeed();
         Collection<MediaBean> getSelectedDataBeans(long key);
-        void delSelectItem(MediaBean item);
-        boolean canSelectItem(MediaBean item);
+        void delSelectItem(MediaBean item, String opeSource);
+        boolean canSelectItem(MediaBean item, String opeSource);
         void regAlbumChangedListeners(AlbumChangedListener albumChangedListener);
 
         void unregAlbumChangedListeners(AlbumChangedListener albumChangedListener);

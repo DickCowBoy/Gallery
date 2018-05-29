@@ -125,22 +125,46 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity implements 
     }
 
     @Override
-    public boolean canSelectItem(MediaBean item) {
-        return mediaSelectorPresenter.addSingleMedia(item);
+    public boolean canSelectItem(MediaBean item, String opeSource) {
+        boolean b = mediaSelectorPresenter.addSingleMedia(item);
+        if (b) {
+            for (AlbumChangedListener albumChangedListener : albumChangedListeners) {
+                if (albumChangedListener.getOpeSource().equals(opeSource)) {
+                    continue;
+                }
+                albumChangedListener.onChanged(item, true);
+            }
+        }
+        return b;
     }
 
     @Override
-    public void delSelectItem(MediaBean item) {
+    public void delSelectItem(MediaBean item, String opeSource) {
         mediaSelectorPresenter.removeSingleMedia(item);
+        for (AlbumChangedListener albumChangedListener : albumChangedListeners) {
+            if (albumChangedListener.getOpeSource().equals(opeSource)) {
+                continue;
+            }
+            albumChangedListener.onChanged(item, false);
+        }
     }
 
     @Override
     public boolean canSelectAlbum(AlbumBean item) {
-        return mediaSelectorPresenter.addAlbumMedia(item.bucketId);
+        boolean b = mediaSelectorPresenter.addAlbumMedia(item.bucketId);
+        if (b) {
+            for (AlbumChangedListener albumChangedListener : albumChangedListeners) {
+                albumChangedListener.onChanged(item.bucketId, true);
+            }
+        }
+        return b;
     }
 
     @Override
     public void delSelectAlbum(AlbumBean item) {
         mediaSelectorPresenter.delAlbumMedia(item.bucketId);
+        for (AlbumChangedListener albumChangedListener : albumChangedListeners) {
+            albumChangedListener.onChanged(item.bucketId, false);
+        }
     }
 }

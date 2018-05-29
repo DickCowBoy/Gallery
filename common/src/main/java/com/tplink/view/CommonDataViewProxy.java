@@ -360,7 +360,7 @@ public abstract class CommonDataViewProxy<T, M extends CommonDataViewHolder>
                 }
             }
             boolean selected = mSelector.isItemSelected(downloadInfo);
-            if (!selected && !mSelector.isItemSelected(downloadInfo) && mSelectController != null && !mSelectController.canSelectItem(downloadInfo)) {
+            if (!selected && mSelectController != null && !mSelectController.canSelectItem(downloadInfo)) {
                 return;
             } else if (selected && mSelectController != null) {
                 mSelectController.delSelectItem(downloadInfo);

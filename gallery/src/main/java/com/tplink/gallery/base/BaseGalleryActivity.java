@@ -281,12 +281,12 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     }
 
     @Override
-    public boolean canSelectItem(MediaBean item) {
+    public boolean canSelectItem(MediaBean item, String opeSource) {
         return true;
     }
 
     @Override
-    public void delSelectItem(MediaBean item) {
+    public void delSelectItem(MediaBean item, String opeSource) {
 
     }
 
