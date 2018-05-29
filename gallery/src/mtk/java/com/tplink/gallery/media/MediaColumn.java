@@ -62,19 +62,11 @@ public class MediaColumn {
         if (cursor != null) {
             MediaBean bean = null;
             int anInt;
-            DataCacheManager dataCacheManager = DataCacheManager.initDataCacheManager();
+
             while (cursor.moveToNext()) {
                 anInt = cursor.getInt(0);
                 // 检查是否存在
-                MediaBean cacheMediaBean = dataCacheManager.getCacheMediaBean(anInt);
-                if (cacheMediaBean != null) {
-                    bean = cacheMediaBean;
-                } else {
-                    bean = new MediaBean();
-                    bean._id = anInt;
-                    dataCacheManager.cacheMediaBean(bean);
-                }
-
+                bean = cacheItem(anInt);
                 bean.bucketId = cursor.getLong(1);
                 bean.width = cursor.getInt(2);
                 bean.height = cursor.getInt(3);
@@ -86,6 +78,17 @@ public class MediaColumn {
             }
         }
         return result;
+    }
+
+    public synchronized static MediaBean cacheItem(int anInt) {
+        DataCacheManager dataCacheManager = DataCacheManager.initDataCacheManager();
+        MediaBean cacheMediaBean = dataCacheManager.getCacheMediaBean(anInt);
+        if (cacheMediaBean == null) {
+            cacheMediaBean = new MediaBean();
+            cacheMediaBean._id = anInt;
+            dataCacheManager.cacheMediaBean(cacheMediaBean);
+        }
+        return cacheMediaBean;
     }
 
     public static List<MediaBean> parseFile(Cursor cursor) {

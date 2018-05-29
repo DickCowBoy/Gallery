@@ -16,6 +16,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.tplink.gallery.bean.MediaBean;
@@ -67,7 +68,7 @@ public class DataCacheManager {
         return cacheMediaBeanCollectionMap.get(key);
     }
 
-    public synchronized void cacheMediaBean(MediaBean bean) {
+    public void cacheMediaBean(MediaBean bean) {
         cacheItems.put(bean._id, bean);
     }
 
