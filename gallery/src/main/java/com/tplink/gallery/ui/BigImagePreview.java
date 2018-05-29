@@ -190,5 +190,4 @@ public class BigImagePreview implements PagerSnapHelper.PageListener {
     public interface BigPreviewCallback {
         void onImageChanged(MediaBean current);
     }
-
 }

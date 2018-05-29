@@ -17,10 +17,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public abstract class BaseSelectActivity extends BaseGalleryActivity implements MediaSelectorContract.MediaSelectorView {
+public abstract class BaseSelectActivity extends BaseGalleryActivity
+        implements MediaSelectorContract.MediaSelectorView, InterceptCheckBox.ToggleIntercept {
 
     private MediaSelectorContract.MediaSelectorPresenter mediaSelectorPresenter;
     private InterceptCheckBox mCheckBox;
+    private MediaBean currentMedia;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity implements 
         super.onCreate(savedInstanceState);
         this.mediaSelectorPresenter.loadSelectInfo(this, getIntent());
         mCheckBox = findViewById(R.id.cb_item_selected);
+        mCheckBox.setToggleIntercept(this);
     }
 
     @Override
@@ -192,10 +195,23 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity implements 
         super.showPreviewBar(data);
         onImageChanged(data);
         mCheckBox.setVisibility(View.VISIBLE);
+        currentMedia = data;
     }
 
     @Override
     public void onImageChanged(MediaBean current) {
         mCheckBox.setChecked(mediaSelectorPresenter.isItemSelected(current));
+        currentMedia = current;
+    }
+
+    @Override
+    public boolean canToggle(boolean isCheck) {
+        if (isCheck == false) {
+            // 检测是否还能添加
+            return canSelectItem(currentMedia, getClass().getName());
+        } else {
+            delSelectItem(currentMedia, getClass().getName());
+            return true;
+        }
     }
 }
