@@ -179,10 +179,10 @@ public class DataCacheManager {
     public boolean needReload(long time, boolean video, boolean image) {
         boolean needReload = false;
         if (video) {
-            needReload = (time < lastNotifyImage) || needReload;
+            needReload = (time < lastNotifyVideo) || needReload;
         }
         if (image) {
-            needReload = (time < lastNotifyVideo) || needReload;
+            needReload = (time < lastNotifyImage) || needReload;
         }
         return needReload;
     }
