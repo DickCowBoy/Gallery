@@ -51,8 +51,6 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private boolean isActive = false;
     private MediaContract.MediaPresenter mediaPresenter;
     private BigImagePreview bigImagePreview;
-    private RecyclerView bigImageView;
-    private RecyclerView filmImageView;
     private boolean firstLoad = true;
     private String currentKey;
 
