@@ -88,5 +88,8 @@ public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>
         mDataProxy.deleteSelectedItems();
     }
 
-
+    public void updateBucket(long bucketId, int selectCount) {
+        mDataProxy.updateBucket(bucketId, selectCount);
+    }
 }
+

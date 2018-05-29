@@ -1,9 +1,5 @@
 package com.tplink.gallery.selector.wallpaper;
 
-import android.view.MenuItem;
-
-import com.tplink.gallery.bean.AlbumBean;
-import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.selector.BaseSelectActivity;
 import com.tplink.gallery.selector.MediaSelectorContract;
 

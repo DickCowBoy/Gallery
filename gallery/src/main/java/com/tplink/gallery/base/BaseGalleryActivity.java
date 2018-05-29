@@ -29,6 +29,7 @@ import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.data.DataCacheManager;
 import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.selector.AlbumChangedListener;
+import com.tplink.gallery.selector.ItemChangedListener;
 import com.tplink.gallery.ui.BigImagePreview;
 import com.tplink.gallery.view.AutoFitToolBar;
 import com.tplink.gallery.view.LoadingView;
@@ -56,6 +57,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private String currentKey;
 
     protected List<AlbumChangedListener> albumChangedListeners = new ArrayList<>();
+    protected List<ItemChangedListener> itemChangedListeners = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -271,12 +273,22 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     }
 
     @Override
+    public void regItemChangedListeners(ItemChangedListener listener) {
+        this.itemChangedListeners.add(listener);
+    }
+
+    @Override
+    public void unregItemChangedListeners(ItemChangedListener listener) {
+        this.itemChangedListeners.remove(listener);
+    }
+
+    @Override
     public boolean isAlbumSelected(long bucketId) {
         return false;
     }
 
     @Override
-    public int getAlbumSelectedCount(AlbumBean bean) {
+    public int getAlbumSelectedCount(long bucketId) {
         return 0;
     }
 

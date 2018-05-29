@@ -119,8 +119,8 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity implements 
     }
 
     @Override
-    public int getAlbumSelectedCount(AlbumBean bean) {
-        Set<MediaBean> selectBucketMedia = mediaSelectorPresenter.getSelectBucketMedia(bean.bucketId);
+    public int getAlbumSelectedCount(long bucketId) {
+        Set<MediaBean> selectBucketMedia = mediaSelectorPresenter.getSelectBucketMedia(bucketId);
         return selectBucketMedia == null ? 0 : selectBucketMedia.size();
     }
 
@@ -134,6 +134,10 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity implements 
                 }
                 albumChangedListener.onChanged(item, true);
             }
+
+            for (ItemChangedListener itemChangedListener : itemChangedListeners) {
+                itemChangedListener.onChanged(item);
+            }
         }
         return b;
     }
@@ -146,6 +150,11 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity implements 
                 continue;
             }
             albumChangedListener.onChanged(item, false);
+        }
+
+
+        for (ItemChangedListener itemChangedListener : itemChangedListeners) {
+            itemChangedListener.onChanged(item);
         }
     }
 

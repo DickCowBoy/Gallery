@@ -17,6 +17,7 @@ import com.tplink.view.CommonDataView;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 
 public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperateProcessor, ItemChangedListener{
@@ -90,12 +91,12 @@ public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperat
 
     @Override
     public int getAlbumSelectCount(AlbumBean item) {
-        return imageSlotDataProvider.getAlbumSelectedCount(item);
+        return imageSlotDataProvider.getAlbumSelectedCount(item.bucketId);
     }
 
     @Override
     public void onChanged(MediaBean entity) {
-
+        albumView.updateBucket(entity.bucketId,imageSlotDataProvider.getAlbumSelectedCount(entity.bucketId));
     }
 
     public interface AlbumSlotDataProvider {
@@ -104,7 +105,9 @@ public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperat
         void delSelectAlbum(AlbumBean item);
         boolean canSelectAlbum(AlbumBean item);
         void showAlbumDetail(AlbumBean bean);
-        int getAlbumSelectedCount(AlbumBean bean);
+        int getAlbumSelectedCount(long bucketId);
+        void regItemChangedListeners(ItemChangedListener listener);
+        void unregItemChangedListeners(ItemChangedListener listener);
     }
 
     @Override
@@ -117,6 +120,13 @@ public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperat
         super.onAttach(context);
         if (context instanceof AlbumSlotDataProvider) {
             imageSlotDataProvider = (AlbumSlotDataProvider) context;
+            imageSlotDataProvider.regItemChangedListeners(this);
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        imageSlotDataProvider.unregItemChangedListeners(this);
     }
 }

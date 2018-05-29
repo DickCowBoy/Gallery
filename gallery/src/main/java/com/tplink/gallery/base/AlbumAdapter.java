@@ -150,7 +150,7 @@ public class AlbumAdapter extends CommonDataViewProxy<AlbumBean, AlbumAdapter.Al
         boolean isAlbumSelected(AlbumBean entity);
     }
 
-    public void updateBucket(int bucketId, int selectCount) {
+    public void updateBucket(long bucketId, int selectCount) {
         int index = -1;
         for (int i = 0; i < mData.size(); i++) {
             if (mData.get(i).bucketId == bucketId) {
