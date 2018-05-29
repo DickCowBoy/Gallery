@@ -3,16 +3,20 @@ package com.tplink.gallery.selector;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.dao.MediaDao;
 import com.tplink.gallery.gallery.R;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class ImageSelectPresenter extends MediaSelectorContract.MediaSelectorPresenter {
+
+    public static final String SELECT_RESULT = "SELECT_RESULT";
 
     private MediaDao mediaDao;
     private int countLimit;
@@ -72,6 +76,14 @@ public class ImageSelectPresenter extends MediaSelectorContract.MediaSelectorPre
 
     @Override
     public void setResult(Activity activity) {
+        List<MediaBean> mediaEntries = mContainer.getMediaEntries();
+        ArrayList<Uri> result = new ArrayList<>();
+        for (MediaBean mediaEntry : mediaEntries) {
+            result.add(mediaEntry.getContentUri());
+        }
+        Intent resultIntent = new Intent();
+        resultIntent.putParcelableArrayListExtra(SELECT_RESULT,result);
+        activity.setResult(Activity.RESULT_OK, resultIntent);
         activity.finish();
     }
 

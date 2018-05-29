@@ -46,7 +46,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     public static final int TOOLBAR_STYLE_THUMB = 0;
     public static final int TOOLBAR_STYLE_PREVIEW = 1;
 
-    private int actionbarStyle = TOOLBAR_STYLE_THUMB;// 默认0缩略图，1大图预览
+    protected int actionbarStyle = TOOLBAR_STYLE_THUMB;// 默认0缩略图，1大图预览
 
     private LoadingView mLoadingView;
     protected AutoFitToolBar mNormalToolbar;
@@ -132,15 +132,13 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        switch (actionbarStyle) {
-            case TOOLBAR_STYLE_THUMB:
-                menu.findItem(R.id.action_select).setVisible(true);
-                break;
-            case TOOLBAR_STYLE_PREVIEW:
-                menu.findItem(R.id.action_select).setVisible(false);
-                break;
-        }
+
+        menu.findItem(R.id.action_select).setVisible(needSureBottom());
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    protected boolean needSureBottom() {
+        return  actionbarStyle == TOOLBAR_STYLE_THUMB;
     }
 
     @Override

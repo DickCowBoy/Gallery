@@ -21,7 +21,7 @@ import java.util.Set;
 public abstract class BaseSelectActivity extends BaseGalleryActivity
         implements MediaSelectorContract.MediaSelectorView, InterceptCheckBox.ToggleIntercept {
 
-    private MediaSelectorContract.MediaSelectorPresenter mediaSelectorPresenter;
+    protected MediaSelectorContract.MediaSelectorPresenter mediaSelectorPresenter;
     private InterceptCheckBox mCheckBox;
     private MediaBean currentMedia;
 
@@ -38,6 +38,12 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity
     protected boolean awaysInSelectMode() {
         return this.mediaSelectorPresenter.getMaxSelectCount() > 1
                 || this.mediaSelectorPresenter.getMaxSelectCount() == ResultContainer.UNLIMIT;
+    }
+
+    @Override
+    protected boolean needSureBottom() {
+        return  mediaSelectorPresenter.getMaxSelectCount() != 1
+                && super.needSureBottom();
     }
 
     @Override
@@ -196,14 +202,20 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity
     protected void showPreviewBar(MediaBean data) {
         super.showPreviewBar(data);
         onImageChanged(data);
-        mCheckBox.setVisibility(View.VISIBLE);
+        mCheckBox.setVisibility(needBigImageCheckBox() ? View.VISIBLE: View.GONE);
         currentMedia = data;
+    }
+
+    protected boolean needBigImageCheckBox() {
+        return this.mediaSelectorPresenter.getMaxSelectCount() != 1;
     }
 
     @Override
     public void onImageChanged(MediaBean current) {
-        mCheckBox.setChecked(mediaSelectorPresenter.isItemSelected(current));
         currentMedia = current;
+        if (needBigImageCheckBox()) {
+            mCheckBox.setChecked(mediaSelectorPresenter.isItemSelected(current));
+        }
     }
 
     @Override

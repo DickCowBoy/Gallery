@@ -3,7 +3,9 @@ package com.tplink.gallery.selector;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Menu;
 
+import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.selector.wallpaper.ResultContainer;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class ImageSelectActivity extends BaseSelectActivity {
             maxCount = intent.getIntExtra(MAX_COUNT, 1);
             needImage = intent.getBooleanExtra(NEED_IMAGE, true);
             needVideo = intent.getBooleanExtra(NEED_VIDEO, false);
-            needPreview = intent.getBooleanExtra(NEED_PREVIEW, false);
+            needPreview = intent.getBooleanExtra(NEED_PREVIEW, true);
         }
     }
 
@@ -52,6 +54,12 @@ public class ImageSelectActivity extends BaseSelectActivity {
                 needPreview,
                 needImage,
                 needVideo);
+    }
+
+    @Override
+    protected boolean needSureBottom() {
+        return super.needSureBottom()
+                || (mediaSelectorPresenter.getMaxSelectCount() == 1 && actionbarStyle == TOOLBAR_STYLE_PREVIEW);
     }
 
     @Override
