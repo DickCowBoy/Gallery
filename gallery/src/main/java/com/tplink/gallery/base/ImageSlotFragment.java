@@ -11,7 +11,6 @@
  */
 package com.tplink.gallery.base;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import com.tplink.base.DragSelectTouchHelper;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.selector.AlbumChangedListener;
 import com.tplink.gallery.ui.PhotoThumbView;
-import com.tplink.gallery.utils.MediaUtils;
 import com.tplink.view.CommonDataView;
 
 import java.util.Collection;
@@ -85,7 +83,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
     public void onItemClick(MediaBean data, int index) {
         // 预览图片
         if (imageSlotDataProvider != null) {
-            imageSlotDataProvider.showAllImage(data, index, dataKey);
+            imageSlotDataProvider.onMediaItemClick(data, index, dataKey);
         }
     }
 
@@ -172,7 +170,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
 
     public interface ImageSlotDataProvider {
         List<MediaBean> getDataBeans(String key);
-        void showAllImage(MediaBean data, int index, String key);
+        void onMediaItemClick(MediaBean data, int index, String key);
         void updateMediaIfNeed();
         Collection<MediaBean> getSelectedDataBeans(long key);
         void delSelectItem(MediaBean item, String opeSource);

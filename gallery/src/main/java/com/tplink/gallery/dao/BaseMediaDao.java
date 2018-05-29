@@ -13,10 +13,15 @@ import java.util.List;
 public class BaseMediaDao extends BaseDao {
 
     protected static final String SELECTION_ALL =
-            "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" + String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE)
+            "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                     + " OR "
-                    + MediaStore.Files.FileColumns.MEDIA_TYPE + "=" +String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) +")"
+                    + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?)"
                     + " AND " + MediaStore.MediaColumns.SIZE + ">0";
+
+    protected static final String[] SELECTION_ALL_ARGS = {
+            String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+            String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
+    };
 
     protected static String DATA_MODIFY_DESC = MediaStore.Files.FileColumns.DATE_MODIFIED +" DESC";
 

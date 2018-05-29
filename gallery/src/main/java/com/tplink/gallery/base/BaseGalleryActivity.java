@@ -271,7 +271,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     }
 
     @Override
-    public void showAllImage(MediaBean data, int index, String key) {
+    public void onMediaItemClick(MediaBean data, int index, String key) {
         currentKey = key;
         bigImagePreview.setData(DataCacheManager.dataManager.getMediaBeanCollectionByKey(key).mediaBeans);
         bigImagePreview.showIndex(index);

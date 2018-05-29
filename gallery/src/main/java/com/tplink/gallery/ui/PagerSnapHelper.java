@@ -1,7 +1,6 @@
 package com.tplink.gallery.ui;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 public class PagerSnapHelper extends android.support.v7.widget.PagerSnapHelper {
 
@@ -15,7 +14,6 @@ public class PagerSnapHelper extends android.support.v7.widget.PagerSnapHelper {
             if (pageListener != null) {
                 pageListener.onPageChanged(targetSnapPosition);
                 lastPos = targetSnapPosition;
-                Log.e("LJL", "findTargetSnapPosition: " + targetSnapPosition );
             }
         }
         return targetSnapPosition;

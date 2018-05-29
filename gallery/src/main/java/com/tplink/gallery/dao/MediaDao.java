@@ -39,27 +39,34 @@ public class MediaDao extends BaseMediaDao {
             return queryVideo(selection, null);
         }  else if (needImage && !needVideo) {
             return queryImage(selection, null);
-        } else if (needVideo && needVideo) {
+        } else {
+            return queryFile(SELECTION_ALL, SELECTION_ALL_ARGS);
         }
-        return queryFile(selection, null);
+
     }
 
     public List<AlbumBean> queryAllAlbum(List<String> allowMimeTypes, List<String> notAllowMimeTypes, boolean needResolveBurst, boolean queryVideo, boolean queryImage) {
         String selection = getSqlSelection(allowMimeTypes, notAllowMimeTypes);
-        String[] selectionArgs = null;
         Uri uri = MediaUtils.getFileUri();
 
         if (queryVideo && ! queryImage) {
-            uri = MediaUtils.getVideoUri();
+            return query(MediaUtils.getVideoUri(), MediaColumn.ALBUM_PROJECTION,
+                    (TextUtils.isEmpty(selection) ? "0=0" : selection) + ") GROUP BY (bucket_id",
+                    null,DATA_MODIFY_DESC,
+                    cursor -> MediaColumn.parseAlbum(cursor));
         }  else if (queryImage && !queryVideo) {
-            uri = MediaUtils.getImageUri();
+            return query(MediaUtils.getImageUri(), MediaColumn.ALBUM_PROJECTION,
+                    (TextUtils.isEmpty(selection) ? "0=0" : selection) + ") GROUP BY (bucket_id",
+                    null,DATA_MODIFY_DESC,
+                    cursor -> MediaColumn.parseAlbum(cursor));
+        } else {
+            return query(uri,
+                    MediaColumn.ALBUM_PROJECTION,
+                    SELECTION_ALL + ") GROUP BY (bucket_id",
+                    SELECTION_ALL_ARGS,
+                    DATA_MODIFY_DESC,
+                    cursor -> MediaColumn.parseAlbum(cursor));
         }
-        return query(uri,
-                MediaColumn.ALBUM_PROJECTION,
-                (TextUtils.isEmpty(selection) ? "0=0" : selection) + ") GROUP BY (bucket_id",
-                selectionArgs,
-                DATA_MODIFY_DESC,
-                cursor -> MediaColumn.parseAlbum(cursor));
 
     }
 
@@ -160,7 +167,7 @@ public class MediaDao extends BaseMediaDao {
             sb.append(" )");
             return sb.toString();
         } else {
-            return SELECTION_ALL;
+            return null;
         }
     }
 

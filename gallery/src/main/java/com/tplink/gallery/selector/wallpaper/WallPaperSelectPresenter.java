@@ -35,18 +35,15 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
 
     private MediaDao mediaDao;
 
-    protected ResultContainer mContainer = new ResultContainer();
-
-    private Context context;
-
     private Map<Long, List<MediaBean>> bucketInfo = new HashMap<>();
-
-    private boolean isLoading = false;
 
 
     public WallPaperSelectPresenter(Context context, MediaSelectorContract.MediaSelectorView view) {
-        super(view);
-        this.context = context;
+        super(context, view,
+                ResultContainer.UNLIMIT, WALLPAPER_COUNT_LIMIT,
+                true,
+                true,
+                false);
         mediaDao = new MediaDao(context);
     }
 
@@ -57,45 +54,13 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
     public void pause() {}
 
     @Override
-    public int getMaxSelectCount() {
-        return WALLPAPER_COUNT_LIMIT;
-    }
-
-    @Override
     public boolean needSelectAlbum() {
         return true;
     }
 
     @Override
-    public boolean needPreview() {
-        return true;
-    }
-
-    @Override
-    public boolean addSingleMedia(MediaBean bean) {
-        int result = mContainer.addItem(bean);
-        if (result != 0) {
-            if (mView != null) {
-                mView.showErrorMsg(context.getString(R.string.select_count_over));
-            }
-        }
-        if (result == 0 && mView != null) {
-            showTitle();
-        }
-        return result == 0;
-    }
-
-    @Override
     public boolean isFirstLoading() {
         return isLoading;
-    }
-
-    @Override
-    public void removeSingleMedia(MediaBean bean) {
-        mContainer.delItem(bean);
-        if (mView != null) {
-            showTitle();
-        }
     }
 
     @Override
@@ -111,28 +76,6 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
             showTitle();
         }
         return result == 0 ? mediaBeans : null;
-    }
-
-    @Override
-    public Collection<MediaBean> delAlbumMedia(long bucketId) {
-        Collection<MediaBean> mediaBeans = mContainer.delBucketItems(bucketId);
-        showTitle();
-        return mediaBeans;
-    }
-
-    @Override
-    public List<MediaBean> getSelectMedia() {
-        return mContainer.getMediaEntries();
-    }
-
-    @Override
-    public Set<MediaBean> getSelectBucketMedia(long bucketId) {
-        if (bucketId == -1) {
-            Set<MediaBean> ret = new HashSet<>();
-            ret.addAll(mContainer.getMediaEntries());
-            return ret;
-        }
-        return mContainer.getSelectBucketItems(bucketId);
     }
 
 
@@ -337,7 +280,7 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
                 });
     }
 
-    private void showTitle() {
+    protected void showTitle() {
         int[] count = mContainer.getCount();
         String title =  context.getResources().getString(R.string.select_pic);
         if (count[0] != 0) {
@@ -345,11 +288,5 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
                     .getQuantityString(R.plurals.select_pic_count_limit, count[0], count[0], count[1]);
         }
         mView.showHeader(title);
-    }
-
-    @Override
-    public boolean isItemSelected(MediaBean item) {
-        Set<MediaBean> selectBucketItems = mContainer.getSelectBucketItems(item.bucketId);
-        return selectBucketItems != null && selectBucketItems.contains(item);
     }
 }

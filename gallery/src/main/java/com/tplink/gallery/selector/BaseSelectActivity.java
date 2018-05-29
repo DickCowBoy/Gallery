@@ -11,6 +11,7 @@ import com.tplink.gallery.base.BaseGalleryActivity;
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.selector.wallpaper.ResultContainer;
 import com.tplink.gallery.view.InterceptCheckBox;
 
 import java.util.Collection;
@@ -35,7 +36,8 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity
 
     @Override
     protected boolean awaysInSelectMode() {
-        return this.mediaSelectorPresenter.getMaxSelectCount() > 1;
+        return this.mediaSelectorPresenter.getMaxSelectCount() > 1
+                || this.mediaSelectorPresenter.getMaxSelectCount() == ResultContainer.UNLIMIT;
     }
 
     @Override
@@ -212,6 +214,17 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity
         } else {
             delSelectItem(currentMedia, getClass().getName());
             return true;
+        }
+    }
+
+    @Override
+    public void onMediaItemClick(MediaBean data, int index, String key) {
+        if (mediaSelectorPresenter.needPreview()) {
+            super.onMediaItemClick(data, index, key);
+        } else {
+            mediaSelectorPresenter.addSingleMedia(data);
+            // not need to preview
+            mediaSelectorPresenter.setResult(this);
         }
     }
 }

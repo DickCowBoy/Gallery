@@ -11,9 +11,18 @@ import java.util.Map;
 import java.util.Set;
 
 public class ResultContainer {
+
+    public static final int UNLIMIT = -1;
+
     private Map<Long, HashSet<MediaBean>> mSelectedItems = new HashMap<>();
     public Set<Integer> mWallPapers = new HashSet<>();
-    private int countLimit = 500;
+    private int countLimit = UNLIMIT;
+    private long sizeLimit = UNLIMIT;
+
+    public ResultContainer(int countLimit, long sizeLimit) {
+        this.countLimit = countLimit;
+        this.sizeLimit = sizeLimit;
+    }
 
     public void addItems(List<MediaBean> entities) {
         if (entities == null) {
@@ -35,7 +44,7 @@ public class ResultContainer {
             return -1;
         }
         int[] count = getCount();
-        if (count[0] >= countLimit) {
+        if (countLimit != UNLIMIT && count[0] >= countLimit) {
             return -1;
         }
         HashSet<MediaBean> mediaEntities = mSelectedItems.get(entity.bucketId);
@@ -65,7 +74,7 @@ public class ResultContainer {
     public int addBucketItems(Long bucketId, List<MediaBean> entities) {
 
         int[] count = getCount();
-        if (count[0] + entities.size()  > countLimit) {
+        if (countLimit != UNLIMIT && count[0] + entities.size()  > countLimit) {
             return -1;
         }
         HashSet<MediaBean> mediaEntities = mSelectedItems.get(bucketId);
@@ -117,5 +126,9 @@ public class ResultContainer {
 
     public Set<MediaBean> getSelectBucketItems(long bucketId) {
         return mSelectedItems.get(bucketId);
+    }
+
+    public int getCountLimit() {
+        return countLimit;
     }
 }
