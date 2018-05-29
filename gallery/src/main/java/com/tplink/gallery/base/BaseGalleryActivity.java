@@ -43,6 +43,11 @@ import java.util.List;
 public abstract class BaseGalleryActivity extends PermissionActivity implements AutoFitToolBar.OnPaddingListener,
         ImageSlotFragment.ImageSlotDataProvider, MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider, Toolbar.OnMenuItemClickListener {
 
+    public static final int TOOLBAR_STYLE_THUMB = 0;
+    public static final int TOOLBAR_STYLE_PREVIEW = 1;
+
+    private int actionbarStyle = TOOLBAR_STYLE_THUMB;// 默认0缩略图，1大图预览
+
     private LoadingView mLoadingView;
     protected AutoFitToolBar mNormalToolbar;
     private TabLayout mTabLayout;
@@ -108,10 +113,34 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     public void onBackPressed() {
         if (bigImagePreview.isShow()) {
             bigImagePreview.hide();
+            showNormalBar();
             currentKey = null;
             return;
         }
         super.onBackPressed();
+    }
+
+    protected void showNormalBar(){
+        setWindow();
+        if (mNormalToolbar != null) {
+            mNormalToolbar.setTitleTextColor(getResources().getColor(R.color.photo_normal_toolbar_title));
+            mNormalToolbar.setNavigationIcon(R.drawable.photo_ic_menu_back_button);
+            actionbarStyle = TOOLBAR_STYLE_THUMB;
+        }
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        switch (actionbarStyle) {
+            case TOOLBAR_STYLE_THUMB:
+                menu.findItem(R.id.action_select).setVisible(true);
+                break;
+            case TOOLBAR_STYLE_PREVIEW:
+                menu.findItem(R.id.action_select).setVisible(false);
+                break;
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -171,10 +200,18 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         window.setBackgroundDrawable(null);
+    }
+
+    protected void setPreviewWindow() {
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
     @Override
@@ -238,6 +275,18 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         currentKey = key;
         bigImagePreview.setData(DataCacheManager.dataManager.getMediaBeanCollectionByKey(key).mediaBeans);
         bigImagePreview.showIndex(index);
+        showPreviewBar();
+    }
+
+    private void showPreviewBar() {
+        setPreviewWindow();
+        if (mNormalToolbar != null) {
+            mNormalToolbar.setTitleTextColor(getResources().getColor(R.color.white));
+            mNormalToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+            mNormalToolbar.getMenu().findItem(R.id.action_select).setVisible(false);
+            actionbarStyle = TOOLBAR_STYLE_PREVIEW;
+        }
+        invalidateOptionsMenu();
     }
 
     @Override
