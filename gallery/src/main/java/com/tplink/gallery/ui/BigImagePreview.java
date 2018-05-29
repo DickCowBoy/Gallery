@@ -12,33 +12,29 @@
 package com.tplink.gallery.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.bumptech.glide.ListPreloader;
-import com.bumptech.glide.util.FixedPreloadSizeProvider;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.view.InterceptCheckBox;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BigImagePreview {
+public class BigImagePreview implements PagerSnapHelper.PageListener {
 
     private final LargeImagedAdapter largeImageAdapter;
     private final FilmCardAdapter mFilmCardAdapter;
     private RecyclerView mLargeImageRecycle;
     private RecyclerView mFilmImageRecycle;
     private Activity activity;
+    private List<MediaBean> mediaBeans;
+    private BigPreviewCallback bigPreviewCallback;
 
-    public BigImagePreview(Activity context, RecyclerView mLargeImageRecycle, RecyclerView mFilmImageRecycle) {
+    public BigImagePreview(Activity context, RecyclerView mLargeImageRecycle,
+                           RecyclerView mFilmImageRecycle, BigPreviewCallback bigPreviewCallback) {
         this.mLargeImageRecycle = mLargeImageRecycle;
         this.mFilmImageRecycle = mFilmImageRecycle;
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
@@ -60,8 +56,10 @@ public class BigImagePreview {
         PagerSnapHelper snapHelper1 = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mLargeImageRecycle);
         snapHelper1.attachToRecyclerView(mFilmImageRecycle);
+        snapHelper.setPageListener(this);
 
         this.activity = context;
+        this.bigPreviewCallback = bigPreviewCallback;
 
 
     }
@@ -71,15 +69,19 @@ public class BigImagePreview {
         for (MediaBean datum : data) {
             sources.add(ImageSource.uri(datum.getContentUri(), datum.width, datum.height, 0, datum.mimeType));
         }
+        mediaBeans = data;
         largeImageAdapter.updateList(sources);
         //largeImageAdapter.notifyDataSetChanged();
         mFilmCardAdapter.setList(sources);
         mFilmCardAdapter.notifyDataSetChanged();
     }
 
-
-
-
+    @Override
+    public void onPageChanged(int pos) {
+        if (bigPreviewCallback != null) {
+            bigPreviewCallback.onImageChanged(mediaBeans.get(pos));
+        }
+    }
 
 
     class SpaceItemDecoration extends RecyclerView.ItemDecoration {
@@ -183,6 +185,10 @@ public class BigImagePreview {
 
     public boolean isShow() {
         return this.mLargeImageRecycle.getVisibility() == View.VISIBLE;
+    }
+
+    public interface BigPreviewCallback {
+        void onImageChanged(MediaBean current);
     }
 
 }

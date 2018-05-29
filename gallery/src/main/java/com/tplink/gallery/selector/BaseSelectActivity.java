@@ -3,6 +3,7 @@ package com.tplink.gallery.selector;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.tplink.base.Consts;
@@ -10,6 +11,7 @@ import com.tplink.gallery.base.BaseGalleryActivity;
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.view.InterceptCheckBox;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,12 +20,14 @@ import java.util.Set;
 public abstract class BaseSelectActivity extends BaseGalleryActivity implements MediaSelectorContract.MediaSelectorView {
 
     private MediaSelectorContract.MediaSelectorPresenter mediaSelectorPresenter;
+    private InterceptCheckBox mCheckBox;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         this.mediaSelectorPresenter = initSelectorPresenter();
         super.onCreate(savedInstanceState);
         this.mediaSelectorPresenter.loadSelectInfo(this, getIntent());
+        mCheckBox = findViewById(R.id.cb_item_selected);
     }
 
     @Override
@@ -175,5 +179,23 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity implements 
         for (AlbumChangedListener albumChangedListener : albumChangedListeners) {
             albumChangedListener.onChanged(item.bucketId, false, mediaBeans);
         }
+    }
+
+    @Override
+    protected void showNormalBar() {
+        super.showNormalBar();
+        mCheckBox.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void showPreviewBar(MediaBean data) {
+        super.showPreviewBar(data);
+        onImageChanged(data);
+        mCheckBox.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onImageChanged(MediaBean current) {
+        mCheckBox.setChecked(mediaSelectorPresenter.isItemSelected(current));
     }
 }

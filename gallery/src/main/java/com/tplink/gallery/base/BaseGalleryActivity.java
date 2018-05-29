@@ -41,7 +41,7 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class BaseGalleryActivity extends PermissionActivity implements AutoFitToolBar.OnPaddingListener,
-        ImageSlotFragment.ImageSlotDataProvider, MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider, Toolbar.OnMenuItemClickListener {
+        ImageSlotFragment.ImageSlotDataProvider, MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider, Toolbar.OnMenuItemClickListener, BigImagePreview.BigPreviewCallback {
 
     public static final int TOOLBAR_STYLE_THUMB = 0;
     public static final int TOOLBAR_STYLE_PREVIEW = 1;
@@ -106,7 +106,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
         RecyclerView bigImageView = findViewById(R.id.rcl_gallery);
         RecyclerView filmImageView = findViewById(R.id.rcl_sub_gallery);
-        bigImagePreview = new BigImagePreview(this, bigImageView, filmImageView);
+        bigImagePreview = new BigImagePreview(this, bigImageView, filmImageView, this);
     }
 
     @Override
@@ -275,10 +275,10 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         currentKey = key;
         bigImagePreview.setData(DataCacheManager.dataManager.getMediaBeanCollectionByKey(key).mediaBeans);
         bigImagePreview.showIndex(index);
-        showPreviewBar();
+        showPreviewBar(data);
     }
 
-    private void showPreviewBar() {
+    protected void showPreviewBar(MediaBean data) {
         setPreviewWindow();
         if (mNormalToolbar != null) {
             mNormalToolbar.setTitleTextColor(getResources().getColor(R.color.white));
@@ -356,6 +356,11 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
     @Override
     public void delSelectAlbum(AlbumBean item) {
+
+    }
+
+    @Override
+    public void onImageChanged(MediaBean current) {
 
     }
 }
