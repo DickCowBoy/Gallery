@@ -23,6 +23,7 @@ import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.media.MediaColumn;
 import com.tplink.gallery.utils.MediaUtils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,6 +134,12 @@ public class MediaDao extends BaseMediaDao {
             return queryVideo(selection, selectionArgs);
         }  else if (queryImage && !queryVideo) {
             return queryImage(selection, selectionArgs);
+        }
+        selection += " AND " + SELECTION_ALL;
+        selectionArgs = new String[1 + SELECTION_ALL_ARGS.length];
+        selectionArgs[0] = String.valueOf(bucketId);
+        for (int i = 1; i < selectionArgs.length; i++) {
+            selectionArgs[i] = SELECTION_ALL_ARGS[i -1];
         }
         return queryFile(selection, selectionArgs);
     }

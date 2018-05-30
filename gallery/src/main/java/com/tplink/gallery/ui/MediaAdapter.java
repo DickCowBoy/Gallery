@@ -68,12 +68,10 @@ public class MediaAdapter extends CommonDataViewProxy<MediaBean, MediaAdapter.Me
     public void onBindViewHolder(MediaViewHolder viewHolder, int i) {
         super.onBindViewHolder(viewHolder, i);
         MediaBean pic = getItem(i);
-        GlideApp.with(mContext).load(pic.getContentUri())
-                .into(viewHolder.mThumbnail);
-//        MediaUtils.imageEngine.loadImage(mContext, pic.lastModify,
-//                null, viewHolder.mThumbnail, pic.getContentUri());
+        MediaUtils.imageEngine.loadImage(mContext, pic.lastModify,
+                null, viewHolder.mThumbnail, pic.getContentUri());
     }
-
+git
     @Override
     protected int getContainerId() {
         return -1;

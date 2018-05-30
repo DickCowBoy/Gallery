@@ -24,6 +24,7 @@ import com.tplink.gallery.GlideApp;
 import com.tplink.gallery.GlideRequest;
 import com.tplink.gallery.GlideRequests;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.utils.MediaUtils;
 import com.tplink.gallery.view.BigImageView;
 
 import java.util.ArrayList;
@@ -164,6 +165,7 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 ImageSource imageSource = mList.get(position);
                 holderimg.mImageView.setBackDx(imageSource.getSWidth() / 1.0F / imageSource.getSHeight());
+
                 if (mList.get(position).getMimeType().equals("image/gif")) {
                   glideRequests.asGif()
                             .load(mList.get(position).getUri())
