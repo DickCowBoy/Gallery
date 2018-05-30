@@ -92,7 +92,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         if (mPagerAdapter == null) {
             mPagerAdapter = new ContainerPagerAdapter(getFragmentManager(),
                     this, mPager, awaysInSelectMode(), getAllowMimeTypes(),
-                    getNotAllowMimeTypes(), needResolveBurst(), needImage(), needVideo());
+                    getNotAllowMimeTypes(), needResolveBurst(), needImage(), needVideo(), needSelectAlbum());
         } else {
             mPagerAdapter.setInterceptController(mPager);
         }
@@ -109,6 +109,10 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         RecyclerView bigImageView = findViewById(R.id.rcl_gallery);
         RecyclerView filmImageView = findViewById(R.id.rcl_sub_gallery);
         bigImagePreview = new BigImagePreview(this, bigImageView, filmImageView, this);
+    }
+
+    protected boolean needSelectAlbum() {
+        return false;
     }
 
     @Override

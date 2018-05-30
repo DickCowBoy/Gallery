@@ -17,12 +17,10 @@ public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>
     protected CommonDataView mCommonDataView;
     private AlbumAdapter mDataProxy;
     private SpaceItemDecoration spaceItemDecoration;
-    private boolean awaysInSelectMode = false;
     private AlbumOperateProcessor albumOperateProcessor;
 
     public AlbumView(Context context, CommonDataView recyclerView, boolean awaysInSelectMode, AlbumOperateProcessor albumOperateProcessor) {
         this.mCommonDataView = recyclerView;
-        this.awaysInSelectMode = awaysInSelectMode;
 
         mDataProxy = new AlbumAdapter(context, mCommonDataView, this, awaysInSelectMode);
         mDataProxy.setListener(this);

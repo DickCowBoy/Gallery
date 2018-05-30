@@ -25,6 +25,11 @@ public class WallPaperActivity extends BaseSelectActivity {
     }
 
     @Override
+    protected boolean needSelectAlbum() {
+        return true;
+    }
+
+    @Override
     public boolean needVideo() {
         return false;
     }

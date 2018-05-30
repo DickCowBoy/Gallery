@@ -14,14 +14,17 @@
         android:theme="@style/AppTheme">
         <activity android:name="com.tplink.gallery.selector.wallpaper.WallPaperActivity"
             android:theme="@style/PhotoAppTheme">
-
+            <intent-filter>
+                <action android:name="com.tplink.action.PICK_WALLPAPE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <activity android:name="com.tplink.gallery.selector.ImageSelectActivity"
             android:theme="@style/PhotoAppTheme"
             android:label="@string/select_pic">
             <intent-filter>
-                <action android:name="com.tplink.media_picker" />
+                <action android:name="com.tplink.action.MEDIA_PICKER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>

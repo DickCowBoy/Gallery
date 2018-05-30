@@ -40,7 +40,7 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
 
     public WallPaperSelectPresenter(Context context, MediaSelectorContract.MediaSelectorView view) {
         super(context, view,
-                ResultContainer.UNLIMIT, WALLPAPER_COUNT_LIMIT,
+                WALLPAPER_COUNT_LIMIT, ResultContainer.UNLIMIT,
                 true,
                 true,
                 false);

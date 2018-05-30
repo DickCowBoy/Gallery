@@ -38,6 +38,7 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
     private FragmentManager mFragmentManager;
     private int mCurrentPos;
     private boolean awaysInSelectMode;
+    private boolean needSelectedAlbum;
     private boolean needImage;
     private boolean needVideo;
 
@@ -55,7 +56,7 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
     public ContainerPagerAdapter(FragmentManager fm, Context context,
                                  DragSelectTouchHelper.InterceptController interceptController,
                                  boolean awaysInSelectMode, List<String> allowMimeTyppes,List<String> notAllowMimeTyppes,
-                                 boolean needResolveBurst, boolean needImage, boolean needVideo) {
+                                 boolean needResolveBurst, boolean needImage, boolean needVideo, boolean needSelectedAlbum) {
         super(fm);
         mContext = context;
         mFragmentManager = fm;
@@ -66,6 +67,7 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
         this.needResolveBurst = needResolveBurst;
         this.needVideo = needVideo;
         this.needImage = needImage;
+        this.needSelectedAlbum = needSelectedAlbum;
     }
 
     public void setInterceptController(DragSelectTouchHelper.InterceptController interceptController) {
@@ -95,7 +97,7 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
         // 保证Fragment的复用
         if (getPosInDirection(i) == ALBUM_TAB) {
             if (mAlbumFragment == null) {
-                mAlbumFragment = AlbumSlotFragment.newInstance(awaysInSelectMode,
+                mAlbumFragment = AlbumSlotFragment.newInstance(needSelectedAlbum,
                         MediaUtils.getAllAlbumKey(allowMimeTyppes, notAllowMimeTyppes, needResolveBurst, needImage, needVideo));
             }
             return mAlbumFragment;
