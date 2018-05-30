@@ -9,6 +9,7 @@ import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.dao.MediaDao;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.selector.wallpaper.ResultContainer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,6 +76,11 @@ public class ImageSelectPresenter extends MediaSelectorContract.MediaSelectorPre
     }
 
     @Override
+    public boolean needPreview() {
+        return mContainer.getCountLimit() != 1 || needPreview;
+    }
+
+    @Override
     public void setResult(Activity activity) {
         List<MediaBean> mediaEntries = mContainer.getMediaEntries();
         ArrayList<Uri> result = new ArrayList<>();
@@ -97,8 +103,13 @@ public class ImageSelectPresenter extends MediaSelectorContract.MediaSelectorPre
         int[] count = mContainer.getCount();
         String title =  context.getResources().getString(R.string.select_pic);
         if (count[0] != 0) {
-            title = context.getResources()
-                    .getQuantityString(R.plurals.select_pic_count_limit, count[0], count[0], count[1]);
+           if (countLimit != ResultContainer.UNLIMIT) {
+               title = context.getResources()
+                       .getQuantityString(R.plurals.select_pic_count_limit, count[0], count[0], count[1]);
+           } else {
+               title = context.getResources()
+                       .getQuantityString(R.plurals.select_pic_count, count[0], count[0]);
+           }
         }
         mView.showHeader(title);
     }

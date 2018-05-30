@@ -33,20 +33,25 @@ public class MediaUtils {
     public static ImageEngine imageEngine = null;
 
     public static String getAllMediaKey(List<String> allowMimeTypes,
-                                        List<String> notAllowMimeTypes, boolean needResolveBurst) {
+                                        List<String> notAllowMimeTypes, boolean needResolveBurst,
+                                        boolean needImage, boolean needVideo) {
         return "ALL_MEDIA" + "_" + (allowMimeTypes!= null ? allowMimeTypes.toString() : "all") + "_"
-                +  (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all")  + "_" + needResolveBurst;
+                +  (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all")  + "_" + needResolveBurst
+                + "_" + needImage + "_" + needVideo;
     }
 
     public static String getAllAlbumKey(List<String> allowMimeTypes,
-                                        List<String> notAllowMimeTypes, boolean needResolveBurst) {
+                                        List<String> notAllowMimeTypes, boolean needResolveBurst,
+                                        boolean needImage, boolean needVideo) {
         return "ALL_ALBUM" + "_" + (allowMimeTypes!= null ? allowMimeTypes.toString() : "all") + "_"
-                + (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all")  + "_" + needResolveBurst + "_";
+                + (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all")  + "_" + needResolveBurst
+                + "_" + needImage + "_" + needVideo;
     }
 
     public static String getBucketId(long bucketId, List<String> allowMimeTypes,
                                      List<String> notAllowMimeTypes) {
-        return String.valueOf(bucketId) + "_" + (allowMimeTypes!= null ? allowMimeTypes.toString() : "all")  + "_" + (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all");
+        return String.valueOf(bucketId) + "_" + (allowMimeTypes!= null ? allowMimeTypes.toString() : "all")
+                + "_" + (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all");
     }
 
 

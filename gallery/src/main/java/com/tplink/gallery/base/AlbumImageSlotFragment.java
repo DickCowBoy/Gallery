@@ -103,7 +103,8 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
         showSelected();
     }
 
-    public static AlbumImageSlotFragment newInstance(long bucketId, ArrayList<String> allowMimeTypes, ArrayList<String> notAllowMimeTypes, boolean selectMode) {
+    public static AlbumImageSlotFragment newInstance(long bucketId, ArrayList<String> allowMimeTypes, ArrayList<String> notAllowMimeTypes, boolean selectMode
+    ) {
 
         Bundle args = new Bundle();
 

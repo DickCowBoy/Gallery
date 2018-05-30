@@ -1,6 +1,9 @@
 package com.tplink.gallery.selector.wallpaper;
 
+import android.content.Context;
+
 import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.gallery.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +16,9 @@ import java.util.Set;
 public class ResultContainer {
 
     public static final int UNLIMIT = -1;
+    public static final int ERR_OVER_COUNT = 1;
+    public static final int ERR_OVER_SIZE = 2;
+
 
     private Map<Long, HashSet<MediaBean>> mSelectedItems = new HashMap<>();
     public Set<Integer> mWallPapers = new HashSet<>();
@@ -39,13 +45,46 @@ public class ResultContainer {
         }
     }
 
+    private int checkAdd(Collection<MediaBean> beas) {
+        int[] count = getCount();
+        if (countLimit != UNLIMIT && (count[0] + beas.size()) > countLimit) {
+            return ERR_OVER_COUNT;
+        }
+        if (sizeLimit != UNLIMIT) {
+            long selectSize = getSelectSize();
+            for (MediaBean bea : beas) {
+                selectSize += bea.size;
+            }
+            if (sizeLimit < selectSize) {
+                return ERR_OVER_SIZE;
+            }
+        }
+        return 0;
+
+    }
+
+    private int checkAdd(MediaBean bean) {
+        int[] count = getCount();
+        if (countLimit != UNLIMIT && (count[0]) >= countLimit) {
+            return ERR_OVER_COUNT;
+        }
+        if (sizeLimit != UNLIMIT) {
+            long selectSize = getSelectSize() + bean.size;
+            if (sizeLimit < selectSize) {
+                return ERR_OVER_SIZE;
+            }
+        }
+        return 0;
+
+    }
+
     public int addItem(MediaBean entity) {
         if (entity == null) {
             return -1;
         }
-        int[] count = getCount();
-        if (countLimit != UNLIMIT && count[0] >= countLimit) {
-            return -1;
+        int checkResult = checkAdd(entity);
+        if (checkResult != 0) {
+            return checkResult;
         }
         HashSet<MediaBean> mediaEntities = mSelectedItems.get(entity.bucketId);
         if (mediaEntities == null) {
@@ -55,6 +94,20 @@ public class ResultContainer {
         mediaEntities.add(entity);
         return 0;
     }
+
+    public String getResultHint(Context context, int errorCode) {
+        switch (errorCode) {
+            case ERR_OVER_COUNT:
+                return context.getString(R.string.select_count_over);
+            case ERR_OVER_SIZE:
+                return String.format(context.getString(R.string.select_size_over),
+                        sizeLimit / 1024 / 1024);
+        }
+        return null;
+    }
+
+
+
 
     public void delItem(MediaBean entity) {
         if (entity == null) {
@@ -73,9 +126,9 @@ public class ResultContainer {
 
     public int addBucketItems(Long bucketId, List<MediaBean> entities) {
 
-        int[] count = getCount();
-        if (countLimit != UNLIMIT && count[0] + entities.size()  > countLimit) {
-            return -1;
+        int checkResult = checkAdd(entities);
+        if (checkResult != 0) {
+            return checkResult;
         }
         HashSet<MediaBean> mediaEntities = mSelectedItems.get(bucketId);
         if (mediaEntities == null) {
@@ -103,6 +156,16 @@ public class ResultContainer {
             size += entry.getValue().size();
         }
         return new int[]{size, countLimit};
+    }
+
+    public long getSelectSize() {
+        long size = 0;
+        for (Map.Entry<Long, HashSet<MediaBean>> entry : mSelectedItems.entrySet()) {
+            for (MediaBean bean : entry.getValue()) {
+                size += bean.size;
+            }
+        }
+        return size;
     }
 
     public void getResult(Set<Integer> newItem, Set<Integer> delItem) {

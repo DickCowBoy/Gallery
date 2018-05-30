@@ -12,17 +12,21 @@ public class AllAlbumMediaCollection extends MediaBeanCollection<AlbumBean>{
     List<String> notAllowMimeTypes;
     List<String> allowMimeTypes;
     public boolean needResolveBurst;
+    public boolean needImage;
+    public boolean needVideo;
 
     public AllAlbumMediaCollection(List<AlbumBean> data, List<String> allowMimeTypes,
-                                   List<String> notAllowMimeTypes, boolean needResolveBurst) {
+                                   List<String> notAllowMimeTypes, boolean needResolveBurst, boolean needImage, boolean needVideo) {
         super(data);
         this.allowMimeTypes = allowMimeTypes;
         this.notAllowMimeTypes = notAllowMimeTypes;
+        this.needImage = needImage;
+        this.needVideo = needVideo;
         this.needResolveBurst = needResolveBurst;
     }
 
     @Override
     public String key() {
-        return MediaUtils.getAllAlbumKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst);
+        return MediaUtils.getAllAlbumKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst, needImage, needVideo);
     }
 }

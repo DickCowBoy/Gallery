@@ -203,7 +203,7 @@ public class MediaPresenter extends MediaContract.MediaPresenter implements Data
 
     private AllAlbumMediaCollection loadAlbum() {
         MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.getMediaBeanCollectionByKey(
-                MediaUtils.getAllAlbumKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst));
+                MediaUtils.getAllAlbumKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst, needImage, needVideo));
         AllAlbumMediaCollection allAlbumMediaCollection = null;
         List<AlbumBean> mediaBeans = null;
         if (mediaBeanCollectionByKey != null) {
@@ -216,7 +216,8 @@ public class MediaPresenter extends MediaContract.MediaPresenter implements Data
             }
         } else {
             mediaBeans = mediaDao.queryAllAlbum(allowMimeTypes, notAllowMimeTypes, needResolveBurst, needVideo, needImage);
-            allAlbumMediaCollection = new AllAlbumMediaCollection(mediaBeans, allowMimeTypes, notAllowMimeTypes, needResolveBurst);
+            allAlbumMediaCollection = new AllAlbumMediaCollection(mediaBeans, allowMimeTypes,
+                    notAllowMimeTypes, needResolveBurst, needImage, needVideo);
             DataCacheManager.dataManager.addMediaBeanCollection(allAlbumMediaCollection);
         }
         return allAlbumMediaCollection;
@@ -225,7 +226,7 @@ public class MediaPresenter extends MediaContract.MediaPresenter implements Data
     public AllMediaBeanCollection loadImage() {
         MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager.
                 getMediaBeanCollectionByKey(
-                        MediaUtils.getAllMediaKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst));
+                        MediaUtils.getAllMediaKey(allowMimeTypes, notAllowMimeTypes, needResolveBurst, needImage, needVideo));
         AllMediaBeanCollection allAlbumMediaCollection = null;
         List<MediaBean> mediaBeans = null;
         if (mediaBeanCollectionByKey != null) {
@@ -239,7 +240,9 @@ public class MediaPresenter extends MediaContract.MediaPresenter implements Data
             allAlbumMediaCollection = new AllMediaBeanCollection(mediaBeans,
                     allowMimeTypes,
                     notAllowMimeTypes,
-                    needResolveBurst);
+                    needResolveBurst,
+                    needImage,
+                    needVideo);
             DataCacheManager.dataManager.addMediaBeanCollection(allAlbumMediaCollection);
         }
         return allAlbumMediaCollection;

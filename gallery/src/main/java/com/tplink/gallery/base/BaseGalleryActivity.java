@@ -90,7 +90,8 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
         if (mPagerAdapter == null) {
             mPagerAdapter = new ContainerPagerAdapter(getFragmentManager(),
-                    this, mPager, awaysInSelectMode(), getAllowMimeTypes(),getNotAllowMimeTypes(), needResolveBurst());
+                    this, mPager, awaysInSelectMode(), getAllowMimeTypes(),
+                    getNotAllowMimeTypes(), needResolveBurst(), needImage(), needVideo());
         } else {
             mPagerAdapter.setInterceptController(mPager);
         }

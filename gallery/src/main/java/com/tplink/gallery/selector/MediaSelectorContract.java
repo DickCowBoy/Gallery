@@ -107,7 +107,7 @@ public interface MediaSelectorContract {
             int result = mContainer.addItem(bean);
             if (result != 0) {
                 if (mView != null) {
-                    mView.showErrorMsg(context.getString(R.string.select_count_over));
+                    mView.showErrorMsg(mContainer.getResultHint(context, result));
                 }
             }
             if (result == 0 && mView != null) {

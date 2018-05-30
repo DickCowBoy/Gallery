@@ -38,6 +38,8 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
     private FragmentManager mFragmentManager;
     private int mCurrentPos;
     private boolean awaysInSelectMode;
+    private boolean needImage;
+    private boolean needVideo;
 
     private ImageSlotFragment mMediaFragment = null;
     private AlbumSlotFragment mAlbumFragment = null;
@@ -53,7 +55,7 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
     public ContainerPagerAdapter(FragmentManager fm, Context context,
                                  DragSelectTouchHelper.InterceptController interceptController,
                                  boolean awaysInSelectMode, List<String> allowMimeTyppes,List<String> notAllowMimeTyppes,
-                                 boolean needResolveBurst) {
+                                 boolean needResolveBurst, boolean needImage, boolean needVideo) {
         super(fm);
         mContext = context;
         mFragmentManager = fm;
@@ -62,6 +64,8 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
         this.allowMimeTyppes = allowMimeTyppes;
         this.notAllowMimeTyppes = notAllowMimeTyppes;
         this.needResolveBurst = needResolveBurst;
+        this.needVideo = needVideo;
+        this.needImage = needImage;
     }
 
     public void setInterceptController(DragSelectTouchHelper.InterceptController interceptController) {
@@ -92,13 +96,13 @@ public class ContainerPagerAdapter extends FragmentPagerAdapter {
         if (getPosInDirection(i) == ALBUM_TAB) {
             if (mAlbumFragment == null) {
                 mAlbumFragment = AlbumSlotFragment.newInstance(awaysInSelectMode,
-                        MediaUtils.getAllAlbumKey(allowMimeTyppes, notAllowMimeTyppes, needResolveBurst));
+                        MediaUtils.getAllAlbumKey(allowMimeTyppes, notAllowMimeTyppes, needResolveBurst, needImage, needVideo));
             }
             return mAlbumFragment;
         } else {
             if (mMediaFragment == null) {
                 mMediaFragment = ImageSlotFragment.newInstance(awaysInSelectMode,
-                        MediaUtils.getAllMediaKey (allowMimeTyppes, notAllowMimeTyppes, needResolveBurst));
+                        MediaUtils.getAllMediaKey (allowMimeTyppes, notAllowMimeTyppes, needResolveBurst, needImage, needVideo));
             }
             mMediaFragment.setInterceptController(interceptController);
             return mMediaFragment;
