@@ -71,7 +71,6 @@ public class MediaAdapter extends CommonDataViewProxy<MediaBean, MediaAdapter.Me
         MediaUtils.imageEngine.loadImage(mContext, pic.lastModify,
                 null, viewHolder.mThumbnail, pic.getContentUri());
     }
-git
     @Override
     protected int getContainerId() {
         return -1;
