@@ -56,7 +56,7 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         CommonDataView commonDataView = new CommonDataView(getContext(), null);
-        thumbView = new PhotoThumbView(getContext(), commonDataView, awaysInSelectMode);
+        thumbView = new PhotoThumbView(getContext(), commonDataView, awaysInSelectMode, imageSlotDataProvider.longClickEnter());
         thumbView.setPhotoThumbListener(this);
         if (interceptController != null) {
             thumbView.setParentView(interceptController);
@@ -178,6 +178,8 @@ public class ImageSlotFragment extends Fragment implements PhotoThumbView.PhotoT
         void regAlbumChangedListeners(AlbumChangedListener albumChangedListener);
 
         void unregAlbumChangedListeners(AlbumChangedListener albumChangedListener);
+
+        boolean longClickEnter();
     }
 
     @Override

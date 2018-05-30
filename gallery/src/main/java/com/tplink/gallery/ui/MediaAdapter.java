@@ -37,9 +37,12 @@ import com.tplink.view.CommonDataViewProxy;
 public class MediaAdapter extends CommonDataViewProxy<MediaBean, MediaAdapter.MediaViewHolder> {
     private Context mContext;
     private boolean awaysInSelectMode = false;
+    private boolean needLongClickEnter = false;
 
-    public MediaAdapter(Context context, CommonDataView commonDataView, boolean awaysInSelectMode) {
+    public MediaAdapter(Context context, CommonDataView commonDataView, boolean awaysInSelectMode
+            , boolean needLongClickEnter) {
         super(context, commonDataView);
+        this.needLongClickEnter = needLongClickEnter;
         mContext = context;
         awaysInSelectMode = awaysInSelectMode;
         if (awaysInSelectMode) {
@@ -65,8 +68,7 @@ public class MediaAdapter extends CommonDataViewProxy<MediaBean, MediaAdapter.Me
     public void onBindViewHolder(MediaViewHolder viewHolder, int i) {
         super.onBindViewHolder(viewHolder, i);
         MediaBean pic = getItem(i);
-        GlideApp.with(mContext).asBitmap().load(pic.getContentUri())
-                .transition(BitmapTransitionOptions.withCrossFade())
+        GlideApp.with(mContext).load(pic.getContentUri())
                 .into(viewHolder.mThumbnail);
 //        MediaUtils.imageEngine.loadImage(mContext, pic.lastModify,
 //                null, viewHolder.mThumbnail, pic.getContentUri());
@@ -84,7 +86,7 @@ public class MediaAdapter extends CommonDataViewProxy<MediaBean, MediaAdapter.Me
 
     @Override
     protected boolean canEnterSelectMode() {
-        return true;
+        return needLongClickEnter;
     }
 
     @Override

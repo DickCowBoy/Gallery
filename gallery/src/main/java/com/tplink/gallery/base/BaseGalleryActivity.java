@@ -362,4 +362,9 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     public void onImageChanged(MediaBean current) {
 
     }
+
+    @Override
+    public boolean longClickEnter() {
+        return true;
+    }
 }

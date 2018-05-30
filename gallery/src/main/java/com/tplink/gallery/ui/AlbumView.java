@@ -68,6 +68,11 @@ public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>
         return albumOperateProcessor.isItemChecked(entity);
     }
 
+    @Override
+    public boolean longClickEnter() {
+        return albumOperateProcessor.longClickEnter();
+    }
+
     public void showAlbums(List<AlbumBean> beans) {
         mDataProxy.updateData(beans);
     }
@@ -78,6 +83,7 @@ public class AlbumView implements CommonDataViewProxy.OnDataItemClick<AlbumBean>
         void delSelectItem(AlbumBean item);
         boolean isItemChecked(AlbumBean item);
         int getAlbumSelectCount(AlbumBean item);
+        boolean longClickEnter();
     }
 
     public void setSelectItems(Collection<AlbumBean> items) {

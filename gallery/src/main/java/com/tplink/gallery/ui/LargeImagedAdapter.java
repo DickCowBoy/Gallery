@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.BaseTarget;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.transition.Transition;
@@ -20,6 +21,8 @@ import com.bumptech.glide.util.Synthetic;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.tplink.gallery.GlideApp;
+import com.tplink.gallery.GlideRequest;
+import com.tplink.gallery.GlideRequests;
 import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.view.BigImageView;
 
@@ -38,8 +41,10 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final RecyclerView mView;
     private List<ImageSource> mList = new ArrayList<>();
     private Context context;
+    private GlideRequests glideRequests;
     public LargeImagedAdapter(Context context, RecyclerView view) {
         this.context = context;
+        glideRequests = GlideApp.with(context);
         this.mView = view;
 
         sizeProvider =
@@ -159,10 +164,18 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 ImageSource imageSource = mList.get(position);
                 holderimg.mImageView.setBackDx(imageSource.getSWidth() / 1.0F / imageSource.getSHeight());
-                GlideApp.with(context)
-                        .load(mList.get(position).getUri())
-                        .override(imageWidthPixels, imageHeightPixels)
-                        .into(holderimg.mImageView);
+                if (mList.get(position).getMimeType().equals("image/gif")) {
+                  glideRequests.asGif()
+                            .load(mList.get(position).getUri())
+                            .override(imageWidthPixels, imageHeightPixels)
+                            .into(holderimg.mImageView);
+                } else {
+                    glideRequests.asDrawable()
+                            .load(mList.get(position).getUri())
+                            .override(imageWidthPixels, imageHeightPixels)
+                            .into(holderimg.mImageView);
+                }
+
                 break;
         }
     }

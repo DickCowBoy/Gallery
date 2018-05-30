@@ -104,7 +104,7 @@ public class AlbumAdapter extends CommonDataViewProxy<AlbumBean, AlbumAdapter.Al
     // 不能进入选择模式
     @Override
     protected boolean canEnterSelectMode() {
-        return true;
+        return mAlbumInfoInterface.longClickEnter();
     }
 
     @Override
@@ -148,6 +148,7 @@ public class AlbumAdapter extends CommonDataViewProxy<AlbumBean, AlbumAdapter.Al
     public interface AlbumInfoInterface {
         int getAlbumSelectCount(AlbumBean entity);
         boolean isAlbumSelected(AlbumBean entity);
+        boolean longClickEnter();
     }
 
     public void updateBucket(long bucketId, int selectCount) {

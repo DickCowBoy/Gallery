@@ -53,8 +53,7 @@ public class BigImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (getDrawable() == null || !(getDrawable() instanceof BitmapDrawable)
-                || (((BitmapDrawable) getDrawable()).getBitmap() == null)) {
+        if (getDrawable() == null) {
             drawBack(canvas);
         }
     }

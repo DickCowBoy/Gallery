@@ -239,4 +239,9 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity
             mediaSelectorPresenter.setResult(this);
         }
     }
+
+    @Override
+    public boolean longClickEnter() {
+        return false;
+    }
 }

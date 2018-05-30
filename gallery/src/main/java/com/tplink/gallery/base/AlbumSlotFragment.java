@@ -95,6 +95,11 @@ public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperat
     }
 
     @Override
+    public boolean longClickEnter() {
+        return imageSlotDataProvider.longClickEnter();
+    }
+
+    @Override
     public void onChanged(MediaBean entity) {
         albumView.updateBucket(entity.bucketId,imageSlotDataProvider.getAlbumSelectedCount(entity.bucketId));
     }
@@ -108,6 +113,8 @@ public class AlbumSlotFragment extends Fragment implements AlbumView.AlbumOperat
         int getAlbumSelectedCount(long bucketId);
         void regItemChangedListeners(ItemChangedListener listener);
         void unregItemChangedListeners(ItemChangedListener listener);
+
+        boolean longClickEnter();
     }
 
     @Override
