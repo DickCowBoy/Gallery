@@ -113,6 +113,9 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_select:
+                if (actionbarStyle == TOOLBAR_STYLE_PREVIEW) {
+                    this.mediaSelectorPresenter.addSingleMedia(currentMedia);
+                }
                 this.mediaSelectorPresenter.setResult(this);
                 break;
         }
