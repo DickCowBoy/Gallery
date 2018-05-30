@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -133,8 +134,9 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
-        menu.findItem(R.id.action_select).setVisible(needSureBottom());
+        MenuItem item = menu.findItem(R.id.action_select);
+        item.setVisible(needSureBottom());
+        item.setIcon(actionbarStyle == TOOLBAR_STYLE_THUMB? R.drawable.ic_select : R.drawable.ic_menu_sure );
         return super.onPrepareOptionsMenu(menu);
     }
 
