@@ -79,6 +79,7 @@ public class BigImagePreview implements PagerSnapHelper.PageListener {
     @Override
     public void onPageChanged(int pos) {
         if (bigPreviewCallback != null) {
+            if (pos < mediaBeans.size() && pos >= 0)
             bigPreviewCallback.onImageChanged(mediaBeans.get(pos));
         }
     }

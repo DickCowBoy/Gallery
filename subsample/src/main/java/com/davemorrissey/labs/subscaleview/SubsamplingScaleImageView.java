@@ -138,7 +138,7 @@ public class SubsamplingScaleImageView extends View {
     private Map<Integer, List<Tile>> tileMap;
 
     // Overlay tile boundaries and other info
-    private boolean debug;
+    private boolean debug = true;
 
     // Image orientation setting
     private int orientation = ORIENTATION_0;
@@ -269,7 +269,7 @@ public class SubsamplingScaleImageView extends View {
 
     private ImageSource mImageSource;
 
-    private Bitmap mBitmap;
+    private Tile mBaseTile;
 
     // A global preference for bitmap format, available to decoder classes that respect it
     private static Bitmap.Config preferredBitmapConfig;
@@ -323,8 +323,11 @@ public class SubsamplingScaleImageView extends View {
         }
 
         quickScaleThreshold = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, context.getResources().getDisplayMetrics());
-    }
 
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        maxTileWidth = (int) (displayMetrics.widthPixels * 1.5F);
+        maxTileHeight = (int) (displayMetrics.heightPixels * 1.5F);
+    }
     public SubsamplingScaleImageView(Context context) {
         this(context, null);
     }
@@ -393,19 +396,16 @@ public class SubsamplingScaleImageView extends View {
     }
 
     public void setFullImageBitmap(Bitmap bitmap) {
-        this.mBitmap = bitmap;
+        mBaseTile = new Tile();
+        mBaseTile.bitmap = bitmap;
+        mBaseTile.sRect = new Rect(0, 0, mImageSource.getSWidth(), mImageSource.getSHeight());
+        mBaseTile.fileSRect = new Rect(mBaseTile.sRect);
+        mBaseTile.loading = false;
+        mBaseTile.vRect = new Rect(0, 0, 0, 0);
         if (tileMap == null) {
             return;
         }
-        List<Tile> tiles = tileMap.get(fullImageSampleSize);
-        if (tiles != null && tiles.size() > 0) {
-            Tile tile = tiles.get(0);
-            tile.bitmap = mBitmap;
-            tile.sRect = new Rect(0, 0, mImageSource.getSWidth(), mImageSource.getSHeight());
-            tile.fileSRect = new Rect(tile.sRect);
-            tile.loading = false;
-            onTileLoaded();
-        }
+        invalidate();
     }
 
     /**
@@ -436,7 +436,6 @@ public class SubsamplingScaleImageView extends View {
         satTemp = null;
         matrix = null;
         sRect = null;
-        mBitmap = null;
         if (newImage) {
             decoderLock.writeLock().lock();
             try {
@@ -955,54 +954,35 @@ public class SubsamplingScaleImageView extends View {
             invalidate();
         }
 
-        if (tileMap != null && isBaseLayerReady()) {
+        if (tileMap != null) {
 
-            // Optimum sample size for current scale
-            int sampleSize = Math.min(fullImageSampleSize, calculateInSampleSize(scale));
+            if (!isBaseLayerReady()) {
+                if (mBaseTile != null && mBaseTile.bitmap != null && !mBaseTile.loading) {
+                    if (mBaseTile.isDrawable()) {
+                        drawTile(canvas, mBaseTile);
+                    }
+                }
+            } else {
+                // Optimum sample size for current scale
+                int sampleSize = Math.min(fullImageSampleSize, calculateInSampleSize(scale));
 
-            // First check for missing tiles - if there are any we need the base layer underneath to avoid gaps
-            boolean hasMissingTiles = false;
-            for (Map.Entry<Integer, List<Tile>> tileMapEntry : tileMap.entrySet()) {
-                if (tileMapEntry.getKey() == sampleSize) {
-                    for (Tile tile : tileMapEntry.getValue()) {
-                        if (tile.visible && (tile.loading || tile.bitmap == null)) {
-                            hasMissingTiles = true;
+                // First check for missing tiles - if there are any we need the base layer underneath to avoid gaps
+                boolean hasMissingTiles = false;
+                for (Map.Entry<Integer, List<Tile>> tileMapEntry : tileMap.entrySet()) {
+                    if (tileMapEntry.getKey() == sampleSize) {
+                        for (Tile tile : tileMapEntry.getValue()) {
+                            if (tile.visible && (tile.loading || tile.bitmap == null)) {
+                                hasMissingTiles = true;
+                            }
                         }
                     }
                 }
-            }
 
-            // Render all loaded tiles. LinkedHashMap used for bottom up rendering - lower res tiles underneath.
-            for (Map.Entry<Integer, List<Tile>> tileMapEntry : tileMap.entrySet()) {
-                if (tileMapEntry.getKey() == sampleSize || hasMissingTiles) {
-                    for (Tile tile : tileMapEntry.getValue()) {
-                        sourceToViewRect(tile.sRect, tile.vRect);
-                        if (!tile.loading && tile.bitmap != null) {
-                            if (tileBgPaint != null) {
-                                canvas.drawRect(tile.vRect, tileBgPaint);
-                            }
-                            if (matrix == null) { matrix = new Matrix(); }
-                            matrix.reset();
-                            setMatrixArray(srcArray, 0, 0, tile.bitmap.getWidth(), 0, tile.bitmap.getWidth(), tile.bitmap.getHeight(), 0, tile.bitmap.getHeight());
-                            if (getRequiredRotation() == ORIENTATION_0) {
-                                setMatrixArray(dstArray, tile.vRect.left, tile.vRect.top, tile.vRect.right, tile.vRect.top, tile.vRect.right, tile.vRect.bottom, tile.vRect.left, tile.vRect.bottom);
-                            } else if (getRequiredRotation() == ORIENTATION_90) {
-                                setMatrixArray(dstArray, tile.vRect.right, tile.vRect.top, tile.vRect.right, tile.vRect.bottom, tile.vRect.left, tile.vRect.bottom, tile.vRect.left, tile.vRect.top);
-                            } else if (getRequiredRotation() == ORIENTATION_180) {
-                                setMatrixArray(dstArray, tile.vRect.right, tile.vRect.bottom, tile.vRect.left, tile.vRect.bottom, tile.vRect.left, tile.vRect.top, tile.vRect.right, tile.vRect.top);
-                            } else if (getRequiredRotation() == ORIENTATION_270) {
-                                setMatrixArray(dstArray, tile.vRect.left, tile.vRect.bottom, tile.vRect.left, tile.vRect.top, tile.vRect.right, tile.vRect.top, tile.vRect.right, tile.vRect.bottom);
-                            }
-                            matrix.setPolyToPoly(srcArray, 0, dstArray, 0, 4);
-                            canvas.drawBitmap(tile.bitmap, matrix, bitmapPaint);
-                            if (debug) {
-                                canvas.drawRect(tile.vRect, debugLinePaint);
-                            }
-                        } else if (tile.loading && debug) {
-                            canvas.drawText("LOADING", tile.vRect.left + px(5), tile.vRect.top + px(35), debugTextPaint);
-                        }
-                        if (tile.visible && debug) {
-                            canvas.drawText("ISS " + tile.sampleSize + " RECT " + tile.sRect.top + "," + tile.sRect.left + "," + tile.sRect.bottom + "," + tile.sRect.right, tile.vRect.left + px(5), tile.vRect.top + px(15), debugTextPaint);
+                // Render all loaded tiles. LinkedHashMap used for bottom up rendering - lower res tiles underneath.
+                for (Map.Entry<Integer, List<Tile>> tileMapEntry : tileMap.entrySet()) {
+                    if (tileMapEntry.getKey() == sampleSize || hasMissingTiles) {
+                        for (Tile tile : tileMapEntry.getValue()) {
+                            drawTile(canvas, tile);
                         }
                     }
                 }
@@ -1039,6 +1019,37 @@ public class SubsamplingScaleImageView extends View {
                 canvas.drawCircle(quickScaleVStart.x, quickScaleVStart.y, px(30), debugLinePaint);
             }
             debugLinePaint.setColor(Color.MAGENTA);
+        }
+    }
+
+    private void drawTile(Canvas canvas, Tile tile) {
+        sourceToViewRect(tile.sRect, tile.vRect);
+        if (!tile.loading && tile.bitmap != null) {
+            if (tileBgPaint != null) {
+                canvas.drawRect(tile.vRect, tileBgPaint);
+            }
+            if (matrix == null) { matrix = new Matrix(); }
+            matrix.reset();
+            setMatrixArray(srcArray, 0, 0, tile.bitmap.getWidth(), 0, tile.bitmap.getWidth(), tile.bitmap.getHeight(), 0, tile.bitmap.getHeight());
+            if (getRequiredRotation() == ORIENTATION_0) {
+                setMatrixArray(dstArray, tile.vRect.left, tile.vRect.top, tile.vRect.right, tile.vRect.top, tile.vRect.right, tile.vRect.bottom, tile.vRect.left, tile.vRect.bottom);
+            } else if (getRequiredRotation() == ORIENTATION_90) {
+                setMatrixArray(dstArray, tile.vRect.right, tile.vRect.top, tile.vRect.right, tile.vRect.bottom, tile.vRect.left, tile.vRect.bottom, tile.vRect.left, tile.vRect.top);
+            } else if (getRequiredRotation() == ORIENTATION_180) {
+                setMatrixArray(dstArray, tile.vRect.right, tile.vRect.bottom, tile.vRect.left, tile.vRect.bottom, tile.vRect.left, tile.vRect.top, tile.vRect.right, tile.vRect.top);
+            } else if (getRequiredRotation() == ORIENTATION_270) {
+                setMatrixArray(dstArray, tile.vRect.left, tile.vRect.bottom, tile.vRect.left, tile.vRect.top, tile.vRect.right, tile.vRect.top, tile.vRect.right, tile.vRect.bottom);
+            }
+            matrix.setPolyToPoly(srcArray, 0, dstArray, 0, 4);
+            canvas.drawBitmap(tile.bitmap, matrix, bitmapPaint);
+            if (debug) {
+                canvas.drawRect(tile.vRect, debugLinePaint);
+            }
+        } else if (tile.loading && debug) {
+            canvas.drawText("LOADING", tile.vRect.left + px(5), tile.vRect.top + px(35), debugTextPaint);
+        }
+        if (tile.visible && debug) {
+            canvas.drawText("ISS " + tile.sampleSize + " RECT " + tile.sRect.top + "," + tile.sRect.left + "," + tile.sRect.bottom + "," + tile.sRect.right, tile.vRect.left + px(5), tile.vRect.top + px(15), debugTextPaint);
         }
     }
 
@@ -1157,14 +1168,6 @@ public class SubsamplingScaleImageView extends View {
         }
         initialiseTileMap(maxTileDimensions);
         List<Tile> tiles = tileMap.get(fullImageSampleSize);
-        if (tiles != null && tiles.size() > 0 && mBitmap != null) {
-            Tile tile = tiles.get(0);
-            tile.bitmap = mBitmap;
-            tile.sRect = new Rect(0, 0 , mImageSource.getSWidth(), mImageSource.getSHeight());
-            tile.fileSRect = new Rect(tile.sRect);
-            tile.loading = false;
-            onTileLoaded();
-        }
 
         List<Tile> baseGrid = tileMap.get(fullImageSampleSize);
         refreshRequiredTiles(true);
@@ -1555,6 +1558,9 @@ public class SubsamplingScaleImageView extends View {
         // Volatile fields instantiated once then updated before use to reduce GC.
         private Rect vRect;
         private Rect fileSRect;
+        public boolean isDrawable() {
+            return bitmap != null && !bitmap.isRecycled();
+        }
 
     }
 
@@ -1610,6 +1616,7 @@ public class SubsamplingScaleImageView extends View {
      * Use canvas max bitmap width and height instead of the default 2048, to avoid redundant tiling.
      */
     private Point getMaxBitmapDimensions(Canvas canvas) {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         return new Point(Math.min(canvas.getMaximumBitmapWidth(), maxTileWidth), Math.min(canvas.getMaximumBitmapHeight(), maxTileHeight));
     }
 
@@ -1685,6 +1692,10 @@ public class SubsamplingScaleImageView extends View {
         debugTextPaint = null;
         debugLinePaint = null;
         tileBgPaint = null;
+    }
+
+    public void reuse() {
+        reset(true);
     }
 
     /**

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,8 @@ import java.util.Collections;
 import java.util.List;
 
 class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public final int imageWidthPixels = 640;
-    public final int imageHeightPixels = 640;
+    public int imageWidthPixels = 640;
+    public int imageHeightPixels = 640;
 
 
     private ListPreloader.PreloadSizeProvider sizeProvider;
@@ -47,6 +48,9 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context;
         glideRequests = GlideApp.with(context);
         this.mView = view;
+
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        imageWidthPixels = imageHeightPixels = Math.min(displayMetrics.widthPixels, displayMetrics.heightPixels);
 
         sizeProvider =
                 new FixedPreloadSizeProvider(imageWidthPixels, imageHeightPixels);
@@ -70,6 +74,15 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         RecyclerViewPreloader<ImageSource> preloader =
                 new RecyclerViewPreloader<>(GlideApp.with(context), preloadModelProvider, sizeProvider, 3);
         view.addOnScrollListener(preloader);
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        if (holder instanceof ViewHolder) {
+            ((ViewHolder)holder).mSubImageView.reuse();
+        }
+
     }
 
     @Override
