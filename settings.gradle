@@ -1,1 +1,1 @@
-include ':gallery', ':common', ':refocus',':subsample'
+include ':gallery', ':common', ':refocus',':subsample',':photoview'

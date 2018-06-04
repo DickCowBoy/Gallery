@@ -16,6 +16,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -31,6 +32,7 @@ import com.tplink.gallery.data.DataCacheManager;
 import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.selector.AlbumChangedListener;
 import com.tplink.gallery.selector.ItemChangedListener;
+import com.tplink.gallery.ui.BIgImagePreview_ViewPager;
 import com.tplink.gallery.ui.BigImagePreview;
 import com.tplink.gallery.view.AutoFitToolBar;
 import com.tplink.gallery.view.LoadingView;
@@ -56,7 +58,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private ContainerPagerAdapter mPagerAdapter;
     private boolean isActive = false;
     private MediaContract.MediaPresenter mediaPresenter;
-    private BigImagePreview bigImagePreview;
+    private BIgImagePreview_ViewPager bigImagePreview;
     private boolean firstLoad = true;
     private String currentKey;
 
@@ -106,9 +108,9 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         shapeIndicatorView.setupWithTabLayout(mTabLayout);
         shapeIndicatorView.setupWithViewPager(mPager);
 
-        RecyclerView bigImageView = findViewById(R.id.rcl_gallery);
-        RecyclerView filmImageView = findViewById(R.id.rcl_sub_gallery);
-        bigImagePreview = new BigImagePreview(this, bigImageView, filmImageView, this);
+        ViewPager bigImageView = findViewById(R.id.rcl_gallery);
+        ViewPager filmImageView = findViewById(R.id.rcl_sub_gallery);
+        bigImagePreview = new BIgImagePreview_ViewPager(this, bigImageView, this);
     }
 
     protected boolean needSelectAlbum() {

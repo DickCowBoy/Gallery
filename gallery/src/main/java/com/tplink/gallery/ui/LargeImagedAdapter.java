@@ -9,23 +9,21 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bm.library.PhotoView;
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.BaseTarget;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.transition.Transition;
 import com.bumptech.glide.util.FixedPreloadSizeProvider;
 import com.bumptech.glide.util.Synthetic;
 import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.tplink.gallery.GlideApp;
-import com.tplink.gallery.GlideRequest;
 import com.tplink.gallery.GlideRequests;
 import com.tplink.gallery.gallery.R;
-import com.tplink.gallery.utils.MediaUtils;
 import com.tplink.gallery.view.BigImageView;
 
 import java.util.ArrayList;
@@ -80,7 +78,7 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof ViewHolder) {
-            ((ViewHolder)holder).mSubImageView.reuse();
+            //TODO ((ViewHolder)holder).mSubImageView.reuse();
         }
 
     }
@@ -150,25 +148,18 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        // mCardAdapterHelper.onBindViewHolder(holder.itemView, position, getItemCount());
         switch (getItemViewType(position)) {
             case 0:
                 ViewHolder holdersub = (ViewHolder) holder;
                 onCreateViewHolder(mView, holdersub.itemView);
                 holdersub.itemView.requestLayout();
-                holdersub.mSubImageView.setImage(mList.get(position));
                 GlideApp.with(context).asBitmap().load(mList.get(position).getUri())
                         .override(imageWidthPixels, imageHeightPixels)
                         .placeholder(R.mipmap.ic_launcher)
-                        .into(new CustomTarget(holdersub.mSubImageView));
+                        .into(holdersub.mSubImageView);
                 if (mList.get(position) == null) {
 
                 }
-                holdersub.mSubImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    }
-                });
                 break;
             case 1:
                 ViewHolderImage holderimg = (ViewHolderImage) holder;
@@ -201,10 +192,12 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final SubsamplingScaleImageView mSubImageView;
+        public final PhotoView mSubImageView;
         public ViewHolder(final View itemView) {
             super(itemView);
-            mSubImageView = (SubsamplingScaleImageView) itemView.findViewById(R.id.imageView);
+            mSubImageView = itemView.findViewById(R.id.imageView);
+            mSubImageView.enable();
+
             //mSubView = (SubsamplingScaleImageView) itemView.findViewById(R.id.subimageView);
         }
 
@@ -215,6 +208,7 @@ class LargeImagedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public ViewHolderImage(final View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.imageView);
+            mImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             //mSubView = (SubsamplingScaleImageView) itemView.findViewById(R.id.subimageView);
         }
 

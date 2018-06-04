@@ -30,6 +30,7 @@ dependencies {
     implementation project(':common')
     implementation project(':refocus')
     implementation project(':subsample')
+    implementation project(':photoview')
 
 }
 
@@ -52,7 +53,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    //签名
+    //    //签名
     signingConfigs {
         release {
             storeFile file("/home/w8782/.android/debug.keystore")
@@ -61,6 +62,27 @@ android {
             keyPassword "android"
         }
     }
+
+
+    //读取keystore文件
+    File propFile = file('/var/lib/jenkins/gradle_env/keystore/signing.properties');
+    if (propFile.exists()) {
+        def Properties props = new Properties()
+        props.load(new FileInputStream(propFile))
+        if (props.containsKey('key.store') && props.containsKey('key.store.password') &&
+                props.containsKey('key.alias') && props.containsKey('key.alias.password')) {
+            android.signingConfigs.release.storeFile = file(props['key.store'])
+            android.signingConfigs.release.storePassword = props['key.store.password']
+            android.signingConfigs.release.keyAlias = props['key.alias']
+            android.signingConfigs.release.keyPassword = props['key.alias.password']
+        } else {
+            android.buildTypes.release.signingConfig = null
+        }
+    } else {
+        android.buildTypes.release.signingConfig = null
+    }
+
+
 
 
     buildTypes {
@@ -87,7 +109,7 @@ android {
             // 配置混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.flags'
             // 配置签名（本地编译时可以先注释这句）
-            signingConfig signingConfigs.release
+            signingConfig android.signingConfigs.release
             lintOptions {
                 disable 'MissingTranslation'
             }

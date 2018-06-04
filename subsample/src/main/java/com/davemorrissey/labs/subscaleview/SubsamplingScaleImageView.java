@@ -277,9 +277,10 @@ public class SubsamplingScaleImageView extends View {
     public SubsamplingScaleImageView(Context context, AttributeSet attr) {
         super(context, attr);
         density = getResources().getDisplayMetrics().density;
-        setMinimumDpi(160);
-        setDoubleTapZoomDpi(160);
-        setMinimumTileDpi(320);
+        //setMinimumDpi(160);
+        setMaxScale(0.6F);
+        setDoubleTapZoomScale(0.45F);// control the zoom size
+        setMinimumTileDpi(240);
         setGestureDetector(context);
         this.handler = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message message) {
@@ -406,6 +407,7 @@ public class SubsamplingScaleImageView extends View {
             return;
         }
         invalidate();
+        initDecoder();
     }
 
     /**
@@ -1167,9 +1169,6 @@ public class SubsamplingScaleImageView extends View {
             // TODO
         }
         initialiseTileMap(maxTileDimensions);
-        List<Tile> tiles = tileMap.get(fullImageSampleSize);
-
-        List<Tile> baseGrid = tileMap.get(fullImageSampleSize);
         refreshRequiredTiles(true);
 
 
@@ -2515,30 +2514,35 @@ public class SubsamplingScaleImageView extends View {
 
     boolean loading = false;
 
+    public void initDecoder() {
+        execute(new AsyncTask<Void, Void, Object>() {
+            @Override
+            protected Object doInBackground(Void... voids) {
+                if (decoder != null) {
+                    try {
+                        decoder.init(getContext(), mImageSource.getUri());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                //postInvalidate();
+                refreshRequiredTiles(true);
+                loading = false;
+            }
+        });
+    }
+
     private void sendStateChanged(float oldScale, PointF oldVTranslate, int origin) {
         if (decoder != null &&!decoder.isReady() && !loading) {
             loading = true;
-            execute(new AsyncTask<Void, Void, Object>() {
-                @Override
-                protected Object doInBackground(Void... voids) {
-                    if (decoder != null) {
-                        try {
-                            decoder.init(getContext(), mImageSource.getUri());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Object o) {
-                    super.onPostExecute(o);
-                    postInvalidate();
-                    loading = false;
-                }
-            });
-        };
+            initDecoder();
+        }
         if (onStateChangedListener != null && scale != oldScale) {
             onStateChangedListener.onScaleChanged(scale, origin);
         }

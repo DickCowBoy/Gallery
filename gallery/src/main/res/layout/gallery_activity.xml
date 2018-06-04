@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.view.ViewPager
         android:id="@+id/recyclerViewfilm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +16,7 @@
         android:visibility="gone"
         android:background="#000000"/>
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.view.ViewPager
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:visibility="gone"
