@@ -7,6 +7,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -19,12 +20,14 @@ import android.widget.ImageView;
 import android.widget.OverScroller;
 import android.widget.Scroller;
 
+import com.bm.library.tile.TileProvider;
+
 /**
  * Created by liuheng on 2015/6/21.
  * <p></p>
  * 如有任何意见和建议可邮件  bmme@vip.qq.com
  */
-public class PhotoView extends ImageView {
+public class PhotoView extends ImageView implements TileProvider.RenderTarget{
 
     private final static int MIN_ROTATE = 35;
     private final static int ANIMA_DURING = 340;
@@ -93,6 +96,10 @@ public class PhotoView extends ImageView {
     private Runnable mCompleteCallBack;
 
     private OnLongClickListener mLongClick;
+
+    private Object contentTag;
+
+    private TileProvider tileProvider;
 
     public PhotoView(Context context) {
         super(context);
@@ -234,6 +241,15 @@ public class PhotoView extends ImageView {
         }
 
         setImageDrawable(drawable);
+    }
+
+    public void setImageDrawableWithTag(Drawable drawable, Object tag) {
+        setImageDrawable(drawable);
+        contentTag = tag;
+    }
+
+    public Object getContentTag() {
+        return contentTag;
     }
 
     @Override
@@ -474,8 +490,16 @@ public class PhotoView extends ImageView {
 
         mAnimaMatrix.mapRect(mImgRect, mBaseRect);
 
+        if (tileProvider != null) {
+            tileProvider.setTileViewPosition(mImgRect, getWidth(), getHeight());
+        }
+
         imgLargeWidth = mImgRect.width() > mWidgetRect.width();
         imgLargeHeight = mImgRect.height() > mWidgetRect.height();
+    }
+
+    public void setTileProvider(TileProvider tileProvider) {
+        this.tileProvider = tileProvider;
     }
 
     @Override
@@ -968,6 +992,33 @@ public class PhotoView extends ImageView {
     public boolean canScrollVertically(int direction) {
         if (hasMultiTouch) return true;
         return canScrollVerticallySelf(direction);
+    }
+
+    @Override
+    public void onTileContentUpdate() {
+        this.postInvalidate();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        long time = System.currentTimeMillis();
+        super.onDraw(canvas);
+        Log.e("ljl", "onDraw time1: " + (System.currentTimeMillis() - time));
+        time = System.currentTimeMillis();
+        if (tileProvider != null) {
+            tileProvider.renderTile(canvas);
+            Log.e("ljl", "onDraw time2: " + (System.currentTimeMillis() - time));
+        }
+    }
+
+    @Override
+    public int getScreenNailWidth() {
+        return getDrawableWidth(getDrawable());
+    }
+
+    @Override
+    public int getScreenNailHeight() {
+        return getDrawableHeight(getDrawable());
     }
 
     private class InterpolatorProxy implements Interpolator {

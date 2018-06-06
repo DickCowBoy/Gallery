@@ -13,6 +13,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.tplink.gallery.GlideApp;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.render.BigImageAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,62 +25,14 @@ public class BIgImagePreview_ViewPager {
     private Activity mActivity;
     private List<MediaBean> mediaBeans;
     private BigImagePreview.BigPreviewCallback bigPreviewCallback;
-    private PagerAdapter largeImageAdapter;
+    private BigImageAdapter largeImageAdapter;
 
     public BIgImagePreview_ViewPager(Activity mActivity,ViewPager mViewPager, BigImagePreview.BigPreviewCallback bigPreviewCallback) {
         this.mViewPager = mViewPager;
         mViewPager.setPageMargin((int) (mActivity.getResources().getDisplayMetrics().density * 15));
         this.mActivity = mActivity;
         this.bigPreviewCallback = bigPreviewCallback;
-        this.mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (bigPreviewCallback != null) {
-                    bigPreviewCallback.onImageChanged(mediaBeans.get(position));
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        largeImageAdapter = new PagerAdapter() {
-            @Override
-            public int getCount() {
-                return mediaBeans == null ? 0 : mediaBeans.size();
-            }
-
-            @Override
-            public boolean isViewFromObject(View view, Object object) {
-                return view == object;
-            }
-
-            @Override
-            public Object instantiateItem(ViewGroup container, int position) {
-                PhotoView view = new PhotoView(mActivity);
-                view.enable();
-                view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                GlideApp.with(mActivity).asBitmap().load(mediaBeans.get(position).getContentUri())
-                        //.override(imageWidthPixels, imageHeightPixels)
-                        .placeholder(R.mipmap.ic_launcher)
-                        .into(view);
-                container.addView(view);
-                return view;
-            }
-
-            @Override
-            public void destroyItem(ViewGroup container, int position, Object object) {
-                container.removeView((View) object);
-            }
-
-        };
-        this.mViewPager.setAdapter(largeImageAdapter);
+        largeImageAdapter = new BigImageAdapter(mActivity, this.mViewPager);
     }
 
     public void setData(List<MediaBean> data) {
@@ -88,8 +41,7 @@ public class BIgImagePreview_ViewPager {
             sources.add(ImageSource.uri(datum.getContentUri(), datum.width, datum.height, 0, datum.mimeType));
         }
         mediaBeans = data;
-        largeImageAdapter.notifyDataSetChanged();
-
+        largeImageAdapter.setMediaBeans(mediaBeans);
     }
 
     public void showIndex(int index) {
@@ -104,8 +56,4 @@ public class BIgImagePreview_ViewPager {
     public boolean isShow() {
         return this.mViewPager.getVisibility() == View.VISIBLE;
     }
-
-
-
-
 }

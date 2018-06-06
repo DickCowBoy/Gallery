@@ -16,6 +16,8 @@ package com.tplink.gallery.bean;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.util.Objects;
+
 /**
  * 这里不区分video或image
  */
@@ -94,5 +96,19 @@ public class MediaBean {
                 "_id=" + _id +
                 ", bucketId=" + bucketId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MediaBean mediaBean = (MediaBean) o;
+        return _id == mediaBean._id;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(_id);
     }
 }

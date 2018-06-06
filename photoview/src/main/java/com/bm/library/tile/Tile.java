@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.util.Log;
 
+import junit.framework.Assert;
+
 import static android.content.ContentValues.TAG;
 
 public class Tile {
@@ -50,5 +52,18 @@ public class Tile {
         mX = x;
         mY = y;
         mTileLevel = level;
+    }
+
+    public void recycle() {
+        synchronized (this) {
+            if (mDecodedTile != null) freeBitmap();
+        }
+    }
+
+    private void freeBitmap() {
+        if (mDecodedTile != null) {
+            mDecodedTile.recycle();
+        }
+        mDecodedTile = null;
     }
 }
