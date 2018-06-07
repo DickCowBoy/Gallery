@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 
 import com.tplink.base.CommonUtils;
 import com.tplink.base.DragSelectTouchHelper;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 import com.tplink.gallery.utils.MediaUtils;
 
 import java.util.List;

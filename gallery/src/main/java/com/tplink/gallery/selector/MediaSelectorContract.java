@@ -8,7 +8,7 @@ import com.tplink.base.BaseView;
 import com.tplink.base.RxPresenter;
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 import com.tplink.gallery.selector.wallpaper.ResultContainer;
 
 import java.util.Collection;

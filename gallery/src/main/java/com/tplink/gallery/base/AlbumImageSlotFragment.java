@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 import com.tplink.gallery.utils.MediaUtils;
 
 import java.util.ArrayList;

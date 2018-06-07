@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.dao.MediaDao;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 import com.tplink.gallery.selector.MediaSelectorContract;
 
 import java.util.ArrayList;

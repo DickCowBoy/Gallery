@@ -24,27 +24,27 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 
 import com.tplink.common.R;
+import com.tplink.utils.NoneBoundArrayList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseItemAnimator extends SimpleItemAnimator {
     private static final boolean DEBUG = false;
     private static final String TAG = "BaseItemAnimator";
 
-    private ArrayList<ViewHolder> mPendingRemovals = new ArrayList<>();
-    private ArrayList<ViewHolder> mPendingAdditions = new ArrayList<>();
-    private ArrayList<MoveInfo> mPendingMoves = new ArrayList<>();
-    private ArrayList<ChangeInfo> mPendingChanges = new ArrayList<>();
+    private NoneBoundArrayList<ViewHolder> mPendingRemovals = new NoneBoundArrayList<>();
+    private NoneBoundArrayList<ViewHolder> mPendingAdditions = new NoneBoundArrayList<>();
+    private NoneBoundArrayList<MoveInfo> mPendingMoves = new NoneBoundArrayList<>();
+    private NoneBoundArrayList<ChangeInfo> mPendingChanges = new NoneBoundArrayList<>();
 
-    private ArrayList<ArrayList<ViewHolder>> mAdditionsList = new ArrayList<>();
-    private ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList<>();
-    private ArrayList<ArrayList<ChangeInfo>> mChangesList = new ArrayList<>();
+    private NoneBoundArrayList<NoneBoundArrayList<ViewHolder>> mAdditionsList = new NoneBoundArrayList<>();
+    private NoneBoundArrayList<NoneBoundArrayList<MoveInfo>> mMovesList = new NoneBoundArrayList<>();
+    private NoneBoundArrayList<NoneBoundArrayList<ChangeInfo>> mChangesList = new NoneBoundArrayList<>();
 
-    protected ArrayList<ViewHolder> mAddAnimations = new ArrayList<>();
-    private ArrayList<ViewHolder> mMoveAnimations = new ArrayList<>();
-    protected ArrayList<ViewHolder> mRemoveAnimations = new ArrayList<>();
-    private ArrayList<ViewHolder> mChangeAnimations = new ArrayList<>();
+    protected NoneBoundArrayList<ViewHolder> mAddAnimations = new NoneBoundArrayList<>();
+    private NoneBoundArrayList<ViewHolder> mMoveAnimations = new NoneBoundArrayList<>();
+    protected NoneBoundArrayList<ViewHolder> mRemoveAnimations = new NoneBoundArrayList<>();
+    private NoneBoundArrayList<ViewHolder> mChangeAnimations = new NoneBoundArrayList<>();
 
     protected Interpolator mInterpolator = PathInterpolatorCompat.create(0.25f, 0.1f, 0.25f, 1.0f);
 
@@ -140,7 +140,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         mPendingRemovals.clear();
         // Next, move stuff
         if (movesPending) {
-            final ArrayList<MoveInfo> moves = new ArrayList<MoveInfo>();
+            final NoneBoundArrayList<MoveInfo> moves = new NoneBoundArrayList<MoveInfo>();
             moves.addAll(mPendingMoves);
             mMovesList.add(moves);
             mPendingMoves.clear();
@@ -169,7 +169,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
         // Next, change stuff, to run in parallel with move animations
         if (changesPending) {
-            final ArrayList<ChangeInfo> changes = new ArrayList<ChangeInfo>();
+            final NoneBoundArrayList<ChangeInfo> changes = new NoneBoundArrayList<ChangeInfo>();
             changes.addAll(mPendingChanges);
             mChangesList.add(changes);
             mPendingChanges.clear();
@@ -196,7 +196,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
         // Next, add stuff
         if (additionsPending) {
-            final ArrayList<ViewHolder> additions = new ArrayList<ViewHolder>();
+            final NoneBoundArrayList<ViewHolder> additions = new NoneBoundArrayList<ViewHolder>();
             additions.addAll(mPendingAdditions);
             mAdditionsList.add(additions);
             mPendingAdditions.clear();
@@ -544,14 +544,14 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
 
         for (int i = mChangesList.size() - 1; i >= 0; i--) {
-            ArrayList<ChangeInfo> changes = mChangesList.get(i);
+            NoneBoundArrayList<ChangeInfo> changes = mChangesList.get(i);
             endChangeAnimation(changes, item);
             if (changes.isEmpty()) {
                 mChangesList.remove(i);
             }
         }
         for (int i = mMovesList.size() - 1; i >= 0; i--) {
-            ArrayList<MoveInfo> moves = mMovesList.get(i);
+            NoneBoundArrayList<MoveInfo> moves = mMovesList.get(i);
             for (int j = moves.size() - 1; j >= 0; j--) {
                 MoveInfo moveInfo = moves.get(j);
                 if (moveInfo.holder == item) {
@@ -567,7 +567,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
             }
         }
         for (int i = mAdditionsList.size() - 1; i >= 0; i--) {
-            ArrayList<ViewHolder> additions = mAdditionsList.get(i);
+            NoneBoundArrayList<ViewHolder> additions = mAdditionsList.get(i);
             if (additions.remove(item)) {
                 ViewHelper.clear(item.itemView);
                 dispatchAddFinished(item);
@@ -664,7 +664,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
         int listCount = mMovesList.size();
         for (int i = listCount - 1; i >= 0; i--) {
-            ArrayList<MoveInfo> moves = mMovesList.get(i);
+            NoneBoundArrayList<MoveInfo> moves = mMovesList.get(i);
             count = moves.size();
             for (int j = count - 1; j >= 0; j--) {
                 MoveInfo moveInfo = moves.get(j);
@@ -681,7 +681,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
         listCount = mAdditionsList.size();
         for (int i = listCount - 1; i >= 0; i--) {
-            ArrayList<ViewHolder> additions = mAdditionsList.get(i);
+            NoneBoundArrayList<ViewHolder> additions = mAdditionsList.get(i);
             count = additions.size();
             for (int j = count - 1; j >= 0; j--) {
                 ViewHolder item = additions.get(j);
@@ -700,7 +700,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         }
         listCount = mChangesList.size();
         for (int i = listCount - 1; i >= 0; i--) {
-            ArrayList<ChangeInfo> changes = mChangesList.get(i);
+            NoneBoundArrayList<ChangeInfo> changes = mChangesList.get(i);
             count = changes.size();
             for (int j = count - 1; j >= 0; j--) {
                 endChangeAnimationIfNecessary(changes.get(j));

@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -26,14 +25,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.tplink.gallery.R;
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.data.DataCacheManager;
-import com.tplink.gallery.gallery.R;
 import com.tplink.gallery.selector.AlbumChangedListener;
 import com.tplink.gallery.selector.ItemChangedListener;
-import com.tplink.gallery.ui.BIgImagePreview_ViewPager;
 import com.tplink.gallery.ui.BigImagePreview;
+import com.tplink.gallery.ui.BigImagePreviewGLView;
 import com.tplink.gallery.view.AutoFitToolBar;
 import com.tplink.gallery.view.LoadingView;
 import com.tplink.gallery.view.SelectViewPager;
@@ -58,7 +57,8 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     private ContainerPagerAdapter mPagerAdapter;
     private boolean isActive = false;
     private MediaContract.MediaPresenter mediaPresenter;
-    private BIgImagePreview_ViewPager bigImagePreview;
+    //private BIgImagePreview_ViewPager bigImagePreview;
+    private BigImagePreviewGLView bigImagePreview;
     private boolean firstLoad = true;
     private String currentKey;
 
@@ -108,9 +108,8 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         shapeIndicatorView.setupWithTabLayout(mTabLayout);
         shapeIndicatorView.setupWithViewPager(mPager);
 
-        ViewPager bigImageView = findViewById(R.id.rcl_gallery);
-        ViewPager filmImageView = findViewById(R.id.rcl_sub_gallery);
-        bigImagePreview = new BIgImagePreview_ViewPager(this, bigImageView, this);
+        bigImagePreview = new BigImagePreviewGLView(findViewById(R.id.gl_root_view), this, true);
+        bigImagePreview.onCreate();
     }
 
     protected boolean needSelectAlbum() {
@@ -127,6 +126,8 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         }
         super.onBackPressed();
     }
+
+
 
     protected void showNormalBar(){
         setWindow();
@@ -159,6 +160,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         firstLoad = false;
         isActive = true;
         mediaPresenter.resume();
+        bigImagePreview.onResume();
     }
 
     private void loadData() {
@@ -167,10 +169,23 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        bigImagePreview.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bigImagePreview.onDestroy();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         isActive = false;
         mediaPresenter.pause();
+        bigImagePreview.onPause();
     }
 
     public void showViewFragment(Fragment fragment) {

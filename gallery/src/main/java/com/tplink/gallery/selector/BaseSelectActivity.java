@@ -10,7 +10,7 @@ import com.tplink.base.Consts;
 import com.tplink.gallery.base.BaseGalleryActivity;
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 import com.tplink.gallery.selector.wallpaper.ResultContainer;
 import com.tplink.gallery.view.InterceptCheckBox;
 

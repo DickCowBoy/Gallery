@@ -16,7 +16,7 @@ import com.bumptech.glide.request.target.ViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.tplink.gallery.GlideApp;
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 
 import java.util.List;
 

@@ -23,6 +23,9 @@ import java.util.Objects;
  */
 public class MediaBean {
 
+    public static final int TYPE_THUMBNAIL = 1;
+    public static final int TYPE_MICROTHUMBNAIL = 2;
+
     public static final int SUPPORT_DELETE = 1 << 0;
     public static final int SUPPORT_ROTATE = 1 << 1;
     public static final int SUPPORT_SHARE = 1 << 2;
@@ -110,5 +113,15 @@ public class MediaBean {
     public int hashCode() {
 
         return Objects.hash(_id);
+    }
+
+    //TODO LJL
+    public int getSupportedOperations() {
+        return 0;
+    }
+
+    // TODO LJL
+    public static void setThumbnailSizes(int maxPixels, int i, int i1) {
+
     }
 }

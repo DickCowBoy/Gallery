@@ -3,7 +3,7 @@ package com.tplink.gallery.selector.wallpaper;
 import android.content.Context;
 
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 
 import java.util.ArrayList;
 import java.util.Collection;

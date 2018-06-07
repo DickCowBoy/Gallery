@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.tplink.base.Consts;
 import com.tplink.gallery.bean.AlbumBean;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 import com.tplink.gallery.utils.MediaUtils;
 import com.tplink.gallery.view.RegionRelativeLayout;
 import com.tplink.view.CommonDataView;

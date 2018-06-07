@@ -94,6 +94,12 @@
                 android:visibility="gone" />
         </com.tplink.gallery.view.AutoFitToolBar>
 
+        <com.android.gallery3d.ui.GLRootView
+            android:id="@+id/gl_root_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
 
     </RelativeLayout>
 

@@ -6,8 +6,8 @@ import android.provider.MediaStore;
 import com.tplink.gallery.bean.AlbumBean;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.data.DataCacheManager;
+import com.tplink.utils.NoneBoundArrayList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MediaColumn {
@@ -58,7 +58,7 @@ public class MediaColumn {
     };
 
     public static List<MediaBean> parseImage(Cursor cursor) {
-        List<MediaBean> result = new ArrayList<>();
+        List<MediaBean> result = new NoneBoundArrayList<>();
         if (cursor != null) {
             MediaBean bean = null;
             int anInt;
@@ -92,7 +92,7 @@ public class MediaColumn {
     }
 
     public static List<MediaBean> parseFile(Cursor cursor) {
-        List<MediaBean> result = new ArrayList<>();
+        List<MediaBean> result = new NoneBoundArrayList<>();
         if (cursor != null) {
             MediaBean bean = null;
             int anInt;
@@ -115,7 +115,7 @@ public class MediaColumn {
     }
 
     public static List<MediaBean> parseVideo(Cursor cursor) {
-        List<MediaBean> result = new ArrayList<>();
+        List<MediaBean> result = new NoneBoundArrayList<>();
         if (cursor != null) {
             MediaBean bean = null;
             int anInt;
@@ -137,7 +137,7 @@ public class MediaColumn {
     }
 
     public static List<AlbumBean> parseAlbum(Cursor cursor) {
-        List<AlbumBean> result = new ArrayList<>();
+        List<AlbumBean> result = new NoneBoundArrayList<>();
         if (cursor != null) {
             AlbumBean bean = null;
             while (cursor.moveToNext()) {

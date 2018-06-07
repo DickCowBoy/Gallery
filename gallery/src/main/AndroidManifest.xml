@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tplink.gallery.gallery">
+    package="com.tplink.gallery">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
@@ -22,6 +22,7 @@
 
         <activity android:name="com.tplink.gallery.selector.ImageSelectActivity"
             android:theme="@style/PhotoAppTheme"
+            android:hardwareAccelerated="true"
             android:label="@string/select_pic">
             <intent-filter>
                 <action android:name="com.tplink.action.MEDIA_PICKER" />

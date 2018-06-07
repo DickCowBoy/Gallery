@@ -476,7 +476,7 @@ public class TileProvider {
         if (bitmap != null) {
             if (needClear) bitmap.eraseColor(0);
         } else {
-            bitmap = Bitmap.createBitmap(tileSize, tileSize, Bitmap.Config.ARGB_8888);
+            bitmap = Bitmap.createBitmap(tileSize, tileSize, Bitmap.Config.RGB_565);
         }
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -545,27 +545,27 @@ public class TileProvider {
                         if (tile.mTileState == Tile.STATE_DECODED) {
                             // render
                             source.set(0, 0, sTileSize, sTileSize);
-                            if (target.left < 0) {
-                                source.left -= (target.left / scale);
-                                target.left = 0;
-                                notAll++;
-                            }
-                            if (target.right >  renderTarget.getWidth()) {
-                                source.right -= ((target.right - renderTarget.getWidth()) / scale);
-                                target.right = renderTarget.getWidth();
-                                notAll++;
-                            }
-
-                            if (target.top < 0) {
-                                source.top -= (target.top / scale);
-                                target.top = 0;
-                                notAll++;
-                            }
-                            if (target.bottom >  renderTarget.getHeight()) {
-                                source.bottom -= ((target.bottom - renderTarget.getHeight()) / scale);
-                                target.bottom = renderTarget.getHeight();
-                                notAll++;
-                            }
+//                            if (target.left < 0) {
+//                                source.left -= (target.left / scale);
+//                                target.left = 0;
+//                                notAll++;
+//                            }
+//                            if (target.right >  renderTarget.getWidth()) {
+//                                source.right -= ((target.right - renderTarget.getWidth()) / scale);
+//                                target.right = renderTarget.getWidth();
+//                                notAll++;
+//                            }
+//
+//                            if (target.top < 0) {
+//                                source.top -= (target.top / scale);
+//                                target.top = 0;
+//                                notAll++;
+//                            }
+//                            if (target.bottom >  renderTarget.getHeight()) {
+//                                source.bottom -= ((target.bottom - renderTarget.getHeight()) / scale);
+//                                target.bottom = renderTarget.getHeight();
+//                                notAll++;
+//                            }
                             index ++;
                             Log.e(TAG, "recct: " + rectString(source) + ":" + rectString(target));
                             canvas.drawBitmap(tile.mDecodedTile, source, target, null);

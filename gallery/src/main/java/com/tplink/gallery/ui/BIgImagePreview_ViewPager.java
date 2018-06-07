@@ -12,7 +12,7 @@ import com.bm.library.PhotoView;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.tplink.gallery.GlideApp;
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 import com.tplink.gallery.render.BigImageAdapter;
 
 import java.util.ArrayList;

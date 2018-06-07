@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 
 public class LoadingView extends ViewSwitcher {
     private final static String TAG = "LoadingView";

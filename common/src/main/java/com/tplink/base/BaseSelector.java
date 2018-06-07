@@ -11,7 +11,8 @@
  */
 package com.tplink.base;
 
-import java.util.ArrayList;
+import com.tplink.utils.NoneBoundArrayList;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class BaseSelector<I, T> {
     protected DataSource<I> mDataSource = null;
 
     // Save and restore selection in thread pool to avoid ANR
-    private ArrayList<I> mSelectionPath = null;
+    private NoneBoundArrayList<I> mSelectionPath = null;
 
     public interface SelectionListener<I, T> {
         public void onSelectionModeChange(int mode);
@@ -227,12 +228,12 @@ public class BaseSelector<I, T> {
         this.mClickedSet = mClickedSet;
     }
 
-    public ArrayList<I> getSelected() {
+    public NoneBoundArrayList<I> getSelected() {
         return getSelected(Integer.MAX_VALUE);
     }
 
-    public ArrayList<I> getSelected(final int maxSelection) {
-        final ArrayList<I> selected = new ArrayList<I>();
+    public NoneBoundArrayList<I> getSelected(final int maxSelection) {
+        final NoneBoundArrayList<I> selected = new NoneBoundArrayList<I>();
         if (mInverseSelection) {
             int total = getTotalCount();
             int index = 0;

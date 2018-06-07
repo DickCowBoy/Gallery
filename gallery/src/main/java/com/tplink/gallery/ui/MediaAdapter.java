@@ -27,7 +27,7 @@ import com.bumptech.glide.load.resource.bitmap.DrawableTransformation;
 import com.tplink.base.Consts;
 import com.tplink.gallery.GlideApp;
 import com.tplink.gallery.bean.MediaBean;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 import com.tplink.gallery.utils.MediaUtils;
 import com.tplink.gallery.view.RegionRelativeLayout;
 import com.tplink.view.CommonDataView;

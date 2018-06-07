@@ -23,7 +23,7 @@ import com.bumptech.glide.util.Synthetic;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.tplink.gallery.GlideApp;
 import com.tplink.gallery.GlideRequests;
-import com.tplink.gallery.gallery.R;
+import com.tplink.gallery.R;
 import com.tplink.gallery.view.BigImageView;
 
 import java.util.ArrayList;
