@@ -329,6 +329,9 @@ public class BigImagePreviewGLView implements GLHost {
 
         @Override
         public ScreenNail getScreenNail(int offset) {
+            if (data == null) {
+                return null;
+            }
             MediaBean mediaBean = data.get(mCurrentIndex + offset);
             if (mediaBean == null) return null;
             ScreenNail screenNail = screenNails.get(mediaBean);

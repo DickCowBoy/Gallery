@@ -1538,8 +1538,9 @@ public class PhotoView extends GLView {
             // 之后render方法之后被调用也不会生成新的mEffect,从而保证了每次滑动过程只生成一次动效
             // 这样就不会因为GLThread在upload到UI线程过程中,由于多次生成动效导致UI线程阻塞问题了
             // 第一次进来时,没有滑动页面就点击返回的话,此时也需要生成新的动效
-            if (i == 0 && mModel.getScreenNail(0) instanceof TiledScreenNail) {
-                TiledScreenNail sc = (TiledScreenNail) mModel.getScreenNail(0);
+            ScreenNail screenNail = mModel.getScreenNail(0);
+            if (i == 0 && screenNail instanceof TiledScreenNail) {
+                TiledScreenNail sc = (TiledScreenNail) screenNail;
                 if (mFirst || (mEffect == null
                         && (sc != null && !sc.isAnimating()) && mImageChanged)) {
                     mEffect = buildFallbackEffect(canvas, r);
