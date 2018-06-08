@@ -12,11 +12,19 @@
 package com.tplink.gallery.utils;
 
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+
+import com.android.gallery3d.util.BucketNames;
+import com.android.gallery3d.util.GalleryUtils;
 
 import java.util.List;
 
 public class MediaUtils {
+
+    public static final int CAMERA_BUCKET_ID = GalleryUtils.getBucketId(
+            Environment.getExternalStorageDirectory().toString() + "/"
+                    + BucketNames.CAMERA);
 
     public static Uri getImageUri() {
         return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -52,6 +60,10 @@ public class MediaUtils {
                                      List<String> notAllowMimeTypes) {
         return String.valueOf(bucketId) + "_" + (allowMimeTypes!= null ? allowMimeTypes.toString() : "all")
                 + "_" + (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all");
+    }
+
+    public static String getAllCameraAlbumKey() {
+        return "CAMERA_ALL";
     }
 
 

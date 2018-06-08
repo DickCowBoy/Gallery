@@ -55,11 +55,6 @@ public class WallPaperPreviewPresenter extends PreviewContract.PreviewPresenter<
 
     }
 
-    class PreviewInfo {
-        public List<MediaBean> datas;
-        public int index = 0;
-    }
-
     public void removeSingleMedia(MediaBean bean, int currentIndex) {
         mContainer.delItem(bean);
         List<MediaBean> mediaEntries = mContainer.getMediaEntries();

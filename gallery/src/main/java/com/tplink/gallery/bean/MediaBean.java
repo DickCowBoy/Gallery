@@ -65,6 +65,9 @@ public class MediaBean {
     public long size;
     public int orientation;
 
+    public boolean isBurst;
+    public int burstCount;
+
     // 使用到时才加载
 
 

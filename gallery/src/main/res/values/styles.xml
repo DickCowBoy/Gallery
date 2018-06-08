@@ -135,5 +135,7 @@
         <item name="android:src">@drawable/photo_ic_menu_more_normal</item>
     </style>
 
-
+    <style name="TextAppearance.SubHead" parent="@android:style/TextAppearance.Material.Body2">
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>

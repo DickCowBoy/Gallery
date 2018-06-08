@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tplink.gallery.view.AutoWeightLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/photopage_bottom_controls"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:orientation="horizontal"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:fitsSystemWindows="true"
+    android:visibility="visible">
+
+    <ImageButton
+        android:id="@+id/photopage_bottom_control_share"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:background="@drawable/ripple_sm"
+        android:src="@drawable/ic_menu_share"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/photopage_bottom_control_edit"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:background="@drawable/ripple_sm"
+        android:src="@drawable/src_menu_edit"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/photopage_bottom_control_burst_select"
+        style="@style/TextAppearance.SubHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/burst_selected"
+        android:padding="12dp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/ripple_sm"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/photopage_bottom_control_delete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:background="@drawable/ripple_sm"
+        android:src="@drawable/ic_menu_trash"
+        android:visibility="gone"/>
+
+</com.tplink.gallery.view.AutoWeightLayout>

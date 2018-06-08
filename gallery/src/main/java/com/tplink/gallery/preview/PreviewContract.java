@@ -32,5 +32,10 @@ public class PreviewContract {
          * load the data to preview
          */
         public abstract void loadPreviewData(Bundle data);
+
+        public class PreviewInfo {
+            public List<MediaBean> datas;
+            public int index = 0;
+        }
     }
 }
