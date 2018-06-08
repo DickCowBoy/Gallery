@@ -33,6 +33,7 @@ public class MediaColumn {
             MediaStore.Video.VideoColumns.DURATION,
             MediaStore.Images.ImageColumns.SIZE,
             "camera_refocus",// MTK媒体库特有字段识别是否是虚化拍摄
+            MediaStore.Images.ImageColumns.ORIENTATION,
     };
 
     public static final String[] QUERY_IMAGE_PROJECTION = new String[]{
@@ -44,6 +45,7 @@ public class MediaColumn {
             MediaStore.Images.ImageColumns.DATE_MODIFIED,
             MediaStore.Images.ImageColumns.SIZE,
             "camera_refocus",// MTK媒体库特有字段识别是否是虚化拍摄
+            MediaStore.Images.ImageColumns.ORIENTATION,
     };
 
     public static final String[] QUERY_VIDEO_PROJECTION = new String[]{
@@ -55,12 +57,13 @@ public class MediaColumn {
             MediaStore.Images.ImageColumns.DATE_MODIFIED,
             MediaStore.Video.VideoColumns.DURATION,
             MediaStore.Images.ImageColumns.SIZE,
+            MediaStore.Images.ImageColumns.ORIENTATION,
     };
 
     public static List<MediaBean> parseImage(Cursor cursor) {
         List<MediaBean> result = new NoneBoundArrayList<>();
         if (cursor != null) {
-            MediaBean bean = null;
+            MediaBean bean;
             int anInt;
 
             while (cursor.moveToNext()) {
@@ -74,6 +77,7 @@ public class MediaColumn {
                 bean.lastModify = cursor.getLong(5);
                 bean.size = cursor.getLong(6);
                 bean.refocusType = cursor.getInt(7);
+                bean.orientation = cursor.getInt(8);
                 result.add(bean);
             }
         }
@@ -94,7 +98,7 @@ public class MediaColumn {
     public static List<MediaBean> parseFile(Cursor cursor) {
         List<MediaBean> result = new NoneBoundArrayList<>();
         if (cursor != null) {
-            MediaBean bean = null;
+            MediaBean bean;
             int anInt;
             while (cursor.moveToNext()) {
                 anInt = cursor.getInt(0);
@@ -108,6 +112,7 @@ public class MediaColumn {
                 bean.duration = cursor.getLong(6);
                 bean.size = cursor.getLong(7);
                 bean.refocusType = cursor.getInt(8);
+                bean.orientation = cursor.getInt(9);
                 result.add(bean);
             }
         }
@@ -117,7 +122,7 @@ public class MediaColumn {
     public static List<MediaBean> parseVideo(Cursor cursor) {
         List<MediaBean> result = new NoneBoundArrayList<>();
         if (cursor != null) {
-            MediaBean bean = null;
+            MediaBean bean;
             int anInt;
             while (cursor.moveToNext()) {
                 anInt = cursor.getInt(0);
@@ -130,6 +135,7 @@ public class MediaColumn {
                 bean.lastModify = cursor.getLong(5);
                 bean.duration = cursor.getLong(6);
                 bean.size = cursor.getLong(7);
+                bean.orientation = cursor.getInt(8);
                 result.add(bean);
             }
         }
@@ -139,7 +145,7 @@ public class MediaColumn {
     public static List<AlbumBean> parseAlbum(Cursor cursor) {
         List<AlbumBean> result = new NoneBoundArrayList<>();
         if (cursor != null) {
-            AlbumBean bean = null;
+            AlbumBean bean;
             while (cursor.moveToNext()) {
                 // 检查是否存在
                 bean = new AlbumBean();

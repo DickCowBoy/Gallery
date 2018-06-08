@@ -289,4 +289,10 @@ public class WallPaperSelectPresenter extends MediaSelectorContract.MediaSelecto
         }
         mView.showHeader(title);
     }
+    public void removeSingleMedia(MediaBean bean) {
+        mContainer.delItem(bean);
+        if (mView != null) {
+            showTitle();
+        }
+    }
 }

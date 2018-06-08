@@ -41,6 +41,7 @@ public class BigImagePreviewGLView implements GLHost {
     private OrientationManager mOrientationManager;
     private PhotoViewListener photoViewListener;
     private PhotoAdapter photoAdapter;
+    private DataListener dataListener;
 
     private boolean hasAdd = false;
 
@@ -51,6 +52,11 @@ public class BigImagePreviewGLView implements GLHost {
             mPhotoView.layout(0, 0, right - left, bottom - top);
         }
     };
+
+
+    public void setDataListener(DataListener dataListener) {
+        this.dataListener = dataListener;
+    }
 
     public BigImagePreviewGLView(GLRootView mGLRootView, Activity activity, boolean canSwitch) {
         this.mGLRootView = mGLRootView;
@@ -182,6 +188,11 @@ public class BigImagePreviewGLView implements GLHost {
         }
     }
 
+    public interface DataListener {
+        void onPhotoChanged(int index, MediaBean item);
+    }
+
+
     private class PhotoAdapter implements PhotoView.Model {
 
         private static final int SCREEN_NAIL_MAX = PhotoView.SCREEN_NAIL_MAX;
@@ -303,11 +314,13 @@ public class BigImagePreviewGLView implements GLHost {
 
         @Override
         public boolean hasNext() {
+            if (data == null) return false;
             return mCurrentIndex < (data.size() - 1);
         }
 
         @Override
         public boolean hasPre() {
+            if (data == null) return false;
             return mCurrentIndex > 0;
         }
 
@@ -344,12 +357,24 @@ public class BigImagePreviewGLView implements GLHost {
 
         @Override
         public int getImageWidth() {
-            return data.get(mCurrentIndex).width;
+            if (data == null) return 0;
+            MediaBean mediaBean = data.get(mCurrentIndex);
+            if (mediaBean == null) return 0;
+            if (mediaBean.orientation % 180 != 0) {
+                return data.get(mCurrentIndex).height;
+            }
+            return mediaBean.width;
         }
 
         @Override
         public int getImageHeight() {
-            return data.get(mCurrentIndex).height;
+            if (data == null) return 0;
+            MediaBean mediaBean = data.get(mCurrentIndex);
+            if (mediaBean == null) return 0;
+            if (mediaBean.orientation % 180 != 0) {
+                return data.get(mCurrentIndex).width;
+            }
+            return mediaBean.height;
         }
 
         @Override
@@ -369,6 +394,9 @@ public class BigImagePreviewGLView implements GLHost {
 
         public void showImageIndex(int index) {
             mCurrentIndex = index;
+            if (dataListener != null) {
+                dataListener.onPhotoChanged(mCurrentIndex, data.get(mCurrentIndex));
+            }
             int fromIndex[] = new int[IMAGE_CACHE_SIZE];
             MediaBean oldMedias[] = new MediaBean[IMAGE_CACHE_SIZE];
             System.arraycopy(mMedias, 0, oldMedias, 0, IMAGE_CACHE_SIZE);
@@ -437,5 +465,14 @@ public class BigImagePreviewGLView implements GLHost {
                 }
             }
         }
+    }
+
+    public MediaBean getCurrentBean() {
+        return data.get(photoAdapter.getCurrentIndex());
+    }
+
+
+    public int getCurrentIndex() {
+        return photoAdapter.getCurrentIndex();
     }
 }

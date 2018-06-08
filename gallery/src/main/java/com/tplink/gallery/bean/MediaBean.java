@@ -63,6 +63,7 @@ public class MediaBean {
     public long duration;
     public int refocusType;
     public long size;
+    public int orientation;
 
     // 使用到时才加载
 
@@ -104,6 +105,9 @@ public class MediaBean {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+        if (o != null && o instanceof Integer) {
+            return _id == (Integer) o;
+        }
         if (o == null || getClass() != o.getClass()) return false;
         MediaBean mediaBean = (MediaBean) o;
         return _id == mediaBean._id;

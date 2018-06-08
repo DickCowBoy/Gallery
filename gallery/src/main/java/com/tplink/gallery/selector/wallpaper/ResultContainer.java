@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.R;
+import com.tplink.utils.NoneBoundArrayList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -180,7 +181,7 @@ public class ResultContainer {
     }
 
     public List<MediaBean> getMediaEntries() {
-        List<MediaBean> entities = new ArrayList<>();
+        List<MediaBean> entities = new NoneBoundArrayList<>();
         for (Map.Entry<Long, HashSet<MediaBean>> entry : mSelectedItems.entrySet()) {
             entities.addAll(entry.getValue());
         }

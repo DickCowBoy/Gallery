@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tplink.gallery.view.AutoWeightLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/photopage_bottom_controls"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:orientation="horizontal"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
+    android:fitsSystemWindows="true">
+
+    <ImageButton
+        android:id="@+id/photopage_bottom_control_delete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:background="@drawable/ripple_sm"
+        android:src="@drawable/ic_menu_trash"/>
+
+</com.tplink.gallery.view.AutoWeightLayout>

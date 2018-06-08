@@ -34,6 +34,21 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name=".preview.wallpaper.WallPaperPreviewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="@string/select_pic"
+            android:screenOrientation="portrait"
+            android:theme="@style/PhotoAppTheme"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="com.tplink.action.gallery.PREVIEW_WALLPAPER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

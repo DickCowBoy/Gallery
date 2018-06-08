@@ -95,6 +95,7 @@ android {
             zipAlignEnabled false
             //不去除无用资源
             shrinkResources false
+            signingConfig android.signingConfigs.release
         }
 
         release {
