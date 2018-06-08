@@ -49,6 +49,9 @@
             </intent-filter>
         </activity>
 
+        <service android:name="com.android.gallery3d.app.InitService"
+            android:exported="true"/>
+
     </application>
 
 </manifest>
