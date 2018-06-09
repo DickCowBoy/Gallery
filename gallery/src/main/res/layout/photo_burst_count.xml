@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<com.tplink.gallery.view.FitLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_burst_photo_count_controls"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/burst_count_text_height"
+    android:layout_marginStart="@dimen/padding_8dp"
+    android:background="@drawable/burst_text_bg"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:visibility="gone">
+
+    <ImageView
+        android:id="@+id/iv_burst_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_8dp"
+        android:layout_marginStart="@dimen/padding_8dp"
+        android:src="@drawable/ic_collections_white" />
+
+    <TextView
+        android:id="@+id/tv_burst_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_8dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/burst_count_text_size" />
+</com.tplink.gallery.view.FitLinearLayout>

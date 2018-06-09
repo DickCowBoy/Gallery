@@ -105,7 +105,7 @@ public class CameraMediaDao extends MediaDao {
                         } else {
                             resolve.put(bean.bucketId, bean);
                             bean.isBurst = true;
-                            bean.burstCount = 0;
+                            bean.burstCount = 1;
                         }
                     }
                     bean.width = cursor.getInt(2);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.tplink.gallery.view.AutoFitRelative xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_gallery_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@null"
@@ -13,6 +14,8 @@
 
     <include layout="@layout/local_preview_bottom_menu"/>
 
+
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/PhotoAppTheme.Toolbar"
@@ -24,4 +27,4 @@
         app:titleTextAppearance="@style/PhotoAppTheme.ActionBar.TitleTextStyle"
         app:titleTextColor="@color/white"/>
 
-</RelativeLayout>
+</com.tplink.gallery.view.AutoFitRelative>
