@@ -18,7 +18,8 @@ import com.tplink.gallery.utils.MediaUtils;
 
 import java.util.ArrayList;
 
-public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.PreviewPresenter> extends BasePreviewActivity<T> {
+public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.PreviewPresenter>
+        extends BasePreviewActivity<T> implements MediaOperationContract.MediaOperationView{
 
     private static final int REQUEST_CROP = 1;
     private static final int REQUEST_EDIT = 2;
@@ -29,20 +30,18 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
     private static final String TAG = "LocalImagePreview";
     private BottomMenuManager bottomMenuManager;
 
+    private MediaOperationContract.MediaOperationPresenter mediaOperationPresenter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bottomMenuManager = new BottomMenuManager();
+        mediaOperationPresenter = new MediaOperationPresenter(this, this);
     }
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_local_media_preview;
-    }
-
-    @Override
-    protected T initPreviewPresenter() {
-        return null;
     }
 
     @Override
@@ -93,7 +92,7 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
                     launchPhotoEditor(item);
                     break;
                 case R.id.photopage_bottom_control_delete :
-
+                    mediaOperationPresenter.delPhoto(item);
                     break;
                 case R.id.photopage_bottom_control_burst_select :
 

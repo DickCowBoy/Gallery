@@ -21,8 +21,8 @@ public class WallPaperPreviewActivity extends BasePreviewActivity<WallPaperPrevi
     }
 
     @Override
-    protected WallPaperPreviewPresenter initPreviewPresenter() {
-        return new WallPaperPreviewPresenter(this, new WallPaperView());
+    protected WallPaperPreviewPresenter initPreviewPresenter(Bundle data) {
+        return new WallPaperPreviewPresenter(data, this, new WallPaperView());
     }
 
     class WallPaperView extends ViewProxy implements WallpaperPreviewView {

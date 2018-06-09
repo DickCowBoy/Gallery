@@ -25,24 +25,14 @@ public class CameraPreviewPresenter extends PreviewContract.PreviewPresenter<Pre
     private CameraMediaDao mediaDao;
     private Context context;
 
-    public CameraPreviewPresenter(Context context, PreviewContract.PreviewView view) {
-        super(view);
+    public CameraPreviewPresenter(Bundle data, Context context, PreviewContract.PreviewView view) {
+        super(data, view);
         mediaDao = new CameraMediaDao(context);
         this.context = context;
     }
 
     @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void loadPreviewData(Bundle data) {
+    public void loadPreviewData() {
         Flowable.create(new FlowableOnSubscribe<PreviewInfo>() {
             @Override
             public void subscribe(

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.tplink.base.BaseView;
 import com.tplink.base.RxPresenter;
 import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.data.DataCacheManager;
 
 import java.util.List;
 
@@ -17,21 +18,33 @@ public class PreviewContract {
     }
 
 
-    public static abstract class PreviewPresenter<T extends PreviewView> extends RxPresenter<T> {
+    public static abstract class PreviewPresenter<T extends PreviewView> extends RxPresenter<T>
+            implements DataCacheManager.OnMediaChanged{
 
         public static final String CURRENT_MEDIA = "CURRENT_MEDIA";
+        protected Bundle data;
 
-        public PreviewPresenter(T view) {
+        public PreviewPresenter(Bundle data, T view) {
             super(view);
+            this.data = data;
         }
 
-        public abstract void resume();
-        public abstract void pause();
+        public void resume() {
+            DataCacheManager.initDataCacheManager().registerOnMediaChanged(this);
+        }
+        public void pause() {
+            DataCacheManager.initDataCacheManager().unregisterOnMediaChanged(this);
+        }
+
+        @Override
+        public void onMediaChanged(List<String> images, List<String> videos, boolean del) {
+            loadPreviewData();
+        }
 
         /**
          * load the data to preview
          */
-        public abstract void loadPreviewData(Bundle data);
+        public abstract void loadPreviewData();
 
         public class PreviewInfo {
             public List<MediaBean> datas;

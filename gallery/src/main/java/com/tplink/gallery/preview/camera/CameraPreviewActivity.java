@@ -21,8 +21,8 @@ public class CameraPreviewActivity extends BaseLocalImagePreviewActivity<CameraP
     }
 
     @Override
-    protected CameraPreviewPresenter initPreviewPresenter() {
-        return new CameraPreviewPresenter(this, this);
+    protected CameraPreviewPresenter initPreviewPresenter(Bundle data) {
+        return new CameraPreviewPresenter(data, this, this);
     }
 
     @Override

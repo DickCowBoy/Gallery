@@ -34,6 +34,7 @@ public class MediaColumn {
             MediaStore.Images.ImageColumns.SIZE,
             "camera_refocus",// MTK媒体库特有字段识别是否是虚化拍摄
             MediaStore.Images.ImageColumns.ORIENTATION,
+            MediaStore.Images.ImageColumns.DATA,
     };
 
     public static final String[] QUERY_IMAGE_PROJECTION = new String[]{
@@ -46,6 +47,7 @@ public class MediaColumn {
             MediaStore.Images.ImageColumns.SIZE,
             "camera_refocus",// MTK媒体库特有字段识别是否是虚化拍摄
             MediaStore.Images.ImageColumns.ORIENTATION,
+            MediaStore.Images.ImageColumns.DATA,
     };
 
     public static final String[] QUERY_VIDEO_PROJECTION = new String[]{
@@ -58,6 +60,7 @@ public class MediaColumn {
             MediaStore.Video.VideoColumns.DURATION,
             MediaStore.Images.ImageColumns.SIZE,
             MediaStore.Images.ImageColumns.ORIENTATION,
+            MediaStore.Images.ImageColumns.DATA,
     };
 
     public static List<MediaBean> parseImage(Cursor cursor) {
@@ -78,6 +81,7 @@ public class MediaColumn {
                 bean.size = cursor.getLong(6);
                 bean.refocusType = cursor.getInt(7);
                 bean.orientation = cursor.getInt(8);
+                bean.filePath = cursor.getString(9);
                 result.add(bean);
             }
         }
@@ -113,6 +117,7 @@ public class MediaColumn {
                 bean.size = cursor.getLong(7);
                 bean.refocusType = cursor.getInt(8);
                 bean.orientation = cursor.getInt(9);
+                bean.filePath = cursor.getString(10);
                 result.add(bean);
             }
         }
@@ -136,6 +141,7 @@ public class MediaColumn {
                 bean.duration = cursor.getLong(6);
                 bean.size = cursor.getLong(7);
                 bean.orientation = cursor.getInt(8);
+                bean.filePath = cursor.getString(9);
                 result.add(bean);
             }
         }

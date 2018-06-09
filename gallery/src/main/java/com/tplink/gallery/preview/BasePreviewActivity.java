@@ -29,11 +29,11 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         bigImagePreviewGLView = new BigImagePreviewGLView(findViewById(R.id.gl_root_view), this, this, canFilmMode());
-        previewPresenter = initPreviewPresenter();
-        bigImagePreviewGLView.onCreate();
         Bundle data = new Bundle();
+        previewPresenter = initPreviewPresenter(data);
+        bigImagePreviewGLView.onCreate();
         data.putParcelable(PreviewContract.PreviewPresenter.CURRENT_MEDIA, getIntent().getData());
-        previewPresenter.loadPreviewData(data);
+        previewPresenter.loadPreviewData();
         setPreviewWindow();
         mNormalToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mNormalToolbar);
@@ -48,12 +48,13 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
 
     protected abstract int getLayoutId();
 
-    protected abstract T initPreviewPresenter();
+    protected abstract T initPreviewPresenter(Bundle data);
 
     protected abstract boolean canFilmMode();
 
     @Override
     public void showMediaData(List<MediaBean> mediaBeans, int index, long version) {
+
         if (mediaBeans == null || mediaBeans.size() == 0) {
             onBackPressed();
         }
@@ -69,6 +70,7 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
     protected void onResume() {
         super.onResume();
         isActive = true;
+        previewPresenter.resume();
         bigImagePreviewGLView.onResume();
     }
 
@@ -82,6 +84,7 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
     protected void onPause() {
         super.onPause();
         isActive = false;
+        previewPresenter.pause();
         bigImagePreviewGLView.onPause();
     }
 

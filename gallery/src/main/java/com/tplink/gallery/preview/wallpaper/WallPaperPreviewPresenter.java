@@ -37,8 +37,8 @@ public class WallPaperPreviewPresenter extends PreviewContract.PreviewPresenter<
     protected boolean isLoading = false;
     private int version = -1;
 
-    public WallPaperPreviewPresenter(Context context, WallpaperPreviewView view) {
-        super(view);
+    public WallPaperPreviewPresenter(Bundle data, Context context, WallpaperPreviewView view) {
+        super(data, view);
         this.context = context;
         mediaDao = new MediaDao(context);
         mContainer = new ResultContainer(WallPaperSelectPresenter.WALLPAPER_COUNT_LIMIT,
@@ -72,7 +72,7 @@ public class WallPaperPreviewPresenter extends PreviewContract.PreviewPresenter<
     }
 
     @Override
-    public void loadPreviewData(Bundle data) {
+    public void loadPreviewData() {
         // load the wallpaper info
         final Uri current = data.getParcelable(CURRENT_MEDIA);
         Flowable.create(new FlowableOnSubscribe<PreviewInfo>() {

@@ -3,6 +3,8 @@
     package="com.tplink.gallery">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!--SD permission-->
+    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"/>
 
     <application
         android:allowBackup="true"

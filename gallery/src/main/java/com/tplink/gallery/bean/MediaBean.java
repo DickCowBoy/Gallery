@@ -67,6 +67,7 @@ public class MediaBean {
 
     public boolean isBurst;
     public int burstCount;
+    public String filePath;
 
     // 使用到时才加载
 

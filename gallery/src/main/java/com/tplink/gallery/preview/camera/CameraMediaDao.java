@@ -116,6 +116,7 @@ public class CameraMediaDao extends MediaDao {
                     bean.size = cursor.getLong(7);
                     bean.refocusType = cursor.getInt(8);
                     bean.orientation = cursor.getInt(9);
+                    bean.filePath = cursor.getString(10);
                     result.add(bean);
                 }
             }
