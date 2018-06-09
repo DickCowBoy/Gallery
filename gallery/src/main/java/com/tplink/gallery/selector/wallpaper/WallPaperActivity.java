@@ -40,6 +40,11 @@ public class WallPaperActivity extends BaseSelectActivity {
     }
 
     @Override
+    public boolean longClickEnter() {
+        return true;
+    }
+
+    @Override
     public void showHint(String msg) {
 
     }

@@ -60,29 +60,34 @@ public class AlbumAdapter extends CommonDataViewProxy<AlbumBean, AlbumAdapter.Al
     @Override
     public void onBindViewHolder(AlbumViewHolder viewHolder, int i) {
         AlbumBean picAlbum = getItem(i);
-        int albumSelectCount = mAlbumInfoInterface.getAlbumSelectCount(picAlbum);
-        if (albumSelectCount > 0) {
-            if (!mSelector.isItemSelected(picAlbum)) {
-                mSelector.toggle(picAlbum, i);
+        if (mAlbumInfoInterface.longClickEnter()) {
+            int albumSelectCount = mAlbumInfoInterface.getAlbumSelectCount(picAlbum);
+            if (albumSelectCount > 0) {
+                if (!mSelector.isItemSelected(picAlbum)) {
+                    mSelector.toggle(picAlbum, i);
+                }
+            } else {
+                if (mSelector.isItemSelected(picAlbum)) {
+                    mSelector.toggle(picAlbum, i);
+                }
             }
-        } else {
-            if (mSelector.isItemSelected(picAlbum)) {
-                mSelector.toggle(picAlbum, i);
-            }
+        } else if (mSelector.inSelectionMode()) {
+            viewHolder.getCheckBox().setChecked(mAlbumInfoInterface.isAlbumSelected(picAlbum));
         }
+
         super.onBindViewHolder(viewHolder, i);
-        MediaUtils.imageEngine.loadImage(mContext,
+         MediaUtils.imageEngine.loadImage(mContext,
                 picAlbum.lastModify, null, viewHolder.mIconImageView,
                 picAlbum.getContentUri());
         viewHolder.mAlbumName.setText(picAlbum.displayName);
         viewHolder.mAlbumPicCount.setText(getCountText(picAlbum));
-        if (mSelector.inSelectionMode()) {
-            viewHolder.getCheckBox().setChecked(mAlbumInfoInterface.isAlbumSelected(picAlbum));
-        }
     }
 
     protected String getCountText(AlbumBean picAlbum) {
-        return mAlbumInfoInterface.getAlbumSelectCount(picAlbum) + "/" + String.valueOf(picAlbum.count);
+        if (mAlbumInfoInterface.longClickEnter()) {
+            return mAlbumInfoInterface.getAlbumSelectCount(picAlbum) + "/" + String.valueOf(picAlbum.count);
+        }
+        return String.valueOf(picAlbum.count);
     }
 
     @Override
@@ -152,6 +157,9 @@ public class AlbumAdapter extends CommonDataViewProxy<AlbumBean, AlbumAdapter.Al
     }
 
     public void updateBucket(long bucketId, int selectCount) {
+        if (!mAlbumInfoInterface.longClickEnter()) {
+            return;
+        }
         int index = -1;
         for (int i = 0; i < mData.size(); i++) {
             if (mData.get(i).bucketId == bucketId) {
