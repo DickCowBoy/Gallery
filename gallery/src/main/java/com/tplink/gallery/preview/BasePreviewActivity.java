@@ -16,7 +16,7 @@ import java.util.List;
 
 public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPresenter>
         extends AppCompatActivity
-        implements BigImagePreviewGLView.DataListener, PreviewContract.PreviewView {
+        implements BigImagePreviewGLView.DataListener, PreviewContract.PreviewView, BigImagePreviewGLView.BigPreviewDelete {
 
     protected BigImagePreviewGLView bigImagePreviewGLView;
     protected T previewPresenter;
@@ -28,7 +28,7 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
-        bigImagePreviewGLView = new BigImagePreviewGLView(findViewById(R.id.gl_root_view), this, canFilmMode());
+        bigImagePreviewGLView = new BigImagePreviewGLView(findViewById(R.id.gl_root_view), this, this, canFilmMode());
         previewPresenter = initPreviewPresenter();
         bigImagePreviewGLView.onCreate();
         Bundle data = new Bundle();
@@ -109,6 +109,11 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
         mNormalToolbar.setTitle(title);
     }
 
+    @Override
+    public void onStartCapture(Object command) {
+
+    }
+
     protected class ViewProxy implements PreviewContract.PreviewView {
 
         @Override
@@ -125,5 +130,9 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
         public boolean isActive() {
             return BasePreviewActivity.this.isActive();
         }
+    }
+
+    public boolean isFileMode() {
+        return bigImagePreviewGLView.isInFilmMode();
     }
 }

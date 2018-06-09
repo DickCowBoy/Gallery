@@ -43,7 +43,7 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class BaseGalleryActivity extends PermissionActivity implements AutoFitToolBar.OnPaddingListener,
-        ImageSlotFragment.ImageSlotDataProvider, MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider, Toolbar.OnMenuItemClickListener, BigImagePreview.BigPreviewCallback {
+        ImageSlotFragment.ImageSlotDataProvider, MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider, Toolbar.OnMenuItemClickListener, BigImagePreview.BigPreviewCallback, BigImagePreviewGLView.BigPreviewDelete {
 
     public static final int TOOLBAR_STYLE_THUMB = 0;
     public static final int TOOLBAR_STYLE_PREVIEW = 1;
@@ -108,7 +108,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         shapeIndicatorView.setupWithTabLayout(mTabLayout);
         shapeIndicatorView.setupWithViewPager(mPager);
 
-        bigImagePreview = new BigImagePreviewGLView(findViewById(R.id.gl_root_view), this, true);
+        bigImagePreview = new BigImagePreviewGLView(findViewById(R.id.gl_root_view), this, this, true);
         bigImagePreview.onCreate();
     }
 
@@ -389,5 +389,10 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     @Override
     public boolean longClickEnter() {
         return true;
+    }
+
+    @Override
+    public void onStartCapture(Object command) {
+
     }
 }

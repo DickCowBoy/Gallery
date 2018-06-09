@@ -303,7 +303,7 @@ public class EdgeEffect {
 
     /**
      * Draw into the provided canvas. Assumes that the canvas has been rotated
-     * accordingly and the size has been set. The effect will be drawn the full
+     * accordingly and the size has been setCaptureListener. The effect will be drawn the full
      * width of X=0 to X=width, beginning from Y=0 and extending to some factor <
      * 1.f of height.
      *

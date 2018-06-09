@@ -531,7 +531,7 @@ public final class EntrySchema {
             this.field = field;
             this.projectionIndex = projectionIndex;
 
-            field.setAccessible(true); // in order to set non-public fields
+            field.setAccessible(true); // in order to setCaptureListener non-public fields
         }
 
         public boolean isId() {

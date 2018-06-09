@@ -57,7 +57,7 @@ class PositionController {
     // Animation time in milliseconds. The order must match ANIM_KIND_* above.
     //
     // The values for ANIM_KIND_FLING_X does't matter because we use
-    // mFilmScroller.isFinished() to decide when to stop. We set it to 0 so it's
+    // mFilmScroller.isFinished() to decide when to stop. We setCaptureListener it to 0 so it's
     // faster for Animatable.advanceAnimation() to calculate the progress
     // (always 1).
     private static final int ANIM_TIME[] = {
@@ -83,7 +83,7 @@ class PositionController {
     private static final float SCALE_MAX_EXTRA = 1.4f;
 
     // Setting this true makes the extra scaling range permanent (until this is
-    // set to false again).
+    // setCaptureListener to false again).
     private boolean mExtraScalingRange = false;
 
     // Film Mode v.s. Page Mode: in film mode we show smaller pictures.
@@ -149,7 +149,7 @@ class PositionController {
     // Whether the focused box is constrained.
     //
     // Our current program's first call to moveBox() sets constrained = true, so
-    // we set the initial value of this variable to true, and we will not see
+    // we setCaptureListener the initial value of this variable to true, and we will not see
     // see unwanted transition animation.
     private boolean mConstrained = true;
 

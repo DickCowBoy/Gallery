@@ -268,7 +268,7 @@ public abstract class UploadedTexture extends BasicTexture {
             } finally {
                 /// M: [BUG.MODIFY] @{
                 /* freeBitmap(); */
-                // It's possible that mBitmap has been set as null in recycle() when
+                // It's possible that mBitmap has been setCaptureListener as null in recycle() when
                 // uploadToCanvas running, so we need to check if mBitmap == null before
                 // freeBitmap, and synchronize it with recycle()
                 synchronized (this) {

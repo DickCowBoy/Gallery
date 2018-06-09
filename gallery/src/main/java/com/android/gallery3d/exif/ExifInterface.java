@@ -772,7 +772,7 @@ public class ExifInterface {
      * Sets the exif tags, clearing this ExifInterface object's existing exif
      * tags.
      *
-     * @param tags a collection of exif tags to set.
+     * @param tags a collection of exif tags to setCaptureListener.
      */
     public void setExif(Collection<ExifTag> tags) {
         clearExif();
@@ -1490,7 +1490,7 @@ public class ExifInterface {
      *
      * @param tagId a tag constant, e.g. {@link #TAG_IMAGE_WIDTH}.
      * @param ifdId the IFD that the tag should be in.
-     * @param val the value of the tag to set.
+     * @param val the value of the tag to setCaptureListener.
      * @return an ExifTag object or null if one could not be constructed.
      * @see #buildTag
      */
@@ -1543,7 +1543,7 @@ public class ExifInterface {
      *
      * @param tagId a tag constant, e.g. {@link #TAG_IMAGE_WIDTH}.
      * @param ifdId the IFD that the ExifTag is in.
-     * @param val the value to set.
+     * @param val the value to setCaptureListener.
      * @return true if success, false if the ExifTag doesn't exist or the value
      *         is the wrong type/length.
      * @see #setTagValue
@@ -1561,7 +1561,7 @@ public class ExifInterface {
      * must be the correct type and length for that ExifTag.
      *
      * @param tagId a tag constant, e.g. {@link #TAG_IMAGE_WIDTH}.
-     * @param val the value to set.
+     * @param val the value to setCaptureListener.
      * @return true if success, false if the ExifTag doesn't exist or the value
      *         is the wrong type/length.
      */
@@ -1812,7 +1812,7 @@ public class ExifInterface {
      * thumbnail.
      *
      * @param thumb a byte array containing a jpeg compressed image.
-     * @return true if the thumbnail was set.
+     * @return true if the thumbnail was setCaptureListener.
      */
     public boolean setCompressedThumbnail(byte[] thumb) {
         mData.clearThumbnailAndStrips();
@@ -1825,7 +1825,7 @@ public class ExifInterface {
      * thumbnail.
      *
      * @param thumb a bitmap to compress to a jpeg thumbnail.
-     * @return true if the thumbnail was set.
+     * @return true if the thumbnail was setCaptureListener.
      */
     public boolean setCompressedThumbnail(Bitmap thumb) {
         ByteArrayOutputStream thumbnail = new ByteArrayOutputStream();
@@ -1959,7 +1959,7 @@ public class ExifInterface {
      * @param tagId one of the DateTimeStamp tags.
      * @param timestamp a timestamp to format.
      * @param timezone a TimeZone object.
-     * @return true if success, false if the tag could not be set.
+     * @return true if success, false if the tag could not be setCaptureListener.
      */
     public boolean addDateTimeStampTag(int tagId, long timestamp, TimeZone timezone) {
         if (tagId == TAG_DATE_TIME || tagId == TAG_DATE_TIME_DIGITIZED
@@ -1981,7 +1981,7 @@ public class ExifInterface {
      *
      * @param latitude a GPS latitude coordinate.
      * @param longitude a GPS longitude coordinate.
-     * @return true if success, false if they could not be created or set.
+     * @return true if success, false if they could not be created or setCaptureListener.
      */
     public boolean addGpsTags(double latitude, double longitude) {
         ExifTag latTag = buildTag(TAG_GPS_LATITUDE, toExifLatLong(latitude));
@@ -2006,7 +2006,7 @@ public class ExifInterface {
      * Creates and sets the GPS timestamp tag.
      *
      * @param timestamp a GPS timestamp.
-     * @return true if success, false if could not be created or set.
+     * @return true if success, false if could not be created or setCaptureListener.
      */
     public boolean addGpsDateTimeStampTag(long timestamp) {
         ExifTag t = buildTag(TAG_GPS_DATE_STAMP, mGPSDateStampFormat.format(timestamp));

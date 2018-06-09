@@ -315,7 +315,7 @@ public class ExifTag {
      * type {@link #TYPE_ASCII}. The string is converted to an ASCII string.
      * Characters that cannot be converted are replaced with '?'. The length of
      * the string must be equal to either (component count -1) or (component
-     * count). The final byte will be set to the string null terminator '\0',
+     * count). The final byte will be setCaptureListener to the string null terminator '\0',
      * overwriting the last character in the string if the value.length is equal
      * to the component count. This method will fail if:
      * <ul>

@@ -22,7 +22,7 @@ import com.android.gallery3d.util.Utils;
 
 // Animation calculates a value according to the current input time.
 //
-// 1. First we need to use setDuration(int) to set the duration of the
+// 1. First we need to use setDuration(int) to setCaptureListener the duration of the
 //    animation. The duration is in milliseconds.
 // 2. Then we should call start(). The actual start time is the first value
 //    passed to calculate(long).
@@ -35,7 +35,7 @@ import com.android.gallery3d.util.Utils;
 // the value according to progress (progress is a value in [0,1]).
 //
 // Before onCalculate(float) is called, There is an optional interpolator which
-// can change the progress value. The interpolator can be set by
+// can change the progress value. The interpolator can be setCaptureListener by
 // setInterpolator(Interpolator). If the interpolator is used, the value passed
 // to onCalculate may be (for example, the overshoot effect).
 //

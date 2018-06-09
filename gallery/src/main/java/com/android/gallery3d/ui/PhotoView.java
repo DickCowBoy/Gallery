@@ -290,7 +290,7 @@ public class PhotoView extends GLView {
                 clearEffects();
             }
         });
-        /// M: [BUG.MODIFY] set text size by considering device resolution @{
+        /// M: [BUG.MODIFY] setCaptureListener text size by considering device resolution @{
         // mNoThumbnailText = StringTexture.newInstance(
         //         mActivity.getString(R.string.no_thumbnail),
         //        DEFAULT_TEXT_SIZE, Color.WHITE);

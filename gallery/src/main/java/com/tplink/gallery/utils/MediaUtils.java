@@ -66,5 +66,13 @@ public class MediaUtils {
         return "CAMERA_ALL";
     }
 
+    public static boolean isEditSupported(String mimeType) {
+        if (mimeType == null) return false;
+        mimeType = mimeType.toLowerCase();
+
+        return mimeType.startsWith("image/")
+                && (mimeType.endsWith("jpg") || mimeType.endsWith("jpeg")
+                || mimeType.endsWith("png") || mimeType.endsWith("bmp"));
+    }
 
 }

@@ -94,7 +94,7 @@ public class BigImagePreview implements PagerSnapHelper.PageListener {
          * The default implementation sets the bounds of outRect to 0 and returns.
          * <p>
          * <p>
-         * If this ItemDecoration does not affect the positioning of item views, it should set
+         * If this ItemDecoration does not affect the positioning of item views, it should setCaptureListener
          * all four fields of <code>outRect</code> (left, top, right, bottom) to zero
          * before returning.
          * <p>
@@ -131,7 +131,7 @@ public class BigImagePreview implements PagerSnapHelper.PageListener {
          * The default implementation sets the bounds of outRect to 0 and returns.
          * <p>
          * <p>
-         * If this ItemDecoration does not affect the positioning of item views, it should set
+         * If this ItemDecoration does not affect the positioning of item views, it should setCaptureListener
          * all four fields of <code>outRect</code> (left, top, right, bottom) to zero
          * before returning.
          * <p>

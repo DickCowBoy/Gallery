@@ -165,9 +165,9 @@ public class GLRootView extends GLSurfaceView
 
     @Override
     public void registerLaunchedAnimation(CanvasAnimation animation) {
-        // Register the newly launched animation so that we can set the start
+        // Register the newly launched animation so that we can setCaptureListener the start
         // time more precisely. (Usually, it takes much longer for first
-        // rendering, so we set the animation start time as the time we
+        // rendering, so we setCaptureListener the animation start time as the time we
         // complete rendering)
         mAnimations.add(animation);
     }
@@ -612,7 +612,7 @@ public class GLRootView extends GLSurfaceView
         /// M: [BUG.ADD] @{
         // log the GLSurfaceView status to avoid some error cases
         mGLSurfaceViewPaused = true;
-        Log.i(TAG, "<onPause> set mGLSurfaceViewPaused as true");
+        Log.i(TAG, "<onPause> setCaptureListener mGLSurfaceViewPaused as true");
         /// @}
         super.onPause();
         if (DEBUG_PROFILE) {
@@ -627,7 +627,7 @@ public class GLRootView extends GLSurfaceView
     public void onResume() {
         super.onResume();
         mGLSurfaceViewPaused = false;
-        Log.i(TAG, "<onResume> set mGLSurfaceViewPaused as false");
+        Log.i(TAG, "<onResume> setCaptureListener mGLSurfaceViewPaused as false");
     }
 
 
@@ -714,7 +714,7 @@ public class GLRootView extends GLSurfaceView
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         /// M: [BUG.ADD] avoid NE after surfaceDestroy @{
-        Log.i(TAG, "<surfaceCreated> set mSurfaceDestroyed = false");
+        Log.i(TAG, "<surfaceCreated> setCaptureListener mSurfaceDestroyed = false");
         mSurfaceDestroyed = false;
         /// @}
         unfreeze();
@@ -724,7 +724,7 @@ public class GLRootView extends GLSurfaceView
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         /// M: [BUG.ADD] avoid NE after surfaceDestroy @{
-        Log.i(TAG, "<surfaceDestroyed> set mSurfaceDestroyed = true");
+        Log.i(TAG, "<surfaceDestroyed> setCaptureListener mSurfaceDestroyed = true");
         mSurfaceDestroyed = true;
         /// @}
         unfreeze();

@@ -8,7 +8,7 @@ public interface Const {
     String KEY_TP_APP_SUPPORT_SAVE_DIR = "tplink_apps_support_save_dir";
     String KEY_TP_APPS_URIS = "tplink-uris";
 
-    String KEY_MEDIA_SET_PATH = "media-set-path";
+    String KEY_MEDIA_SET_PATH = "media-setCaptureListener-path";
     String KEY_MEDIA_ITEM_PATH = "media-item-path";
     String KEY_ENTITY_KEY = "KEY_ENTITY_KEY";
 

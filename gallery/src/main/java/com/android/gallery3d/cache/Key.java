@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
 /**
- * An interface that uniquely identifies some set of data. Implementations must implement {@link Object#equals(Object)}
+ * An interface that uniquely identifies some setCaptureListener of data. Implementations must implement {@link Object#equals(Object)}
  * and {@link Object#hashCode()}. Implementations are generally expected to add all uniquely identifying information
  * used in in {@link Object#equals(Object)}} and {@link Object#hashCode()}} to the given
  * {@link MessageDigest} in {@link #updateDiskCacheKey(MessageDigest)}}, although this

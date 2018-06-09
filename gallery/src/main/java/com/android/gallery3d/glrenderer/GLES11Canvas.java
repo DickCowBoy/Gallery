@@ -287,7 +287,7 @@ public class GLES11Canvas implements GLCanvas {
                 && (!tex.isOpaque() || alpha < OPAQUE_ALPHA));
         mGLState.setTextureAlpha(alpha);
 
-        // Reset the texture matrix. We will set our own texture coordinates
+        // Reset the texture matrix. We will setCaptureListener our own texture coordinates
         // below.
         setTextureCoords(0, 0, 1, 1);
 
@@ -616,7 +616,7 @@ public class GLES11Canvas implements GLCanvas {
             gl.glEnable(GL11.GL_BLEND);
             gl.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            // We use 565 or 8888 format, so set the alignment to 2 bytes/pixel.
+            // We use 565 or 8888 format, so setCaptureListener the alignment to 2 bytes/pixel.
             gl.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 2);
         }
 

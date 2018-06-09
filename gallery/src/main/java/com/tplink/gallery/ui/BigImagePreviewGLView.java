@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class BigImagePreviewGLView implements GLHost {
+public class BigImagePreviewGLView implements GLHost, GLRoot.CaptureListener {
 
     public static final String TAG = "BigImagePreviewGLView";
 
@@ -42,6 +42,8 @@ public class BigImagePreviewGLView implements GLHost {
     private PhotoViewListener photoViewListener;
     private PhotoAdapter photoAdapter;
     private DataListener dataListener;
+    private Bitmap converBitmap;
+    private BigPreviewDelete mBigPreviewDelete;
 
     private boolean hasAdd = false;
 
@@ -58,10 +60,12 @@ public class BigImagePreviewGLView implements GLHost {
         this.dataListener = dataListener;
     }
 
-    public BigImagePreviewGLView(GLRootView mGLRootView, Activity activity, boolean canSwitch) {
+    public BigImagePreviewGLView(GLRootView mGLRootView, Activity activity,BigPreviewDelete bigPreviewDelete, boolean canSwitch) {
         this.mGLRootView = mGLRootView;
         this.activity = activity;
         this.canSwitch = canSwitch;
+        mGLRootView.setCaptureListener(this);
+        this.mBigPreviewDelete = bigPreviewDelete;
     }
 
 
@@ -128,6 +132,19 @@ public class BigImagePreviewGLView implements GLHost {
 
     public void onDestroy() {
         mGLRootView.setOrientationSource(null);
+    }
+
+    @Override
+    public void onGetBitmap(Bitmap bitmap) {
+        if (converBitmap != null) {
+            converBitmap.recycle();
+        }
+        converBitmap = bitmap;
+    }
+
+    @Override
+    public void onStartCapture(Object command) {
+        mBigPreviewDelete.onStartCapture(command);
     }
 
     public class PhotoViewListener implements PhotoView.Listener {
@@ -474,5 +491,17 @@ public class BigImagePreviewGLView implements GLHost {
 
     public int getCurrentIndex() {
         return photoAdapter.getCurrentIndex();
+    }
+
+    public boolean isInFilmMode() {
+        return mPhotoView.getFilmMode();
+    }
+
+    public void enableCapture(Object command) {
+        mGLRootView.enableCapture(command);
+    }
+
+    public interface BigPreviewDelete {
+        void onStartCapture(Object command);
     }
 }

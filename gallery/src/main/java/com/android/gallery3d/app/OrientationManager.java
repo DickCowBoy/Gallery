@@ -71,7 +71,7 @@ public class OrientationManager implements OrientationSource {
     //  We can choose to lock the framework orientation or not. If we lock the
     //  framework orientation, we calculate a a compensation value according to
     //  current device orientation and send it to listeners. If we don't lock
-    //  the framework orientation, we always set the compensation value to 0.
+    //  the framework orientation, we always setCaptureListener the compensation value to 0.
     ////////////////////////////////////////////////////////////////////////////
 
     // Lock the framework orientation to the current device orientation

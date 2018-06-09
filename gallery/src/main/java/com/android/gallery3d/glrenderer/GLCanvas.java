@@ -142,7 +142,7 @@ public interface GLCanvas {
      * GL_LINEAR for GL_TEXTURE_MIN_FILTER and GL_TEXTURE_MAG_FILTER.
      * bindTexture() must be called prior to this.
      *
-     * @param texture The texture to set parameters on.
+     * @param texture The texture to setCaptureListener parameters on.
      */
     public abstract void setTextureParameters(BasicTexture texture);
 

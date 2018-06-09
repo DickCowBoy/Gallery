@@ -44,7 +44,7 @@ public class ThreadPool {
     public static final int PARALLEL_THREAD_NUM = PARALLEL_THREAD_NUM_MIN > (CPU_CORES_NUM / 2) ? PARALLEL_THREAD_NUM_MIN : (CPU_CORES_NUM / 2);
     /// @}
 
-    /// M: [BUG.MODIFY]PARALLEL_THREAD_NUM: set the real parallel process num.@{
+    /// M: [BUG.MODIFY]PARALLEL_THREAD_NUM: setCaptureListener the real parallel process num.@{
     // ResourceCounter mCpuCounter = new ResourceCounter(2);
     // ResourceCounter mNetworkCounter = new ResourceCounter(2);
     ResourceCounter mCpuCounter = new ResourceCounter(PARALLEL_THREAD_NUM);

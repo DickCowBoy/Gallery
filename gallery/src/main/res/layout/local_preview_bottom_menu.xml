@@ -17,8 +17,7 @@
         android:layout_height="48dp"
         android:padding="12dp"
         android:background="@drawable/ripple_sm"
-        android:src="@drawable/ic_menu_share"
-        android:visibility="gone"/>
+        android:src="@drawable/ic_menu_share"/>
 
     <ImageButton
         android:id="@+id/photopage_bottom_control_edit"
@@ -46,7 +45,6 @@
         android:layout_height="48dp"
         android:padding="12dp"
         android:background="@drawable/ripple_sm"
-        android:src="@drawable/ic_menu_trash"
-        android:visibility="gone"/>
+        android:src="@drawable/ic_menu_trash"/>
 
 </com.tplink.gallery.view.AutoWeightLayout>
