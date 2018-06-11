@@ -51,7 +51,7 @@
             android:name=".preview.camera.CameraPreviewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:screenOrientation="portrait"
-            android:theme="@style/PhotoAppTheme"
+            android:theme="@style/DarkPhotoAppTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="com.tplink.action.camera.PREVIEW" />

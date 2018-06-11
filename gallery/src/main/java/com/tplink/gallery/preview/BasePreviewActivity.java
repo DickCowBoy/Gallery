@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPresenter>
         extends AppCompatActivity
-        implements BigImagePreviewGLView.DataListener, PreviewContract.PreviewView, BigImagePreviewGLView.BigPreviewDelete {
+        implements BigImagePreviewGLView.DataListener, PreviewContract.PreviewView, BigImagePreviewGLView.BigPreviewDelete, Toolbar.OnMenuItemClickListener {
 
     protected BigImagePreviewGLView bigImagePreviewGLView;
     protected T previewPresenter;
@@ -43,6 +44,7 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
         mNormalToolbar.setNavigationOnClickListener((v) -> {
             onBackPressed();
         });
+        mNormalToolbar.setOnMenuItemClickListener(this);
         bigImagePreviewGLView.setDataListener(this);
     }
 
@@ -115,6 +117,11 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
     @Override
     public void onStartCapture(Object command) {
 
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        return false;
     }
 
     protected class ViewProxy implements PreviewContract.PreviewView {

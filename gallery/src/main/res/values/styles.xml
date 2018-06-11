@@ -135,6 +135,14 @@
         <item name="android:src">@drawable/photo_ic_menu_more_normal</item>
     </style>
 
+    <style name="DarkPhotoOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/icon_overflow_bottom</item>
+    </style>
+
+    <style name="DarkPhotoAppTheme" parent="PhotoAppTheme">
+        <item name="actionOverflowButtonStyle">@style/DarkPhotoOverflowButtonStyle</item>
+    </style>
+
     <style name="TextAppearance.SubHead" parent="@android:style/TextAppearance.Material.Body2">
         <item name="android:textSize">14sp</item>
     </style>

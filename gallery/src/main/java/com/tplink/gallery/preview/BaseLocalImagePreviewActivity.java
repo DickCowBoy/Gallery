@@ -99,6 +99,11 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
                     break;
             }
         }
+
+    }
+
+    protected MediaBean getCurrentItem() {
+        return bottomMenuManager.item;
     }
 
     protected void launchPhotoEditor(MediaBean mediaBean) {
