@@ -337,7 +337,11 @@ public class SelectBurstActivity extends AppCompatActivity
             return;
         }
         // 删除所有连拍照片
-        // TODO LJL
+        getContentResolver().delete(MediaUtils.getImageUri(), "bucket_id = ? AND _data like ?",
+                new String[]{
+                        String.valueOf(mBurstCover.bucketId),
+                        getSelectionArgsForColumnData()
+                });
         try {
             // 尝试删除父目录
             new File(choosedFilePaths.get(0)).getParentFile().delete();
@@ -585,5 +589,11 @@ public class SelectBurstActivity extends AppCompatActivity
         intent.putExtra(SecureCameraPreview.EXTRA_TP_SECURE_CAMERA, secureCamera);
         GalleryApplication.getApp().putParam(SelectBurstActivity.KEY_COVER, cover);
         activity.startActivityForResult(intent, request);
+    }
+
+    // 用于 查询媒体数据库时指定_data列的selectionArgs
+    // 由于相机保存的连拍照片以BURSTyyyyMMddHHmmss.jpg 结尾，故需要类似结构的args
+    private String getSelectionArgsForColumnData(){
+        return "%BURST%";
     }
 }
