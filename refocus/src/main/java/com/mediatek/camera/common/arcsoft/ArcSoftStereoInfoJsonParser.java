@@ -17,6 +17,7 @@ public class ArcSoftStereoInfoJsonParser {
     private static final String I32MAIN_HEIGHT = "i32MainHeight_CropNoScale";
     private static final String I32AUX_WIDTH = "i32AuxWidth_CropNoScale";
     private static final String I32AUX_HEIGHT = "i32AuxHeight_CropNoScale";
+    private static final String HAS_WATERMARK = "HasWatermark";
 
     private int mOrientation = -1;
     private int mTouchCoordX1st = -1;
@@ -27,6 +28,8 @@ public class ArcSoftStereoInfoJsonParser {
     private int mI32MainHeight_CropNoScale = -1;
     private int mI32AuxWidth_CropNoScale = -1;
     private int mI32AuxHeight_CropNoScale = -1;
+
+    private int mHasWatermark = -1;
 
     private JsonParser mParser;
 
@@ -113,6 +116,16 @@ public class ArcSoftStereoInfoJsonParser {
             mI32AuxWidth_CropNoScale = mParser.getValueIntFromObject((String) null, (String) null,
                     I32AUX_HEIGHT);
             return mI32AuxWidth_CropNoScale;
+        }
+    }
+
+    public int getHasWatermark() {
+        if (mHasWatermark != -1) {
+            return mHasWatermark;
+        } else {
+            mHasWatermark = mParser.getValueIntFromObject((String) null, (String) null,
+                    HAS_WATERMARK);
+            return mHasWatermark;
         }
     }
 }

@@ -5,9 +5,10 @@ package com.mediatek.camera.common.arcsoft;
  */
 
 public class ArcSoftStereoCaptureInfo {
+    public String debugDir;
     public byte[] jpgBuffer;
     public byte[] bayerBuffer;
-    public byte[] jpsBuffer;
+    public byte[] depthBuffer;
     public byte[] configBuffer;
     public byte[] calibrationBuffer;
 
@@ -29,11 +30,11 @@ public class ArcSoftStereoCaptureInfo {
             sb.append("\n    bayerBuffer = null");
         }
 
-        if (this.jpsBuffer != null) {
-            sb.append("\n    jpsBuffer length = 0x" + Integer.toHexString(jpsBuffer.length) + "("
-                    + jpsBuffer.length + ")");
+        if (this.depthBuffer != null) {
+            sb.append("\n    depthBuffer length = 0x" + Integer.toHexString(depthBuffer.length) + "("
+                    + depthBuffer.length + ")");
         } else {
-            sb.append("\n    jpsBuffer = null");
+            sb.append("\n    depthBuffer = null");
         }
 
         if (this.configBuffer != null) {

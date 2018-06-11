@@ -18,11 +18,12 @@ public class ArcSoftPackUtils {
     private static final String TAG = Log.Tag(ArcSoftPackUtils.class.getSimpleName());
 
     public static final String TYPE_BAYER_DATA = "BAYERBF";
-    public static final String TYPE_JPS_DATA = "JPSDATA";
+    public static final String TYPE_DEPTH_DATA = "DEPTHBF";
     public static final String TYPE_CALIBRATION_DATA = "CALIBBF";
     public static final String TYPE_CONFIG_DATA = "CONFIBF";
 
-    private ArcSoftPackUtils() {}
+    private ArcSoftPackUtils() {
+    }
 
     public static ArrayList<Section> parseAppInfoFromStream(ByteArrayInputStreamExt is) {
         if (is == null) {
@@ -37,11 +38,10 @@ public class ArcSoftPackUtils {
                     return new ArrayList();
                 } else {
                     Log.d(TAG, "<parseAppInfoFromStream> parse begin!!!");
-                    long offset;
                     ArrayList sections = new ArrayList();
 
                     while ((value = is.readUnsignedShort()) != -1 && value != 'ￚ') {
-                        offset = is.getFilePointer() - 2L;
+                        long offset = is.getFilePointer() - 2L;
                         int length = is.readUnsignedShort();
                         sections.add(new Section(value, offset, length));
                         is.skip((long) (length - 2));
@@ -76,7 +76,7 @@ public class ArcSoftPackUtils {
                     is.read(buffer, 0, buffer.length);
                     str = new String(buffer);
                     if (!TYPE_BAYER_DATA.equals(str)
-                            && !TYPE_JPS_DATA.equals(str)
+                            && !TYPE_DEPTH_DATA.equals(str)
                             && !TYPE_CONFIG_DATA.equals(str)
                             && !TYPE_CALIBRATION_DATA.equals(str)) {
                         section.type = "unknownApp15";

@@ -103,7 +103,7 @@ public class ArcSoftJpgPacker implements IPacker {
                     }
 
                     if (ArcSoftPackUtils.TYPE_BAYER_DATA.equals(sec.type)
-                            || ArcSoftPackUtils.TYPE_JPS_DATA.equals(sec.type)
+                            || ArcSoftPackUtils.TYPE_DEPTH_DATA.equals(sec.type)
                             || ArcSoftPackUtils.TYPE_CONFIG_DATA.equals(sec.type)
                             || ArcSoftPackUtils.TYPE_CALIBRATION_DATA.equals(sec.type)) {
                         inputStream.seek(sec.offset + 4L);
@@ -151,8 +151,8 @@ public class ArcSoftJpgPacker implements IPacker {
     }
 
     private void pack(ByteArrayInputStreamExt is, ByteArrayOutputStreamExt os,
-            Section standardSection, ArrayList<Section> extendedSections,
-            ArrayList<Section> customizedSections) {
+                      Section standardSection, ArrayList<Section> extendedSections,
+                      ArrayList<Section> customizedSections) {
         Log.d(TAG, "<pack> write begin!!!");
         ArrayList<Section> srcJpgSections = PackUtils.parseAppInfoFromStream(is);
         os.writeShort('\uffd8');
@@ -189,7 +189,7 @@ public class ArcSoftJpgPacker implements IPacker {
                 }
 
                 if (!ArcSoftPackUtils.TYPE_BAYER_DATA.equals(sec.type)
-                        && !ArcSoftPackUtils.TYPE_JPS_DATA.equals(sec.type)
+                        && !ArcSoftPackUtils.TYPE_DEPTH_DATA.equals(sec.type)
                         && !ArcSoftPackUtils.TYPE_CONFIG_DATA.equals(sec.type)
                         && !ArcSoftPackUtils.TYPE_CALIBRATION_DATA.equals(sec.type)
                         && !"standardXmp".equals(sec.type)
@@ -227,7 +227,7 @@ public class ArcSoftJpgPacker implements IPacker {
     }
 
     private void writeXmp(ByteArrayOutputStreamExt os, Section standardSection,
-            ArrayList<Section> extendedSections) {
+                          ArrayList<Section> extendedSections) {
         if (standardSection != null) {
             Log.d(TAG, "<writeXmp> standardxmp");
             PackUtils.writeSectionToStream(os, standardSection);

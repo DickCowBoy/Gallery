@@ -23,7 +23,6 @@ public class ArcSoftStereoConfigInfoParser {
     private ArrayList<DataItem.SimpleItem> mListOfExtendedItem = new ArrayList();
     private ArrayList<DataItem.SimpleItem> mListOfStandardItem = new ArrayList();
     private ArcSoftStereoConfigInfo mStereoConfigInfo;
-    private static final String NAMESPACE_PREFIX = "TPlinkRefocus";//XMPInfo
 
     public ArcSoftStereoConfigInfoParser(byte[] standardBuffer, byte[] extendedBuffer,
             ArcSoftStereoConfigInfo info) {
@@ -54,7 +53,7 @@ public class ArcSoftStereoConfigInfoParser {
     }
 
     public ArcSoftStereoConfigInfoParser(IMetaOperator standardMetaOperator,
-            IMetaOperator extendedMetaOperator, ArcSoftStereoConfigInfo info) {
+                                         IMetaOperator extendedMetaOperator, ArcSoftStereoConfigInfo info) {
         mStandardDataCollections.dest = 0;
         mExtendardDataCollections.dest = 0;
         mStereoConfigInfo = info;
@@ -174,6 +173,10 @@ public class ArcSoftStereoConfigInfoParser {
                     ((DataItem.SimpleItem) mListOfExtendedItem.get(i)).name)) {
                 ((DataItem.SimpleItem) mListOfExtendedItem.get(i)).value = String.valueOf(
                         mStereoConfigInfo.i32AuxHeight_CropNoScale);
+            } else if("HasWatermark".equals(
+                    ((DataItem.SimpleItem) mListOfExtendedItem.get(i)).name)) {
+                ((DataItem.SimpleItem) mListOfExtendedItem.get(i)).value = String.valueOf(
+                        mStereoConfigInfo.hasWatermark);
             }
         }
 
@@ -207,6 +210,9 @@ public class ArcSoftStereoConfigInfoParser {
                 } else if ("I32AuxHeight_CropNoScale".equals(simpleValue.name)) {
                     mStereoConfigInfo.i32AuxHeight_CropNoScale = Integer.parseInt(
                             simpleValue.value);
+                } else if ("HasWatermark".equals(simpleValue.name)) {
+                    mStereoConfigInfo.hasWatermark = Integer.parseInt(
+                            simpleValue.value);
                 }
             }
         }
@@ -239,6 +245,9 @@ public class ArcSoftStereoConfigInfoParser {
         simpleValue = getSimpleValueInstance();
         simpleValue.name = "I32AuxHeight_CropNoScale";
         mListOfExtendedItem.add(simpleValue);
+        simpleValue = getSimpleValueInstance();
+        simpleValue.name = "HasWatermark";
+        mListOfExtendedItem.add(simpleValue);
     }
 
     private void initStandardItem() {
@@ -247,7 +256,7 @@ public class ArcSoftStereoConfigInfoParser {
         simpleValue.nameSpaceItem = new DataItem.NameSpaceItem();
         simpleValue.nameSpaceItem.dest = 0;
         simpleValue.nameSpaceItem.nameSpace = "http://ns.google.com/photos/1.0/depthmap/";
-        simpleValue.nameSpaceItem.nameSpacePrifix = NAMESPACE_PREFIX;
+        simpleValue.nameSpaceItem.nameSpacePrifix = "TPlinkRefocus";
         simpleValue.name = "RoiX";
         simpleValue.value = "1000";
         mListOfStandardItem.add(simpleValue);
@@ -268,7 +277,7 @@ public class ArcSoftStereoConfigInfoParser {
         simpleValue.nameSpaceItem = new DataItem.NameSpaceItem();
         simpleValue.nameSpaceItem.dest = 0;
         simpleValue.nameSpaceItem.nameSpace = "http://ns.google.com/photos/1.0/depthmap/";
-        simpleValue.nameSpaceItem.nameSpacePrifix = NAMESPACE_PREFIX;
+        simpleValue.nameSpaceItem.nameSpacePrifix = "TPlinkRefocus";
         return simpleValue;
     }
 }

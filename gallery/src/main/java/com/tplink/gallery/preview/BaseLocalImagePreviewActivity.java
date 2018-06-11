@@ -3,6 +3,7 @@ package com.tplink.gallery.preview;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StatFs;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
@@ -10,11 +11,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.gallery3d.util.Const;
+import com.tplink.base.Consts;
+import com.tplink.gallery.GalleryApplication;
 import com.tplink.gallery.R;
 import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.refocus.RefocusEditActivity;
 import com.tplink.gallery.utils.MediaUtils;
+import com.tplink.gallery.utils.StorageUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.PreviewPresenter>
@@ -29,6 +37,8 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
 
     private static final String TAG = "LocalImagePreview";
     private BottomMenuManager bottomMenuManager;
+
+    protected Toast mToast;
 
     private MediaOperationContract.MediaOperationPresenter mediaOperationPresenter;
 
@@ -193,6 +203,9 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
             case R.id.action_details:
                 showMediaDetails();
                 return true;
+            case R.id.action_refocus:
+                launchRefocusActivity();
+                break;
         }
         return false;
     }
@@ -203,7 +216,52 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
         MediaBean currentItem = getCurrentItem();
         menu.findItem(R.id.action_setas).setVisible(currentItem != null
                 && currentItem.isImage() && !currentItem.isGif());
+        menu.findItem(R.id.action_refocus).setVisible(
+                currentItem != null
+                        && GalleryApplication.getApp().isSupportRefocus() != Const.NONE_REFOCUS
+                        && currentItem.refocusType != 0);
         return true;
+    }
+
+
+    /**
+     * Launch RefocusActivity.
+     */
+    public void launchRefocusActivity() {
+        MediaBean item = getCurrentItem();
+        Log.i(TAG, "<launchRefocusActivity> item:" + item);
+        if (item == null) {
+            return;
+        }
+
+        File srcFile = new File(item.filePath);
+        if (!srcFile.exists()) {
+            Log.i(TAG, "<onItemSelected> abort editing photo when not exists!");
+            return;
+        }
+        // 添加存储判断
+        if (!StorageUtils.isSpaceEnough(srcFile)) {
+            Log.i(TAG, "<onItemSelected> abort editing photo when no enough space!");
+            if (mToast != null) {
+                mToast.cancel();
+            }
+            mToast = Toast.makeText(this, R.string.msgs_no_disk_space, Toast.LENGTH_SHORT);
+            mToast.show();
+            return;
+        }
+
+        if (item.refocusType == MediaBean.FLAG_TPLINK_DEPTH_IMAGE) {
+            // 虹软算法编辑
+            RefocusEditActivity.lunchRefocusEdit(this, item,false);
+        } else if (item.refocusType == MediaBean.FLAG_DEPTH_IMAGE){
+            // MTK算法编辑
+            Intent intent = new Intent("com.mediatek.refocus.action.REFOCUS");
+            intent.setDataAndType(item.getContentUri(), "image/*");
+            Log.d(TAG, "<startRefocusActivity> intent: " + intent);
+            startActivityForResult(intent, REQUEST_REFOCUS);
+        }
+        // 过度动画
+        overridePendingTransition(0, R.anim.gallery_to_refocus_exit_anim);
     }
 
 }

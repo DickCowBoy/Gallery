@@ -13,6 +13,7 @@ public class ArcSoftStereoConfigInfo {
     public int i32MainHeight_CropNoScale;
     public int i32AuxWidth_CropNoScale;
     public int i32AuxHeight_CropNoScale;
+    public int hasWatermark;
 
     public ArcSoftStereoConfigInfo cloneConfig() {
         ArcSoftStereoConfigInfo ret = new ArcSoftStereoConfigInfo();
@@ -24,6 +25,7 @@ public class ArcSoftStereoConfigInfo {
         ret.i32MainHeight_CropNoScale = i32MainHeight_CropNoScale;
         ret.i32AuxWidth_CropNoScale = i32AuxWidth_CropNoScale;
         ret.i32AuxHeight_CropNoScale = i32AuxHeight_CropNoScale;
+        ret.hasWatermark = hasWatermark;
         return ret;
     }
 
@@ -36,6 +38,7 @@ public class ArcSoftStereoConfigInfo {
         this.i32MainHeight_CropNoScale = ret.i32MainHeight_CropNoScale;
         this.i32AuxWidth_CropNoScale = ret.i32AuxWidth_CropNoScale;
         this.i32AuxHeight_CropNoScale = ret.i32AuxHeight_CropNoScale;
+        this.hasWatermark = ret.hasWatermark;
     }
 
     public ArcSoftStereoConfigInfo() {
@@ -61,6 +64,7 @@ public class ArcSoftStereoConfigInfo {
                         + "(" + i32AuxWidth_CropNoScale + ")");
         sb.append("\n    i32AuxHeight_CropNoScale = 0x" + Integer.toHexString(
                 i32AuxHeight_CropNoScale) + "(" + i32AuxHeight_CropNoScale + ")");
+        sb.append("\n    HasWatermark = " + hasWatermark);
         return sb.toString();
     }
 
@@ -74,6 +78,7 @@ public class ArcSoftStereoConfigInfo {
                 ", i32MainHeight_CropNoScale=" + i32MainHeight_CropNoScale +
                 ", i32AuxWidth_CropNoScale=" + i32AuxWidth_CropNoScale +
                 ", i32AuxHeight_CropNoScale=" + i32AuxHeight_CropNoScale +
+                ", HasWatermark=" + hasWatermark +
                 '}';
     }
 

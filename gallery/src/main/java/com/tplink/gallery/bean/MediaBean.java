@@ -58,6 +58,9 @@ public class MediaBean {
     public static final int SUPPORT_TP_LINK_REFOCUS = 1 << 20;
     public static final int SUPPORT_ALL = 0xffffffff;
 
+    public static final int FLAG_DEPTH_IMAGE = 1;
+    public static final int FLAG_TPLINK_DEPTH_IMAGE = 2;
+
     public static final String VIDEO = "video";
     public static final String IMAGE = "image";
     public static final String GIF = "image/gif";
@@ -176,4 +179,6 @@ public class MediaBean {
         }
         return details;
     }
+
+
 }

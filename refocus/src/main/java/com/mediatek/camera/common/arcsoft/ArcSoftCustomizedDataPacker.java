@@ -138,12 +138,12 @@ public class ArcSoftCustomizedDataPacker implements IPacker {
         } else {
             sectionCount = bufferData.length / maxBufferContentLength + 1;
         }
-        byte[] section;
-        byte[] bufferTotalLength;
-        byte[] serialNumber;
+        byte[] section = null;
+        byte[] bufferTotalLength = null;
+        byte[] serialNumber = null;
         int bufferCurrentPos = 0;
         int sectionCurrentPos = 0;
-        int sectionLen;
+        int sectionLen = 0;
         for (int i = 0; i < sectionCount; ++i) {
             if (i == sectionCount - 1 && bufferData.length % maxBufferContentLength != 0) {
                 sectionLen = bufferData.length % maxBufferContentLength + 12;

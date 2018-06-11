@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/refocusImage_bottom_controls"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="20dp"
+    android:layout_centerHorizontal="true"
+    android:layoutDirection="ltr"
+    android:visibility="gone">
+
+    <LinearLayout
+        android:id="@+id/seekBar_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_light_dark"
+        android:paddingEnd="@dimen/seek_bar_padding"
+        android:paddingStart="@dimen/seek_bar_start_padding"
+        android:gravity="center_vertical">
+
+        <RelativeLayout
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/current_tick_margin">
+            <TextView
+                android:id="@+id/current_tick_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/tick_text_size"
+                android:textColor="@color/seek_bar_highlight_color"/>
+        </RelativeLayout>
+
+        <com.tplink.gallery.view.CalibrationSeekBar
+            android:id="@+id/refocusSeekBar"
+            android:layout_width="@dimen/seek_bar_width"
+            android:layout_height="@dimen/seek_bar_height"
+            custom:selectedTickColor="@color/seek_bar_highlight_color"
+            custom:unselectedTickColor="@android:color/white"
+            custom:tickCount="40"
+            custom:maxValue="100"
+            custom:tickSize="@dimen/tick_line_size"/>
+
+        <TextView
+            android:id="@+id/max_tick_text"
+            android:layout_marginStart="@dimen/text_tick_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/tick_text_size"/>
+    </LinearLayout>
+</RelativeLayout>

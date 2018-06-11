@@ -146,4 +146,15 @@
     <style name="TextAppearance.SubHead" parent="@android:style/TextAppearance.Material.Body2">
         <item name="android:textSize">14sp</item>
     </style>
+
+
+    <style name="AlertDialogTheme" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorAccent">#ff24a3f5</item>
+    </style>
+
+    <style name="ProgressDialog">
+        <item name="android:background">#99000000</item>
+    </style>
+
 </resources>

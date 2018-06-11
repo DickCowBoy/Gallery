@@ -68,6 +68,14 @@
         <service android:name="com.android.gallery3d.app.InitService"
             android:exported="true"/>
 
+        <activity
+            android:name=".refocus.RefocusEditActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="@string/select_pic"
+            android:screenOrientation="portrait"
+            android:theme="@style/PhotoAppTheme"
+            android:windowSoftInputMode="adjustResize"/>
+
     </application>
 
 </manifest>

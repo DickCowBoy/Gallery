@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CalibrationSeekBar">
+        <attr name="selectedTickColor" format="reference|color"/>
+        <attr name="unselectedTickColor" format="reference|color"/>
+        <attr name="maxValue" format="integer"/>
+        <attr name="currentValue" format="integer"/>
+        <attr name="tickCount" format="integer"/>
+        <attr name="tickSize" format="dimension"/>
+    </declare-styleable>
+</resources>

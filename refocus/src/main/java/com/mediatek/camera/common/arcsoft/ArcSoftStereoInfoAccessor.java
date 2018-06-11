@@ -8,6 +8,9 @@ import com.mediatek.accessor.util.Log;
 import com.mediatek.accessor.util.TraceHelper;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by chengjian on 4/2/18.
@@ -39,7 +42,7 @@ public class ArcSoftStereoInfoAccessor {
             return null;
         } else {
             if (ENABLE_BUFFER_DUMP) {
-                dumpFileBeforeWrite(captureInfo);
+                dumpFileArcSoftStereoCaptureInfo(captureInfo);
             }
 
             ArcSoftPackerManager packerManager = new ArcSoftPackerManager();
@@ -73,18 +76,19 @@ public class ArcSoftStereoInfoAccessor {
                     new ArcSoftStereoConfigInfoParser(packInfo.unpackedStandardXmpBuf,
                             packInfo.unpackedExtendedXmpBuf, configInfo);
             stereoConfigInfoParser.read();
+            captureInfo.debugDir = generateFileName();
             captureInfo.jpgBuffer = fileBuffer;
             captureInfo.bayerBuffer = packInfo.unpackedCustomizedBufMap.get(
                     ArcSoftPackUtils.TYPE_BAYER_DATA);
-            captureInfo.jpsBuffer = packInfo.unpackedCustomizedBufMap.get(
-                    ArcSoftPackUtils.TYPE_JPS_DATA);
+            captureInfo.depthBuffer = packInfo.unpackedCustomizedBufMap.get(
+                    ArcSoftPackUtils.TYPE_DEPTH_DATA);
             captureInfo.configBuffer = configInfo.toJSONString().getBytes();
             captureInfo.calibrationBuffer = packInfo.unpackedCustomizedBufMap.get(
                     ArcSoftPackUtils.TYPE_CALIBRATION_DATA);
-            if (ENABLE_BUFFER_DUMP) {
-                dumpFileAfterRead(captureInfo);
-            }
             TraceHelper.endSection();
+            if (ENABLE_BUFFER_DUMP) {
+                dumpFileArcSoftStereoCaptureInfo(captureInfo);
+            }
             return captureInfo;
         }
 
@@ -98,21 +102,22 @@ public class ArcSoftStereoInfoAccessor {
         info.unpackedCustomizedBufMap = serializedInfo.customizedBufMap;
     }
 
-    private void dumpFileBeforeWrite(ArcSoftStereoCaptureInfo captureInfo) {
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/jpgBuffer.data", captureInfo.jpgBuffer);
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/bayer.data", captureInfo.bayerBuffer);
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/depthMap.data", captureInfo.jpsBuffer);
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/config.data", captureInfo.configBuffer);
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/calibrationData.data",
-                captureInfo.calibrationBuffer);
+    private String generateFileName() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss_'out'",
+                Locale.ENGLISH);
+        Date date = new Date(System.currentTimeMillis());
+        return simpleDateFormat.format(date) + ".jpg";
     }
 
-    private void dumpFileAfterRead(ArcSoftStereoCaptureInfo captureInfo) {
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/jpgBuffer1.data", captureInfo.jpgBuffer);
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/bayer1.data", captureInfo.bayerBuffer);
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/depthMap1.data", captureInfo.jpsBuffer);
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/config1.data", captureInfo.configBuffer);
-        ArcSoftPackUtils.saveFile(DUMP_FILE_FOLDER + "/calibrationData1.data",
+    private void dumpFileArcSoftStereoCaptureInfo(ArcSoftStereoCaptureInfo captureInfo) {
+        String debugDir = DUMP_FILE_FOLDER + "/" + captureInfo.debugDir.replace(".jpg", "");
+        File debugDirFile = new File(debugDir);
+        debugDirFile.mkdirs();
+        ArcSoftPackUtils.saveFile(debugDir + "/jpgBuffer.data", captureInfo.jpgBuffer);
+        ArcSoftPackUtils.saveFile(debugDir + "/bayer.data", captureInfo.bayerBuffer);
+        ArcSoftPackUtils.saveFile(debugDir + "/depthMap.data", captureInfo.depthBuffer);
+        ArcSoftPackUtils.saveFile(debugDir + "/config.data", captureInfo.configBuffer);
+        ArcSoftPackUtils.saveFile(debugDir + "/calibrationData.data",
                 captureInfo.calibrationBuffer);
     }
 
@@ -128,6 +133,7 @@ public class ArcSoftStereoInfoAccessor {
         configInfo.i32MainHeight_CropNoScale = stereoInfoJsonParser.getMainHeight();
         configInfo.i32AuxWidth_CropNoScale = stereoInfoJsonParser.getAuxWidth();
         configInfo.i32AuxHeight_CropNoScale = stereoInfoJsonParser.getAuxHeight();
+        configInfo.hasWatermark = stereoInfoJsonParser.getHasWatermark();
         return configInfo;
     }
 }

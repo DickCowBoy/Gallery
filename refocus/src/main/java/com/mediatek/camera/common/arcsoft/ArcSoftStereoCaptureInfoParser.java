@@ -84,6 +84,7 @@ public class ArcSoftStereoCaptureInfoParser implements IParser {
             mConfigInfo.i32MainHeight_CropNoScale = stereoInfoJsonParser.getMainHeight();
             mConfigInfo.i32AuxWidth_CropNoScale = stereoInfoJsonParser.getAuxWidth();
             mConfigInfo.i32AuxHeight_CropNoScale = stereoInfoJsonParser.getAuxHeight();
+            mConfigInfo.hasWatermark = stereoInfoJsonParser.getHasWatermark();
             TraceHelper.endSection();
         }
     }
@@ -92,7 +93,8 @@ public class ArcSoftStereoCaptureInfoParser implements IParser {
         Map<String, byte[]> unpackedCustomizedBufMap = new HashMap<String, byte[]>();
         unpackedCustomizedBufMap.put(ArcSoftPackUtils.TYPE_BAYER_DATA,
                 mStereoCaptureInfo.bayerBuffer);
-        unpackedCustomizedBufMap.put(ArcSoftPackUtils.TYPE_JPS_DATA, mStereoCaptureInfo.jpsBuffer);
+        unpackedCustomizedBufMap.put(ArcSoftPackUtils.TYPE_DEPTH_DATA,
+                mStereoCaptureInfo.depthBuffer);
         unpackedCustomizedBufMap.put(ArcSoftPackUtils.TYPE_CONFIG_DATA,
                 mStereoCaptureInfo.configBuffer);
         unpackedCustomizedBufMap.put(ArcSoftPackUtils.TYPE_CALIBRATION_DATA,
