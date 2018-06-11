@@ -9,7 +9,7 @@
  *
  * Ver 1.0, 17-3-16, caixinhai, Create file
  */
-package com.android.gallery3d.ui.view;
+package com.tplink.gallery.ui;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -18,7 +18,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,14 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.data.MediaDetails;
-import com.android.gallery3d.data.MediaObject;
-import com.android.gallery3d.data.Path;
 import com.android.gallery3d.ui.DetailsHelper;
 import com.android.gallery3d.util.GalleryUtils;
 import com.tplink.gallery.R;
-import com.tplink.view.FixSizeScrollView;
+import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.view.AutoFitRelative;
+import com.tplink.gallery.view.FixSizeScrollView;
 
 import java.util.Map;
 import java.util.Set;
@@ -87,8 +85,8 @@ public class MediaDetailsView extends RelativeLayout implements AutoFitRelative.
         mLayoutInflater = LayoutInflater.from(mContext);
 
         mDetailScrollView = (FixSizeScrollView) mLayoutInflater.inflate(R.layout.layout_media_details_view, null);
-        RelativeLayout.LayoutParams layoutParams =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        LayoutParams layoutParams =
+                new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         addView(mDetailScrollView, layoutParams);
@@ -110,9 +108,9 @@ public class MediaDetailsView extends RelativeLayout implements AutoFitRelative.
         itemColor = getResources().getColor(R.color.black_54_alpha);
     }
 
-    public void show(String mediaPath) {
-        mLoaderTask = new LocalMediaDetailLoader();
-        mLoaderTask.execute(mediaPath);
+    public void show(Context context, MediaBean mediaBean) {
+        mLoaderTask = new LocalMediaDetailLoader(context);
+        mLoaderTask.execute(mediaBean);
         if (!mIsShowing) {
             Animator anim = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f);
             anim.setDuration(SHOW_HIDE_ANIM_DURATION);
@@ -154,16 +152,16 @@ public class MediaDetailsView extends RelativeLayout implements AutoFitRelative.
         return mIsShowing;
     }
 
-    public void toggle(String mMediaPath) {
+    public void toggle(MediaBean mediaBean) {
         if (mIsShowing) {
             hide();
         } else {
-            show(mMediaPath);
+            show(getContext().getApplicationContext(), mediaBean);
         }
     }
 
     private void addToContainer() {
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mParentContainer.addView(this, layoutParams);
     }
 
@@ -186,25 +184,27 @@ public class MediaDetailsView extends RelativeLayout implements AutoFitRelative.
             }
         }
         return true;
-        //return super.onTouchEvent(event);
     }
 
-    private class LocalMediaDetailLoader extends AsyncTask<String, Void, MediaDetails> {
+    private class LocalMediaDetailLoader extends AsyncTask<MediaBean, Void, MediaDetails> {
 
-        public LocalMediaDetailLoader() {
+        private Context context;
+
+        public LocalMediaDetailLoader(Context context) {
+            this.context = context;
         }
 
         @Override
-        protected MediaDetails doInBackground(String... params) {
+        protected MediaDetails doInBackground(MediaBean... params) {
             if (params.length <= 0) {
                 return null;
             }
-            MediaObject object = DataManager.getInstance(mContext).getMediaObject(Path.fromString(params[0]));
+            MediaBean object = params[0];
             if (object == null) {
                 return null;
             }
 
-            return object.getDetails();
+            return object.getDetails(context);
         }
 
         @Override

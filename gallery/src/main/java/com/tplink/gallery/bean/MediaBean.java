@@ -13,15 +13,24 @@
  */
 package com.tplink.gallery.bean;
 
+import android.content.Context;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import com.android.gallery3d.data.MediaDetails;
+import com.android.gallery3d.util.GalleryUtils;
+import com.tplink.gallery.utils.MediaUtils;
+
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 /**
  * 这里不区分video或image
  */
 public class MediaBean {
+
+    public static final double INVALID_LATLNG = 0f;
 
     public static final int TYPE_THUMBNAIL = 1;
     public static final int TYPE_MICROTHUMBNAIL = 2;
@@ -68,6 +77,11 @@ public class MediaBean {
     public boolean isBurst;
     public int burstCount;
     public String filePath;
+    // TODO LJL load when need example:show detail
+    public String title;
+    public long dateTakenInMs;
+    public double latitude = INVALID_LATLNG;
+    public double longitude = INVALID_LATLNG;
 
     // 使用到时才加载
 
@@ -131,5 +145,35 @@ public class MediaBean {
     // TODO LJL
     public static void setThumbnailSizes(int maxPixels, int i, int i1) {
 
+    }
+
+    public MediaDetails getDetails(Context context) {
+        MediaDetails details = new MediaDetails();
+        details.addDetail(MediaDetails.INDEX_ORIENTATION, Integer.valueOf(orientation));
+
+        details.addDetail(MediaDetails.INDEX_PATH, filePath);
+        details.addDetail(MediaDetails.INDEX_TITLE, title);
+        DateFormat formater = DateFormat.getDateTimeInstance();
+        details.addDetail(MediaDetails.INDEX_DATETIME,
+                formater.format(new Date(dateTakenInMs)));  //修改为照片拍摄时间
+        details.addDetail(MediaDetails.INDEX_WIDTH, orientation % 180 ==0 ? width : height);
+        details.addDetail(MediaDetails.INDEX_HEIGHT, orientation % 180 ==0 ? height : width);
+
+        if (GalleryUtils.isValidLocation(latitude, longitude)) {
+            details.addDetail(MediaDetails.INDEX_LOCATION, new double[] {latitude, longitude});
+        }
+        if (size > 0) details.addDetail(MediaDetails.INDEX_SIZE, size);
+
+        if (MediaUtils.MIME_TYPE_JPEG.equals(mimeType)) {
+            // ExifInterface returns incorrect values for photos in other format.
+            // For example, the width and height of an webp images is always '0'.
+            MediaDetails.extractExifInfo(details, filePath);
+        }
+        if (isVideo()) {
+            // Fix #41385
+            details.addDetail(MediaDetails.INDEX_DURATION, GalleryUtils.formatDuration(
+                    context, duration == 0 ? 1 : duration));
+        }
+        return details;
     }
 }

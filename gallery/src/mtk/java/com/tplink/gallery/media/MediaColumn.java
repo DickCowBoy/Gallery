@@ -35,6 +35,10 @@ public class MediaColumn {
             "camera_refocus",// MTK媒体库特有字段识别是否是虚化拍摄
             MediaStore.Images.ImageColumns.ORIENTATION,
             MediaStore.Images.ImageColumns.DATA,
+            MediaStore.Images.ImageColumns.TITLE,
+            MediaStore.Images.ImageColumns.DATE_TAKEN,
+            MediaStore.Images.ImageColumns.LATITUDE,
+            MediaStore.Images.ImageColumns.LONGITUDE,
     };
 
     public static final String[] QUERY_IMAGE_PROJECTION = new String[]{
@@ -48,6 +52,10 @@ public class MediaColumn {
             "camera_refocus",// MTK媒体库特有字段识别是否是虚化拍摄
             MediaStore.Images.ImageColumns.ORIENTATION,
             MediaStore.Images.ImageColumns.DATA,
+            MediaStore.Images.ImageColumns.TITLE,
+            MediaStore.Images.ImageColumns.DATE_TAKEN,
+            MediaStore.Images.ImageColumns.LATITUDE,
+            MediaStore.Images.ImageColumns.LONGITUDE,
     };
 
     public static final String[] QUERY_VIDEO_PROJECTION = new String[]{
@@ -61,6 +69,10 @@ public class MediaColumn {
             MediaStore.Images.ImageColumns.SIZE,
             MediaStore.Images.ImageColumns.ORIENTATION,
             MediaStore.Images.ImageColumns.DATA,
+            MediaStore.Images.ImageColumns.TITLE,
+            MediaStore.Images.ImageColumns.DATE_TAKEN,
+            MediaStore.Images.ImageColumns.LATITUDE,
+            MediaStore.Images.ImageColumns.LONGITUDE,
     };
 
     public static List<MediaBean> parseImage(Cursor cursor) {
@@ -82,6 +94,11 @@ public class MediaColumn {
                 bean.refocusType = cursor.getInt(7);
                 bean.orientation = cursor.getInt(8);
                 bean.filePath = cursor.getString(9);
+
+                bean.title = cursor.getString(10);
+                bean.dateTakenInMs = cursor.getLong(11);
+                bean.latitude = cursor.getDouble(12);
+                bean.longitude = cursor.getDouble(13);
                 result.add(bean);
             }
         }
@@ -118,6 +135,11 @@ public class MediaColumn {
                 bean.refocusType = cursor.getInt(8);
                 bean.orientation = cursor.getInt(9);
                 bean.filePath = cursor.getString(10);
+
+                bean.title = cursor.getString(11);
+                bean.dateTakenInMs = cursor.getLong(12);
+                bean.latitude = cursor.getDouble(13);
+                bean.longitude = cursor.getDouble(14);
                 result.add(bean);
             }
         }
@@ -142,6 +164,11 @@ public class MediaColumn {
                 bean.size = cursor.getLong(7);
                 bean.orientation = cursor.getInt(8);
                 bean.filePath = cursor.getString(9);
+
+                bean.title = cursor.getString(10);
+                bean.dateTakenInMs = cursor.getLong(11);
+                bean.latitude = cursor.getDouble(12);
+                bean.longitude = cursor.getDouble(13);
                 result.add(bean);
             }
         }

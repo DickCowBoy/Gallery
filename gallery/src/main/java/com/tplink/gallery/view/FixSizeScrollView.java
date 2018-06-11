@@ -9,7 +9,7 @@
  *
  * Ver 1.0, 18-01-25, LinJl, Create file
  */
-package com.tplink.view;
+package com.tplink.gallery.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

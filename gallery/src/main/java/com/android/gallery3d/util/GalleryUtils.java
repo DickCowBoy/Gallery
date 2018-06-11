@@ -272,10 +272,10 @@ public class GalleryUtils {
     }
 
     // Returns a (localized) string for the given duration (in seconds).
-    public static String formatDuration(final Context context, int duration) {
-        int h = duration / 3600;
-        int m = (duration - h * 3600) / 60;
-        int s = duration - (h * 3600 + m * 60);
+    public static String formatDuration(final Context context, long duration) {
+        long h = duration / 3600;
+        long m = (duration - h * 3600) / 60;
+        long s = duration - (h * 3600 + m * 60);
         String durationValue;
         if (h == 0) {
             durationValue = String.format(context.getString(R.string.details_ms), m, s);
@@ -560,5 +560,10 @@ public class GalleryUtils {
             Log.w(TAG, "invalid type: " + type, e);
         }
         return defaultType;
+    }
+
+    public static boolean isValidLocation(double latitude, double longitude) {
+        // TODO: change || to && after we fix the default location issue
+        return (latitude != MediaBean.INVALID_LATLNG || longitude != MediaBean.INVALID_LATLNG);
     }
 }

@@ -1,17 +1,16 @@
 package com.tplink.gallery.preview;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.android.gallery3d.ui.GLRoot;
-import com.android.gallery3d.util.GalleryUtils;
 import com.tplink.gallery.R;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.utils.MediaUtils;
@@ -19,7 +18,8 @@ import com.tplink.gallery.utils.MediaUtils;
 import java.util.ArrayList;
 
 public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.PreviewPresenter>
-        extends BasePreviewActivity<T> implements MediaOperationContract.MediaOperationView{
+        extends BasePreviewActivity<T>
+        implements MediaOperationContract.MediaOperationView{
 
     private static final int REQUEST_CROP = 1;
     private static final int REQUEST_EDIT = 2;
@@ -52,15 +52,19 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
     @Override
     public void onPhotoChanged(int index, MediaBean item) {
         bottomMenuManager.updateBottomMenu(item);
+        // refresh the menu
+        invalidateOptionsMenu();
     }
 
     private class BottomMenuManager implements View.OnClickListener {
+        private View mContainerView;
         private ImageButton btnEdit;
         private ImageButton btnDel;
         private TextView tvBurst;
 
         private MediaBean item;
         public BottomMenuManager() {
+            mContainerView = findViewById(R.id.photopage_bottom_controls);
             findViewById(R.id.photopage_bottom_control_share).setOnClickListener(this);
             btnEdit = findViewById(R.id.photopage_bottom_control_edit);
             btnEdit.setOnClickListener(this);
@@ -68,6 +72,10 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
             btnDel.setOnClickListener(this);
             tvBurst = findViewById(R.id.photopage_bottom_control_burst_select);
             tvBurst.setOnClickListener(this);
+        }
+
+        public void setVisible(boolean visible) {
+            this.mContainerView.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
 
         public void updateBottomMenu(MediaBean mediaBean) {
@@ -151,4 +159,51 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
             overrideTransitionToEditor();
         }
     }
+
+    protected void showMediaDetails() {
+        super.showMediaDetails();
+        updateBottomMenu();
+    }
+
+    @Override
+    protected void hideMediaDetails() {
+        super.hideMediaDetails();
+        updateBottomMenu();
+    }
+
+    private void updateBottomMenu() {
+        bottomMenuManager.setVisible(!mMediaDetailsView.isShowing());
+    }
+
+    private Intent getIntentBySingleSelectedPath(String action) {
+        MediaBean currentItem = getCurrentItem();
+        return new Intent(action).setDataAndType(currentItem.getContentUri(), currentItem.mimeType);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_setas:
+                Intent intent = getIntentBySingleSelectedPath(Intent.ACTION_ATTACH_DATA)
+                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.putExtra("mimeType", intent.getType());
+                startActivity(Intent.createChooser(
+                        intent, getString(R.string.set_as)));
+                return true;
+            case R.id.action_details:
+                showMediaDetails();
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.photo, menu);
+        MediaBean currentItem = getCurrentItem();
+        menu.findItem(R.id.action_setas).setVisible(currentItem != null
+                && currentItem.isImage() && !currentItem.isGif());
+        return true;
+    }
+
 }

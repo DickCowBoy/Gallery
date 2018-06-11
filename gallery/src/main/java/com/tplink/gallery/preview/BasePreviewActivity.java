@@ -4,26 +4,33 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.tplink.gallery.R;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.ui.BigImagePreviewGLView;
+import com.tplink.gallery.ui.MediaDetailsView;
 
 import java.util.List;
 
 public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPresenter>
         extends AppCompatActivity
-        implements BigImagePreviewGLView.DataListener, PreviewContract.PreviewView, BigImagePreviewGLView.BigPreviewDelete, Toolbar.OnMenuItemClickListener {
+        implements BigImagePreviewGLView.DataListener, PreviewContract.PreviewView,
+        BigImagePreviewGLView.BigPreviewDelete, Toolbar.OnMenuItemClickListener,
+        MediaDetailsView.MediaDetailViewListener{
 
+    private static final String TAG = "BasePreviewActivity";
     protected BigImagePreviewGLView bigImagePreviewGLView;
     protected T previewPresenter;
     private long mediaVersion = Integer.MIN_VALUE;
     private boolean isActive = false;
     private Toolbar mNormalToolbar;
+    protected MediaDetailsView mMediaDetailsView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -144,5 +151,38 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
 
     public boolean isFileMode() {
         return bigImagePreviewGLView.isInFilmMode();
+    }
+
+    @Override
+    public void onContentOutsideClicked() {
+        hideMediaDetails();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mMediaDetailsView != null && mMediaDetailsView.isShowing()) {
+            hideMediaDetails();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    protected void showMediaDetails() {
+        MediaBean item = bigImagePreviewGLView.getCurrentBean();
+        if (mMediaDetailsView == null) {
+            RelativeLayout galleryRoot = findViewById(R.id.rl_gallery_root);
+            mMediaDetailsView = new MediaDetailsView(this, galleryRoot);
+            mMediaDetailsView.setMediaDetailViewListener(this);
+        }
+        mMediaDetailsView.show(getApplicationContext(), item);
+    }
+
+
+    protected void hideMediaDetails() {
+        if (mMediaDetailsView == null || !mMediaDetailsView.isShowing()) {
+            return;
+        }
+        mMediaDetailsView.hide();
     }
 }

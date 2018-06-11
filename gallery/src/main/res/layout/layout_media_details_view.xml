@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<com.tplink.gallery.view.FixSizeScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sv_media_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true">
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/media_detail_padding"
+        android:paddingStart="@dimen/media_detail_padding" />
+</com.tplink.gallery.view.FixSizeScrollView>

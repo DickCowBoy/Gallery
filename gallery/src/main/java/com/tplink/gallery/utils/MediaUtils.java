@@ -30,6 +30,8 @@ public class MediaUtils {
             Environment.getExternalStorageDirectory().toString() + "/"
                     + BucketNames.CAMERA);
 
+    public static final String MIME_TYPE_JPEG = "image/jpeg";
+
     public static Uri getImageUri() {
         return MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
     }
