@@ -98,6 +98,7 @@ public class CameraMediaDao extends MediaDao {
                     // 检查是否存在
                     bean = MediaColumn.cacheItem(anInt);
                     bean.bucketId = cursor.getLong(1);
+                    bean.burstCount = 0;
                     if (burstBucketId.contains((int)bean.bucketId)) {
                         if (resolve.containsKey(bean.bucketId)) {
                             resolve.get(bean.bucketId).burstCount++;
