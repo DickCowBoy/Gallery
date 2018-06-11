@@ -106,8 +106,8 @@ public class AlbumDetailPresenter extends MediaContract.AlbumDetailPresenter imp
         MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager
                 .getMediaBeanCollectionByKey(
                         MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes));
-        AlbumDetailCollection albumDetailCollection = null;
-        List<MediaBean> mediaBeans = null;
+        AlbumDetailCollection albumDetailCollection;
+        List<MediaBean> mediaBeans;
         if (mediaBeanCollectionByKey != null) {
             albumDetailCollection = (AlbumDetailCollection) mediaBeanCollectionByKey;
 

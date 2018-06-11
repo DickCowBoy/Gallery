@@ -18,6 +18,7 @@ import com.tplink.base.Consts;
 import com.tplink.gallery.GalleryApplication;
 import com.tplink.gallery.R;
 import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.preview.camera.SelectBurstActivity;
 import com.tplink.gallery.refocus.RefocusEditActivity;
 import com.tplink.gallery.utils.MediaUtils;
 import com.tplink.gallery.utils.StorageUtils;
@@ -113,11 +114,17 @@ public abstract class BaseLocalImagePreviewActivity<T extends PreviewContract.Pr
                     mediaOperationPresenter.delPhoto(item);
                     break;
                 case R.id.photopage_bottom_control_burst_select :
+                    SelectBurstActivity.launchSelectBurst(
+                            BaseLocalImagePreviewActivity.this,
+                            getCurrentItem(), isSecureActivity(), 100);
 
-                    break;
             }
         }
 
+    }
+
+    protected boolean isSecureActivity() {
+        return false;
     }
 
     protected MediaBean getCurrentItem() {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_rootView"
+    android:layout_width="@dimen/dialog_min_width"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:background="@color/default_bg_light"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/dialog_title_burst_selected"
+        android:textColor="@color/black_87_alpha"
+        android:textSize="@dimen/dialog_title" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:text="@string/msg_burst_selected_all"
+        android:textColor="@color/black_54_alpha"
+        android:textSize="@dimen/dialog_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@color/black_13_alpha" />
+
+    <TextView
+        android:id="@+id/tv_keepsome"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:text="@string/msg_burst_selected_all"
+        android:textColor="@color/black_54_alpha"
+        android:textSize="@dimen/dialog_content" />
+
+</LinearLayout>

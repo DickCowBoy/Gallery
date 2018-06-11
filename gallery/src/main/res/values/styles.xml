@@ -157,4 +157,15 @@
         <item name="android:background">#99000000</item>
     </style>
 
+    <style name="ToolbarTitle" parent="@style/Base.TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/toolbar_text_size</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <!-- 筛选图片 -->
+    <style name="Theme.SelectBurst" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>

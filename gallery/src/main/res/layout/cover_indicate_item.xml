@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_cover_indicate_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="1dp"
+    android:paddingRight="1dp" >
+
+    <ImageView
+        android:id="@+id/iv_indicator"
+        android:layout_width="@dimen/burst_small_img_heigh"
+        android:layout_height="@dimen/burst_small_img_heigh"
+        android:backgroundTint="@color/white"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/iv_burst_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:src="@drawable/ic_burst_selected" />
+
+</FrameLayout>

@@ -76,6 +76,13 @@
             android:theme="@style/PhotoAppTheme"
             android:windowSoftInputMode="adjustResize"/>
 
+        <activity
+            android:name=".preview.camera.SelectBurstActivity"
+            android:resizeableActivity="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SelectBurst"></activity>
+
+
     </application>
 
 </manifest>
