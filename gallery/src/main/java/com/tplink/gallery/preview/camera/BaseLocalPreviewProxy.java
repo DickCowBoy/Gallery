@@ -126,7 +126,7 @@ public abstract class BaseLocalPreviewProxy extends PreviewProxy
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.photopage_bottom_control_share :
-                    previewProxyHost.popupShareMenu(item);
+                    previewProxyHost.popupShareMenu(R.id.photopage_bottom_control_share);
                     break;
                 case R.id.photopage_bottom_control_edit :
                     launchPhotoEditor(item);

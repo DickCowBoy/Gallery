@@ -65,10 +65,12 @@ public class BurstImagePreviewAdapter extends PagerAdapter {
                 mControl.onCheckedChanged(((Integer) tag), isChecked);
             }
             Drawable drawable = viewHolder.imageView.getDrawable();
-            if (isChecked) {
-                drawable.setColorFilter(viewHolder.maskColor, PorterDuff.Mode.SRC_OVER);
-            } else {
-                drawable.clearColorFilter();
+            if (drawable != null) {
+                if (isChecked) {
+                    drawable.setColorFilter(viewHolder.maskColor, PorterDuff.Mode.SRC_OVER);
+                } else {
+                    drawable.clearColorFilter();
+                }
             }
         });
         viewHolder.imageView.setTag(R.id.iv_burst_check, position);

@@ -161,7 +161,7 @@ public class PreviewActivity extends AppCompatActivity
     }
 
     @Override
-    public void popupShareMenu(MediaBean bean) {
+    public void popupShareMenu(Object bean) {
         enableCapture(bean);
     }
 
