@@ -33,6 +33,8 @@ public class CameraPreviewPresenter extends PreviewContract.PreviewPresenter {
 
     @Override
     public void loadPreviewData() {
+        if (isLoading) return;
+        isLoading = true;
         Flowable.create(new FlowableOnSubscribe<PreviewInfo>() {
             @Override
             public void subscribe(
@@ -66,6 +68,7 @@ public class CameraPreviewPresenter extends PreviewContract.PreviewPresenter {
 
                     @Override
                     public void onComplete() {
+                        isLoading = false;
                     }
 
                     @Override

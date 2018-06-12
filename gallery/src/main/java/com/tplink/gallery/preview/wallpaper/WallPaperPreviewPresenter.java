@@ -78,6 +78,8 @@ public class WallPaperPreviewPresenter extends PreviewContract.PreviewPresenter 
 
     @Override
     public void loadPreviewData() {
+        if (isLoading) return;
+        isLoading = true;
         // load the wallpaper info
         final Uri current = data.getParcelable(CURRENT_MEDIA);
         Flowable.create(new FlowableOnSubscribe<PreviewInfo>() {

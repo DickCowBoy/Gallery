@@ -470,6 +470,11 @@ public class TileImageView extends GLView {
 
                 int x = -(int)(mCenterX * mScale - getWidth() / 2);
                 int y = -(int)(mCenterY * mScale - getHeight() / 2);
+//                // TODO ljl how to load info for uri iamge more elegant
+//                if (mImageHeight == 0 || mImageWidth == 0) {
+//                    mImageHeight = mScreenNail.getHeight();
+//                    mImageWidth = mScreenNail.getWidth();
+//                }
                 mScreenNail.draw(canvas, x, y,
                         Math.round(mImageWidth * mScale),
                         Math.round(mImageHeight * mScale));

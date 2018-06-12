@@ -40,6 +40,8 @@ public class LocalBucketPreviewPresenter extends PreviewContract.PreviewPresente
 
     @Override
     public void loadPreviewData() {
+        if (isLoading) return;
+        isLoading = true;
         Flowable.create(new FlowableOnSubscribe<PreviewInfo>() {
             @Override
             public void subscribe(
@@ -77,6 +79,7 @@ public class LocalBucketPreviewPresenter extends PreviewContract.PreviewPresente
 
                     @Override
                     public void onComplete() {
+                        isLoading = false;
                     }
 
                     @Override

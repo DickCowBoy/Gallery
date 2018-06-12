@@ -61,7 +61,6 @@ public class PreviewActivity extends AppCompatActivity
         previewPresenter = mProxy.initPreviewPresenter();
         mProxy.initView();
         bigImagePreviewGLView.onCreate();
-        previewPresenter.loadPreviewData();
         setPreviewWindow();
         mNormalToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mNormalToolbar);
@@ -74,10 +73,11 @@ public class PreviewActivity extends AppCompatActivity
         mNormalToolbar.setOnMenuItemClickListener(this);
         mNormalToolbar.setTitle("");
         bigImagePreviewGLView.setDataListener(this);
+        previewPresenter.loadPreviewData();
     }
 
     @Override
-    public void showMediaData(List<MediaBean> mediaBeans, int index, long version) {
+    public void showMediaData(List<? extends MediaBean> mediaBeans, int index, long version) {
 
         if (mediaBeans == null || mediaBeans.size() == 0) {
             onBackPressed();
@@ -97,6 +97,7 @@ public class PreviewActivity extends AppCompatActivity
         isActive = true;
         previewPresenter.resume();
         bigImagePreviewGLView.onResume();
+        previewPresenter.loadPreviewData();
     }
 
     @Override

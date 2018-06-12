@@ -36,8 +36,7 @@ public class ProxyFactory {
                 case PreviewActivity.IMAGE_TYPE_LOCAL_ALBUM:
                     return new LocalPreviewProxy(host, intent, view, previewProxyHost);
                 case PreviewActivity.IMAGE_TYPE_LOCAL_CERTAIN:
-
-                    return null;
+                    return new UriPreviewProxy(host, intent, view, previewProxyHost);
                 case PreviewActivity.IMAGE_TYPE_LOCAL_SINGLE:
 
                     return null;

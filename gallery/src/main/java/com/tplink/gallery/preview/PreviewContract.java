@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PreviewContract {
     public interface PreviewView extends BaseView {
-        void showMediaData(List<MediaBean> mediaBeans, int index, long version);
+        void showMediaData(List<? extends MediaBean> mediaBeans, int index, long version);
 
         void showHeader(String title);
     }
@@ -22,6 +22,7 @@ public class PreviewContract {
 
         public static final String CURRENT_MEDIA = "CURRENT_MEDIA";
         protected Bundle data;
+        protected boolean isLoading = false;
 
         public PreviewPresenter(Bundle data, PreviewView view) {
             super(view);
@@ -46,7 +47,7 @@ public class PreviewContract {
         public abstract void loadPreviewData();
 
         public class PreviewInfo {
-            public List<MediaBean> datas;
+            public List<? extends MediaBean> datas;
             public int index = 0;
         }
     }
