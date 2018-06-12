@@ -1,6 +1,5 @@
 package com.tplink.gallery.preview;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.tplink.base.BaseView;
@@ -18,13 +17,13 @@ public class PreviewContract {
     }
 
 
-    public static abstract class PreviewPresenter<T extends PreviewView> extends RxPresenter<T>
+    public static abstract class PreviewPresenter extends RxPresenter<PreviewView>
             implements DataCacheManager.OnMediaChanged{
 
         public static final String CURRENT_MEDIA = "CURRENT_MEDIA";
         protected Bundle data;
 
-        public PreviewPresenter(Bundle data, T view) {
+        public PreviewPresenter(Bundle data, PreviewView view) {
             super(view);
             this.data = data;
         }

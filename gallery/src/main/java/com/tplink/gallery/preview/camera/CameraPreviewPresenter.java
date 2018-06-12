@@ -20,7 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
-public class CameraPreviewPresenter extends PreviewContract.PreviewPresenter<PreviewContract.PreviewView> {
+public class CameraPreviewPresenter extends PreviewContract.PreviewPresenter {
 
     private CameraMediaDao mediaDao;
     private Context context;
@@ -80,7 +80,7 @@ public class CameraPreviewPresenter extends PreviewContract.PreviewPresenter<Pre
                 getMediaBeanCollectionByKey(
                         MediaUtils.getAllCameraAlbumKey());
         CameraMediaBeanCollection cameraMediaBeanCollection = null;
-        List<MediaBean> mediaBeans = null;
+        List<MediaBean> mediaBeans;
         if (mediaBeanCollection != null) {
             cameraMediaBeanCollection = (CameraMediaBeanCollection) mediaBeanCollection;
             if (DataCacheManager.dataManager.needReload(cameraMediaBeanCollection.lastLoad, true, true)) {

@@ -1,10 +1,11 @@
 package com.tplink.gallery.preview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -18,29 +19,48 @@ import com.tplink.gallery.ui.MediaDetailsView;
 
 import java.util.List;
 
-public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPresenter>
-        extends AppCompatActivity
+public class PreviewActivity extends AppCompatActivity
         implements BigImagePreviewGLView.DataListener, PreviewContract.PreviewView,
         BigImagePreviewGLView.BigPreviewDelete, Toolbar.OnMenuItemClickListener,
-        MediaDetailsView.MediaDetailViewListener{
+        MediaDetailsView.MediaDetailViewListener, PreviewProxy.PreviewProxyHost {
 
-    private static final String TAG = "BasePreviewActivity";
+    public static final String EXTRA_TP_SECURE_CAMERA = "EXTRA_TP_SECURE_CAMERA";
+
+    public static final int IMAGE_TYPE_CAMERA = 0;// 只查看相机图片
+    public static final int IMAGE_TYPE_LOCAL_ALL = 1;// 查看本地所有图片
+    public static final int IMAGE_TYPE_LOCAL_ALBUM = 2;// 查看本地相册
+    public static final int IMAGE_TYPE_LOCAL_CERTAIN = 3;// 指定查看文件
+    public static final int IMAGE_TYPE_LOCAL_SINGLE = 4;// 指定查看文件
+
+    public static final String IMAGE_TYPE = "IMAGE_TYPE";
+    public static final String IMAGE_TYPE_URLS = "IMAGE_TYPE_URLS";
+    public static final String IS_CAMERA = "isCamera";
+    public static final String KEY_SHOW_WHEN_LOCKED = "show_when_locked";
+
+    private static final String TAG = "PreviewActivity";
     protected BigImagePreviewGLView bigImagePreviewGLView;
-    protected T previewPresenter;
+    protected  PreviewContract.PreviewPresenter previewPresenter;
     private long mediaVersion = Integer.MIN_VALUE;
     private boolean isActive = false;
     private Toolbar mNormalToolbar;
     protected MediaDetailsView mMediaDetailsView;
+    private PreviewProxy mProxy;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
-        bigImagePreviewGLView = new BigImagePreviewGLView(findViewById(R.id.gl_root_view), this, this, canFilmMode());
-        Bundle data = new Bundle();
-        previewPresenter = initPreviewPresenter(data);
+        mProxy = ProxyFactory.getProxy(this, getIntent(), this, this);
+        if (mProxy == null) {
+            finish();
+            return;
+        }
+        setContentView(mProxy.getLayoutId());
+        bigImagePreviewGLView = new BigImagePreviewGLView(
+                findViewById(R.id.gl_root_view), this,
+                this, mProxy.canFilmMode());
+        previewPresenter = mProxy.initPreviewPresenter();
+        mProxy.initView();
         bigImagePreviewGLView.onCreate();
-        data.putParcelable(PreviewContract.PreviewPresenter.CURRENT_MEDIA, getIntent().getData());
         previewPresenter.loadPreviewData();
         setPreviewWindow();
         mNormalToolbar = findViewById(R.id.toolbar);
@@ -55,17 +75,12 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
         bigImagePreviewGLView.setDataListener(this);
     }
 
-    protected abstract int getLayoutId();
-
-    protected abstract T initPreviewPresenter(Bundle data);
-
-    protected abstract boolean canFilmMode();
-
     @Override
     public void showMediaData(List<MediaBean> mediaBeans, int index, long version) {
 
         if (mediaBeans == null || mediaBeans.size() == 0) {
             onBackPressed();
+            return;
         }
         if (version <= mediaVersion) {
             return;
@@ -104,8 +119,23 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
     }
 
     @Override
+    public Toolbar getNormalBar() {
+        return mNormalToolbar;
+    }
+
+    @Override
     public boolean isActive() {
         return isActive;
+    }
+
+    @Override
+    public MediaBean getCurrentMedia() {
+        return bigImagePreviewGLView.getCurrentBean();
+    }
+
+    @Override
+    public int getCurrentMediaPosition() {
+        return bigImagePreviewGLView.getCurrentIndex();
     }
 
     protected void setPreviewWindow() {
@@ -123,34 +153,58 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
 
     @Override
     public void onStartCapture(Object command) {
+        mProxy.onStartCapture(command);
+    }
 
+    private void enableCapture(Object command) {
+        bigImagePreviewGLView.enableCapture(command);
+    }
+
+    @Override
+    public void popupShareMenu(MediaBean bean) {
+        enableCapture(bean);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        return false;
+        switch (item.getItemId()) {
+            case R.id.action_setas:
+                Intent intent = getIntentBySingleSelectedPath(Intent.ACTION_ATTACH_DATA)
+                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.putExtra("mimeType", intent.getType());
+                startActivity(Intent.createChooser(
+                        intent, getString(R.string.set_as)));
+                return true;
+            case R.id.action_details:
+                showMediaDetails();
+                return true;
+        }
+        return mProxy.onMenuItemClick(item);
     }
 
-    protected class ViewProxy implements PreviewContract.PreviewView {
+    private Intent getIntentBySingleSelectedPath(String action) {
+        MediaBean currentItem = getCurrentMedia();
+        return new Intent(action).setDataAndType(currentItem.getContentUri(), currentItem.mimeType);
+    }
 
-        @Override
-        public void showMediaData(List<MediaBean> mediaBeans, int index, long version) {
-            BasePreviewActivity.this.showMediaData(mediaBeans, index, version);
-        }
+    @Override
+    public void onPhotoChanged(int index, MediaBean item) {
+        invalidateOptionsMenu();
+        mProxy.onPhotoChanged(index, item);
+    }
 
-        @Override
-        public void showHeader(String title) {
-            BasePreviewActivity.this.showHeader(title);
-        }
-
-        @Override
-        public boolean isActive() {
-            return BasePreviewActivity.this.isActive();
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+       return mProxy.onCreateOptionsMenu(menu);
     }
 
     public boolean isFileMode() {
         return bigImagePreviewGLView.isInFilmMode();
+    }
+
+    @Override
+    public boolean isSecureActivity() {
+        return getIntent().getBooleanExtra(EXTRA_TP_SECURE_CAMERA, false);
     }
 
     @Override
@@ -163,6 +217,9 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
         if (mMediaDetailsView != null && mMediaDetailsView.isShowing()) {
             hideMediaDetails();
         } else {
+            if (mProxy.onBackPressed()) {
+                return;
+            }
             super.onBackPressed();
         }
     }
@@ -176,6 +233,7 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
             mMediaDetailsView.setMediaDetailViewListener(this);
         }
         mMediaDetailsView.show(getApplicationContext(), item);
+        mProxy.onDetailViewVisibleChanged(true);
     }
 
 
@@ -184,5 +242,6 @@ public abstract class BasePreviewActivity<T extends PreviewContract.PreviewPrese
             return;
         }
         mMediaDetailsView.hide();
+        mProxy.onDetailViewVisibleChanged(false);
     }
 }

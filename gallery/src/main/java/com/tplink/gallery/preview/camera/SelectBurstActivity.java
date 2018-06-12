@@ -32,6 +32,7 @@ import com.tplink.gallery.R;
 import com.tplink.gallery.base.AlbumDetailPresenter;
 import com.tplink.gallery.base.MediaContract;
 import com.tplink.gallery.bean.MediaBean;
+import com.tplink.gallery.preview.PreviewActivity;
 import com.tplink.gallery.preview.camera.burst.BurstFilterDialog;
 import com.tplink.gallery.preview.camera.burst.BurstImagePreviewAdapter;
 import com.tplink.gallery.preview.camera.burst.BurstMicroThumbTabProvider;
@@ -103,7 +104,7 @@ public class SelectBurstActivity extends AppCompatActivity
         albumDetailPresenter = new AlbumDetailPresenter(this, this,
                 mBurstCover.bucketId, allowTypes, null);
         albumDetailPresenter.loadAlbumDetail();
-        mSecureCamera = getIntent().getBooleanExtra(SecureCameraPreview.EXTRA_TP_SECURE_CAMERA, false);
+        mSecureCamera = getIntent().getBooleanExtra(PreviewActivity.EXTRA_TP_SECURE_CAMERA, false);
         if (mSecureCamera) {
             // Change the window flags so that secure camera can show when locked
             Window win = getWindow();
@@ -586,7 +587,7 @@ public class SelectBurstActivity extends AppCompatActivity
             return;
         }
         Intent intent = new Intent(activity, SelectBurstActivity.class);
-        intent.putExtra(SecureCameraPreview.EXTRA_TP_SECURE_CAMERA, secureCamera);
+        intent.putExtra(PreviewActivity.EXTRA_TP_SECURE_CAMERA, secureCamera);
         GalleryApplication.getApp().putParam(SelectBurstActivity.KEY_COVER, cover);
         activity.startActivityForResult(intent, request);
     }

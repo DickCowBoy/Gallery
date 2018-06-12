@@ -20,6 +20,12 @@
                 <action android:name="com.tplink.action.PICK_WALLPAPE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
 
         <activity android:name="com.tplink.gallery.selector.ImageSelectActivity"
@@ -34,35 +40,22 @@
 
 
         <activity
-            android:name=".preview.wallpaper.WallPaperPreviewActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:label="@string/select_pic"
-            android:screenOrientation="portrait"
-            android:theme="@style/PhotoAppTheme"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="com.tplink.action.gallery.PREVIEW_WALLPAPER" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".preview.camera.CameraPreviewActivity"
+            android:name=".preview.PreviewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:screenOrientation="portrait"
             android:theme="@style/DarkPhotoAppTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name="com.tplink.action.camera.PREVIEW" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.tplink.action.gallery.PREVIEW_WALLPAPER" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="image/*" />
             </intent-filter>
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service android:name="com.android.gallery3d.app.InitService"

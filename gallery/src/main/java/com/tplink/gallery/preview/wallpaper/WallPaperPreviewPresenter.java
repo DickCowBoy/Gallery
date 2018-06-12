@@ -29,15 +29,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
-public class WallPaperPreviewPresenter extends PreviewContract.PreviewPresenter<WallpaperPreviewView> {
+public class WallPaperPreviewPresenter extends PreviewContract.PreviewPresenter {
 
     private Context context;
     private MediaDao mediaDao;
     protected ResultContainer mContainer;
     protected boolean isLoading = false;
     private int version = -1;
+    private WallPaperPreviewOperationContract.PreviewOpeView opeView;
 
-    public WallPaperPreviewPresenter(Bundle data, Context context, WallpaperPreviewView view) {
+    public WallPaperPreviewPresenter(Bundle data, Context context, PreviewContract.PreviewView view) {
         super(data, view);
         this.context = context;
         mediaDao = new MediaDao(context);
@@ -53,6 +54,10 @@ public class WallPaperPreviewPresenter extends PreviewContract.PreviewPresenter<
     @Override
     public void pause() {
 
+    }
+
+    public void setOpeView(WallPaperPreviewOperationContract.PreviewOpeView opeView) {
+        this.opeView = opeView;
     }
 
     public void removeSingleMedia(MediaBean bean, int currentIndex) {
@@ -193,14 +198,14 @@ public class WallPaperPreviewPresenter extends PreviewContract.PreviewPresenter<
                     @Override
                     public void onNext(Integer path) {
                         if (mView != null && mView.isActive()) {
-                            mView.showSetResultFinished();
+                            opeView.showSetResultFinished();
                         }
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
-                        if (mView != null && mView.isActive()) {
-                            mView.showSetResultFinished();
+                        if (mView != null && mView.isActive() && opeView != null && opeView != null) {
+                            opeView.showSetResultFinished();
                         }
                     }
 
@@ -212,8 +217,8 @@ public class WallPaperPreviewPresenter extends PreviewContract.PreviewPresenter<
                     @Override
                     protected void onStart() {
                         super.onStart();
-                        if (mView != null && mView.isActive()) {
-                            mView.showSetResultStart();
+                        if (mView != null && mView.isActive() && opeView != null) {
+                            opeView.showSetResultStart();
                         }
                     }
                 });
