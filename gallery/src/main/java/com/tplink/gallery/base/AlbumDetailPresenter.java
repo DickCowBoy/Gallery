@@ -105,19 +105,24 @@ public class AlbumDetailPresenter extends MediaContract.AlbumDetailPresenter imp
     private AlbumDetailCollection loadDetail() {
         MediaBeanCollection mediaBeanCollectionByKey = DataCacheManager.dataManager
                 .getMediaBeanCollectionByKey(
-                        MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes));
+                        MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes,
+                                needImage, needVideo));
         AlbumDetailCollection albumDetailCollection;
         List<MediaBean> mediaBeans;
         if (mediaBeanCollectionByKey != null) {
             albumDetailCollection = (AlbumDetailCollection) mediaBeanCollectionByKey;
 
-            if (DataCacheManager.dataManager.needReload(albumDetailCollection.lastLoad, needVideo, needImage)) {
-                mediaBeans = mediaDao.queryMediaByBucketId(bucketId, allowMimeTypes, notAllowMimeTypes, needVideo, needImage);
+            if (DataCacheManager.dataManager.needReload(albumDetailCollection.lastLoad, needVideo,
+                    needImage)) {
+                mediaBeans = mediaDao.queryMediaByBucketId(bucketId, allowMimeTypes, notAllowMimeTypes,
+                        needVideo, needImage);
                 albumDetailCollection.updateCollection(mediaBeans);
             }
         } else {
-            mediaBeans = mediaDao.queryMediaByBucketId(bucketId, allowMimeTypes, notAllowMimeTypes, needVideo, needImage);
-            albumDetailCollection = new AlbumDetailCollection(bucketId, mediaBeans, allowMimeTypes, notAllowMimeTypes);
+            mediaBeans = mediaDao.queryMediaByBucketId(bucketId, allowMimeTypes, notAllowMimeTypes,
+                    needVideo, needImage);
+            albumDetailCollection = new AlbumDetailCollection(bucketId, mediaBeans, allowMimeTypes,
+                    notAllowMimeTypes, needImage, needVideo);
             DataCacheManager.dataManager.addMediaBeanCollection(albumDetailCollection);
         }
         return albumDetailCollection;

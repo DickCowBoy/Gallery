@@ -72,6 +72,7 @@ public class PreviewActivity extends AppCompatActivity
             onBackPressed();
         });
         mNormalToolbar.setOnMenuItemClickListener(this);
+        mNormalToolbar.setTitle("");
         bigImagePreviewGLView.setDataListener(this);
     }
 

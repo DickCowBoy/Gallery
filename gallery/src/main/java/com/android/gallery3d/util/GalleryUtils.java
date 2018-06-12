@@ -566,4 +566,45 @@ public class GalleryUtils {
         // TODO: change || to && after we fix the default location issue
         return (latitude != MediaBean.INVALID_LATLNG || longitude != MediaBean.INVALID_LATLNG);
     }
+
+    public static int getMediaIdByUri(Context context, Uri uri) {
+        if (!uri.getAuthority().equalsIgnoreCase(MediaStore.AUTHORITY)
+                || (uri.getAuthority().equalsIgnoreCase(MediaStore.AUTHORITY) && uri.getPath().contains("file"))) {
+            String filePath = getFilePathFromUri(context, uri);
+            if (filePath != null) {
+                String mimeType = GalleryUtils.getMimeTypeForUri(context, uri);
+                if (mimeType != null) {
+                    Uri baseUri = null;
+                    if (mimeType.startsWith("image")) {
+                        baseUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    } else if (mimeType.startsWith("video")) {
+                        baseUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                    }
+                    if (baseUri != null) {
+                        Cursor cursor = null;
+                        try {
+                            cursor = context.getContentResolver().query(baseUri, new String[]{
+                                    MediaStore.Files.FileColumns._ID
+                            }, MediaStore.Files.FileColumns.DATA + " = ?", new String[]{
+                                    filePath
+                            }, null);
+                            if (cursor != null && cursor.getCount() == 1) {
+                                if (cursor.moveToNext()) {
+                                    return cursor.getInt(0);
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, e.getMessage());
+                        } finally {
+                            Utils.closeSilently(cursor);
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
 }

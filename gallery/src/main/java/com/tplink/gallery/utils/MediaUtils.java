@@ -63,9 +63,10 @@ public class MediaUtils {
     }
 
     public static String getBucketId(long bucketId, List<String> allowMimeTypes,
-                                     List<String> notAllowMimeTypes) {
+                                     List<String> notAllowMimeTypes, boolean needImage, boolean needVideo) {
         return String.valueOf(bucketId) + "_" + (allowMimeTypes!= null ? allowMimeTypes.toString() : "all")
-                + "_" + (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all");
+                + "_" + (notAllowMimeTypes!= null ? notAllowMimeTypes.toString() : "all")
+                + "_" +needImage +"_" + needVideo;
     }
 
     public static String getAllCameraAlbumKey() {

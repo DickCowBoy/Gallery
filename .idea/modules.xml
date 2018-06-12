@@ -6,7 +6,9 @@
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/gallery/gallery.iml" filepath="$PROJECT_DIR$/gallery/gallery.iml" />
       <module fileurl="file://$PROJECT_DIR$/photoview/photoview.iml" filepath="$PROJECT_DIR$/photoview/photoview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/photoview/photoview.iml" filepath="$PROJECT_DIR$/photoview/photoview.iml" />
       <module fileurl="file://$PROJECT_DIR$/refocus/refocus.iml" filepath="$PROJECT_DIR$/refocus/refocus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/subsample/subsample.iml" filepath="$PROJECT_DIR$/subsample/subsample.iml" />
       <module fileurl="file://$PROJECT_DIR$/subsample/subsample.iml" filepath="$PROJECT_DIR$/subsample/subsample.iml" />
     </modules>
   </component>

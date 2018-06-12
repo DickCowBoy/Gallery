@@ -113,7 +113,8 @@ public class AlbumImageSlotFragment extends ImageSlotFragment implements MediaCo
         args.putStringArrayList(KEY_NOT_ALLOW_MIME_TYPES, notAllowMimeTypes);
         args.putBoolean(KEY_AWAYS_IN_SELECT_MODE , selectMode);
 
-        args.putString(KEY_DATA_KEY , MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes));
+        args.putString(KEY_DATA_KEY , MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes,
+                true, true));
 
         AlbumImageSlotFragment fragment = new AlbumImageSlotFragment();
         fragment.setArguments(args);

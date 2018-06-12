@@ -12,16 +12,25 @@ public class AlbumDetailCollection extends MediaBeanCollection<MediaBean> {
     private long bucketId;
     private List<String> allowMimeTypes;
     private List<String> notAllowMimeTypes;
+    private boolean needImage;
+    private boolean needVideo;
 
-    public AlbumDetailCollection(long bucketId, List<MediaBean> mediaBeans,List<String> allowMimeTypes, List<String> notAllowMimeTypes) {
+    public AlbumDetailCollection(long bucketId,
+                                 List<MediaBean> mediaBeans,
+                                 List<String> allowMimeTypes,
+                                 List<String> notAllowMimeTypes,
+                                 boolean needImage,
+                                 boolean needVideo) {
         super(mediaBeans);
         this.bucketId = bucketId;
         this.allowMimeTypes = allowMimeTypes;
         this.notAllowMimeTypes = notAllowMimeTypes;
+        this.needImage = needImage;
+        this.needVideo = needVideo;
     }
 
     @Override
     public String key() {
-        return MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes);
+        return MediaUtils.getBucketId(bucketId, allowMimeTypes, notAllowMimeTypes, needImage, needVideo);
     }
 }
