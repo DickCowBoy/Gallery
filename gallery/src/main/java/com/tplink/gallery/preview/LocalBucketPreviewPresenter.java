@@ -63,10 +63,10 @@ public class LocalBucketPreviewPresenter extends PreviewContract.PreviewPresente
                         if (mView != null && mView.isActive()) {
                             mView.showMediaData(info.datas, info.index, DataCacheManager.dataManager.
                                     getMediaBeanCollectionByKey(
-                                            MediaUtils.getAllMediaKey(null,
+                                            MediaUtils.getBucketId(bucketId,null,
                                                     null,
-                                                    false,
-                                                    true, false)).lastLoad);
+                                                    true,
+                                                    false)).lastLoad);
                         }
                     }
 
