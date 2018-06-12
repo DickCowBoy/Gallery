@@ -25,6 +25,12 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
 public class UriPreviewPresenter extends PreviewContract.PreviewPresenter {
+
+    public  static String KEY_TP_APP_SUPPORT_EDIT = "tplink_apps_support_edit";
+    public  static String KEY_TP_APP_SUPPORT_SHARE = "tplink_apps_support_share";
+    public  static String KEY_TP_APP_SUPPORT_SAVE = "tplink_apps_support_save";
+    public  static String KEY_TP_APP_SUPPORT_SAVE_DIR = "tplink_apps_support_save_dir";
+
     private int clickIndex;
     private NoneBoundArrayList<UriMediaBean> mediaBeans;
     private Context context;

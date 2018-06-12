@@ -2,15 +2,13 @@ package com.tplink.gallery.preview;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.android.gallery3d.util.GalleryUtils;
 import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.dao.MediaDao;
-import com.tplink.gallery.data.AlbumDetailCollection;
 import com.tplink.gallery.data.DataCacheManager;
 import com.tplink.gallery.data.MediaBeanCollection;
+import com.tplink.gallery.data.SingleMediaCollection;
 import com.tplink.gallery.utils.MediaUtils;
 
 import java.util.List;
@@ -23,21 +21,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
-public class LocalBucketPreviewPresenter extends PreviewContract.PreviewPresenter {
-    public static final String KEY_BUCKET_ID = "bucketId";
+public class LocalSinglePresenter extends PreviewContract.PreviewPresenter {
     private Context context;
-    public Uri clickToShowUri;// the uri clicked by user
-    private int clickId = -1;
+    private Uri data;
     private MediaDao mediaDao;
-    private int bucketId;
-    public LocalBucketPreviewPresenter(Context context, Bundle data, PreviewContract.PreviewView view) {
-        super(data, view);
-        mediaDao = new MediaDao(context);
+    public LocalSinglePresenter(Context context, Uri data, PreviewContract.PreviewView view) {
+        super(null, view);
         this.context = context;
-        clickToShowUri = data.getParcelable(LocalAllPresenter.CLICK_URI);
-        bucketId = data.getInt(KEY_BUCKET_ID);
+        this.data = data;
+        mediaDao = new MediaDao(context);
     }
-
     @Override
     public void loadPreviewData() {
         if (isLoading) return;
@@ -48,9 +41,8 @@ public class LocalBucketPreviewPresenter extends PreviewContract.PreviewPresente
                     @NonNull FlowableEmitter<PreviewInfo> flowableEmitter)
                     throws Exception {
                 PreviewInfo previewInfo = new PreviewInfo();
-                AlbumDetailCollection albumMediaBeanCollection = loadBucketInfo();
-                previewInfo.datas = albumMediaBeanCollection.mediaBeans;
-                previewInfo.index = findPos(albumMediaBeanCollection.mediaBeans);
+                SingleMediaCollection allMediaBeanCollection = loadMediaInfo();
+                previewInfo.datas = allMediaBeanCollection.mediaBeans;
                 flowableEmitter.onNext(previewInfo);
                 flowableEmitter.onComplete();
             }
@@ -62,11 +54,8 @@ public class LocalBucketPreviewPresenter extends PreviewContract.PreviewPresente
                     public void onNext(PreviewInfo info) {
                         if (mView != null && mView.isActive()) {
                             mView.showMediaData(info.datas, info.index, DataCacheManager.dataManager.
-                                    getMediaBeanCollectionByKey(
-                                            MediaUtils.getAllMediaKey(null,
-                                                    null,
-                                                    false,
-                                                    true, false)).lastLoad);
+                                    getMediaBeanCollectionByKey(data.toString())
+                                    .lastLoad);
                         }
                     }
 
@@ -89,45 +78,24 @@ public class LocalBucketPreviewPresenter extends PreviewContract.PreviewPresente
                 });
     }
 
-    private int findPos(List<MediaBean> mediaBeans) {
-        if (clickId < 0) {
-            clickId = GalleryUtils.getMediaIdByUri(context, clickToShowUri);
-        }
-        if (clickId < 0) {
-            return 0;
-        }
-        for (int i = 0; i < mediaBeans.size(); i++) {
-            if (mediaBeans.get(i)._id == clickId) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    private AlbumDetailCollection loadBucketInfo() {
+    private SingleMediaCollection loadMediaInfo() {
 
         MediaBeanCollection mediaBeanCollection = DataCacheManager.dataManager.
-                getMediaBeanCollectionByKey(
-                        MediaUtils.getBucketId(bucketId,null,
-                                null,
-                                true,
-                                false));
-        AlbumDetailCollection allImageMediaBeanCollection;
+                getMediaBeanCollectionByKey(data.toString());
+        SingleMediaCollection allImageMediaBeanCollection = null;
         List<MediaBean> mediaBeans;
         if (mediaBeanCollection != null) {
-            allImageMediaBeanCollection = (AlbumDetailCollection) mediaBeanCollection;
-            if (DataCacheManager.dataManager.needReload(allImageMediaBeanCollection.lastLoad, false, true)) {
-                mediaBeans = mediaDao.queryMediaByBucketId(bucketId, null,
-                        null, false, true);
+            allImageMediaBeanCollection = (SingleMediaCollection) mediaBeanCollection;
+            if (DataCacheManager.dataManager.needReload(allImageMediaBeanCollection.lastLoad, true, true)) {
+                mediaBeans = mediaDao.queryMediaByFileUri(data.toString().replace("file://", ""));
                 allImageMediaBeanCollection.updateCollection(mediaBeans);
             }
         } else {
-            mediaBeans = mediaDao.queryMediaByBucketId(bucketId, null,
-                    null, false, true);
-            allImageMediaBeanCollection = new AlbumDetailCollection(bucketId, mediaBeans,
-                    null, null, true, false);
+            mediaBeans = mediaDao.queryMediaByFileUri(data.toString().replace("file://", ""));
+            allImageMediaBeanCollection = new SingleMediaCollection(mediaBeans, data.toString());
             DataCacheManager.dataManager.addMediaBeanCollection(allImageMediaBeanCollection);
         }
         return allImageMediaBeanCollection;
     }
+
 }

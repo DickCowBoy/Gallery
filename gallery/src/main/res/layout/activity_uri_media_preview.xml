@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tplink.gallery.view.AutoFitRelative xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_gallery_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@null"
+    android:clipToPadding="true">
+
+    <com.android.gallery3d.ui.GLRootView
+        android:id="@id/gl_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include layout="@layout/uri_preview_bottom_menu"/>
+
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/PhotoAppTheme.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/photo_toolbar_height"
+        android:layout_marginTop="@dimen/status_bar_height"
+        android:minHeight="@dimen/photo_toolbar_height"
+        app:contentInsetStartWithNavigation="@dimen/photo_toolbar_start_margin"
+        app:titleTextAppearance="@style/PhotoAppTheme.ActionBar.TitleTextStyle"
+        app:titleTextColor="@color/white"/>
+
+</com.tplink.gallery.view.AutoFitRelative>

@@ -102,6 +102,10 @@ public class MediaDao extends BaseMediaDao {
         return sb.toString();
     }
 
+    public List<MediaBean> queryMediaByFileUri(String filePath) {
+        return queryFile(MediaStore.MediaColumns.DATA + "=?", new String[]{filePath});
+    }
+
     private class IntCursorProcessor implements CursorProcessor<SparseIntArray> {
 
         SparseIntArray array;
@@ -193,5 +197,4 @@ public class MediaDao extends BaseMediaDao {
 
         return sb.toString();
     }
-
 }

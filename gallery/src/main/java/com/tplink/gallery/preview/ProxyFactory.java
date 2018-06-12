@@ -38,11 +38,10 @@ public class ProxyFactory {
                 case PreviewActivity.IMAGE_TYPE_LOCAL_CERTAIN:
                     return new UriPreviewProxy(host, intent, view, previewProxyHost);
                 case PreviewActivity.IMAGE_TYPE_LOCAL_SINGLE:
-
-                    return null;
+                    return new LocalPreviewProxy(host, intent, view, previewProxyHost);
             }
         }
 
-        return null;
+        return new DefaulPreviewProxy(host, intent, view, previewProxyHost);
     }
 }

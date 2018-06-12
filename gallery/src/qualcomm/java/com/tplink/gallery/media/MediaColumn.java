@@ -1,5 +1,7 @@
 package com.tplink.gallery.media;
 
+import android.provider.MediaStore;
+
 public class MediaColumn {
     public static final String[] QUERY_PROJECTION = new String[]{
             MediaStore.Files.FileColumns._ID,
