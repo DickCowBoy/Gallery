@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Translate by TP-Link START-->
+    <string name="app_name">"វិចិត្រ​សាល"</string>
+    <string name="details_ms">"%1$02d:%2$02d"</string>
+    <string name="details_hms">"%1$d:%2$02d:%3$02d"</string>
+    <string name="no_thumbnail">"គ្មាន​រូបភាព​តូច"</string>
+    <string name="set_image">"កំណត់​រូបភាព​ជា"</string>
+    <string name="delete">"លុប"</string>
+    <string name="cancel">"បោះ​បង់"</string>
+    <string name="deleted">"បាន​លុប"</string>
+    <string name="undo">"​មិន​ធ្វើវិញ"</string>
+    <string name="details_title">"ធាតុ %1$d នៃ %2$d ៖"</string>
+    <string name="close">"បិទ"</string>
+    <string name="no_such_item">"រក​មិន​ឃើញ​ធាតុ។"</string>
+    <string name="edit">"កែសម្រួល"</string>
+    <string name="set_as">"កំណត់​ជា"</string>
+    <string name="video_mute_err">"មិន​អាច​បិទ​សំឡេង​វីដេអូ"</string>
+    <string name="video_err">"មិន​អាច​ចាក់​វីដេអូ។"</string>
+    <string name="title">"ចំណង​ជើង"</string>
+    <string name="description">"ការ​ពិពណ៌នា"</string>
+    <string name="time">"ពេលវេលា"</string>
+    <string name="location">"ទី​តាំង"</string>
+    <string name="path">"ផ្លូវ"</string>
+    <string name="width">"ទទឹង"</string>
+    <string name="height">"កម្ពស់"</string>
+    <string name="orientation">"ការណែនាំ"</string>
+    <string name="duration">"រយៈពេល"</string>
+    <string name="mimetype">"ប្រភេទ MIME"</string>
+    <string name="file_size">"ទំហំ​​ឯកសារ"</string>
+    <string name="maker">"ម៉ាក"</string>
+    <string name="model">"ម៉ូដែល"</string>
+    <string name="flash">"បាញ់​ពន្លឺ"</string>
+    <string name="aperture">"លំហ"</string>
+    <string name="white_balance">"តុល្យភាព​ពណ៌​ស"</string>
+    <string name="exposure_time">"ពេល​បង្ហាញ"</string>
+    <string name="iso">"ISO"</string>
+    <string name="unit_mm">"ម.ម."</string>
+    <string name="manual">"ដោយ​ដៃ"</string>
+    <string name="auto">"ស្វ័យប្រវត្តិ"</string>
+    <string name="flash_on">"បាញ់​ពន្លឺ"</string>
+    <string name="flash_off">"មិន​បាញ់​ពន្លឺ"</string>
+    <string name="unknown">"មិន​ស្គាល់"</string>
+    <string name="set_label_local_albums">"អាល់ប៊ុម​មូលដ្ឋាន"</string>
+    <string name="no_external_storage_title">"គ្មាន​ឧបករណ៍​ផ្ទុក"</string>
+    <string name="no_external_storage">"មិន​មាន​ឧបករណ៍​ផ្ទុក​ខាង​ក្រៅ"</string>
+    <string name="details">"សេចក្ដី​លម្អិត"</string>
+    <string name="share_to">"ចែករំលែក"</string>
+    <string name="burst_selected">"ជ្រើស"</string>
+    <string name="photos">"រូបថត"</string>
+    <string name="more">"ច្រើន​ទៀត"</string>
+    <string name="remove_picture">"លុបចេញ"</string>
+    <string name="photo_tab_albums">"អាល់ប៊ុម"</string>
+    <string name="refocus_canceling_dialog_cancel">"បោះបង់"</string>
+    <string name="refocus_canceling_dialog_confirm">"បញ្ជាក់"</string>
+    <string name="saving_image">"កំពុង​រក្សាទុក​រូបភាព ..."</string>
+    <string name="m_saving_image">"កំពុង​រក្សាទុក​រូបភាព​ក្នុង <xliff:g id="ALBUM_NAME">%1$s</xliff:g> …"</string>
+    <plurals name="delete_selection">
+        <item quantity="one">"លុប​ធាតុ​ដែល​បាន​ជ្រើស​?"</item>
+        <item quantity="other">"លុប​ធាតុ​ដែល​បាន​ជ្រើស​​​?"</item>
+    </plurals>
+    <plurals name="attachments_saved_to_album">
+        <item quantity="one">បានរក្សាទុកឯកសារភ្ជាប់ <xliff:g id="QUANTITY_0">%d</xliff:g> ទៅក្នុងអាល់ប៊ុម \"<xliff:g id="ALBUMNAME_1">%s</xliff:g>\"</item>
+        <item quantity="other">បានរក្សាទុកឯកសារភ្ជាប់ <xliff:g id="QUANTITY_2">%d</xliff:g> ទៅក្នុងអាល់ប៊ុម \"<xliff:g id="ALBUMNAME_3">%s</xliff:g>\"</item>
+    </plurals>
+    <!-- Translate by TP-Link END-->
+
+    <!-- Translate by TP-Link START-->
+    <string name="focal_length">ចម្ងាយ​ផ្ដោត</string>
+    <string name="waiting_dialog_msg">កំពុងអនុវត្ត\u2026</string>
+    <string name="dialog_title_burst_selected">ជ្រើសរូបថតជាប់ៗគ្នា</string>
+    <string name="msg_burst_selected_all">នៅសល់រូបថតទាំងអស់នៅក្នុងក្រុម</string>
+    <string name="msgs_no_disk_space">ខ្វះទំហំឧបករណ៍ផ្ទុក</string>
+    <string name="title_append_colon">ចំណងជើង៖</string>
+    <string name="duration_append_colon">ថិរវេលា៖</string>
+    <string name="resolution_append_colon">គុណភាពបង្ហាញ៖</string>
+    <string name="size_append_colon">ទំហំ៖</string>
+    <string name="path_append_colon">ផ្លូវ៖</string>
+    <string name="delete_this_photo">"លុបរូបថតនេះ?"</string>
+    <string name="delete_this_video">"លុបវីដេអូនេះ?"</string>
+    <string name="sure_remove">តើអ្នក​ពិតជាចង់យករូបភាពនេះចេញឬ?</string>
+    <string name="save">រក្សាទុក</string>
+    <string name="photo_tab_all_images">រូបភាពទាំងអស់</string>
+    <string name="photo_operation_loading">កំពុងផ្ទុក\u2026</string>
+    <string name="select_pic">ជ្រើសរូបភាព</string>
+    <string name="select_pic_count_limit">បានជ្រើស %1$d/%2$d</string>
+    <string name="select_pic_count">បានជ្រើស %1$d</string>
+    <string name="select_count_over">បានលើសចំនួននៃការជ្រើសច្រើនបំផុត</string>
+    <string name="select_size_over">លើស %1$dM</string>
+    <string name="image_loading">កំពុងផ្ទុក...</string>
+    <string name="refocus_canceling_dialog_title">បោះបង់ការប្ដូរដែលអ្នកបានធ្វើ?</string>
+    <string name="loading_image">កំពុងផ្ទុករូបភាព\u2026</string>
+    <string name="m_refocus_save_fail">បានបរាជ័យក្នុងការ​រក្សាទុក!</string>
+    <string name="delete_this_burst">លុបរូបថតជាប់ៗគ្នា?</string>
+    <string name="sure_single_remove">តើអ្នក​ពិតជាចង់​លុបរូបថតនេះឬ?</string>
+    <plurals name="burst_photos_num">
+        <item quantity="other">ថតរូប %d ជាប់ៗគ្នា</item>
+        <item quantity="one">ថតរូបមួយជាប់ៗគ្នា</item>
+    </plurals>
+    <plurals name="msgs_burst_selected_photos_num">
+        <item quantity="other">រក្សាទុករូបថត %d ដែលបានជ្រើស</item>
+        <item quantity="one">រក្សាទុករូបថតដែលបានជ្រើស</item>
+    </plurals>
+    <!-- Translate by TP-Link END-->
+
+</resources>
