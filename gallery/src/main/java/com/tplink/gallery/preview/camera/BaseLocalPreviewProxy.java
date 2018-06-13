@@ -113,7 +113,7 @@ public abstract class BaseLocalPreviewProxy extends PreviewProxy
         public void updateBottomMenu(MediaBean mediaBean) {
             this.item = mediaBean;
             tvBurst.setVisibility(mediaBean.isBurst ? View.VISIBLE : View.GONE);
-            if (!previewProxyHost.isFileMode()
+            if (!previewProxyHost.isFilmMode()
                     && MediaUtils.isEditSupported(mediaBean.mimeType)
                     && mediaBean.isImage()) {
                 btnEdit.setVisibility(View.VISIBLE);

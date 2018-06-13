@@ -16,7 +16,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -31,7 +30,6 @@ import com.tplink.gallery.bean.MediaBean;
 import com.tplink.gallery.data.DataCacheManager;
 import com.tplink.gallery.selector.AlbumChangedListener;
 import com.tplink.gallery.selector.ItemChangedListener;
-import com.tplink.gallery.ui.BigImagePreview;
 import com.tplink.gallery.ui.BigImagePreviewGLView;
 import com.tplink.gallery.view.AutoFitToolBar;
 import com.tplink.gallery.view.LoadingView;
@@ -43,7 +41,9 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class BaseGalleryActivity extends PermissionActivity implements AutoFitToolBar.OnPaddingListener,
-        ImageSlotFragment.ImageSlotDataProvider, MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider, Toolbar.OnMenuItemClickListener, BigImagePreview.BigPreviewCallback, BigImagePreviewGLView.BigPreviewDelete {
+        ImageSlotFragment.ImageSlotDataProvider,
+        MediaContract.MediaView, AlbumSlotFragment.AlbumSlotDataProvider,
+        Toolbar.OnMenuItemClickListener, BigImagePreviewGLView.BigPreviewDelete {
 
     public static final int TOOLBAR_STYLE_THUMB = 0;
     public static final int TOOLBAR_STYLE_PREVIEW = 1;
@@ -108,7 +108,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
         shapeIndicatorView.setupWithTabLayout(mTabLayout);
         shapeIndicatorView.setupWithViewPager(mPager);
 
-        bigImagePreview = new BigImagePreviewGLView(findViewById(R.id.gl_root_view), this, this, true);
+        bigImagePreview = new BigImagePreviewGLView(findViewById(R.id.gl_root_view), this, this, needFilmMode());
         bigImagePreview.onCreate();
     }
 
@@ -119,6 +119,10 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     @Override
     public void onBackPressed() {
         if (bigImagePreview.isShow()) {
+            if (bigImagePreview.isInFilmMode()) {
+                bigImagePreview.exitFilmMode();
+                return;
+            }
             bigImagePreview.hide();
             showNormalBar();
             currentKey = null;
@@ -382,7 +386,7 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     }
 
     @Override
-    public void onImageChanged(MediaBean current) {
+    public void onPhotoChanged(int index, MediaBean item) {
 
     }
 
@@ -394,5 +398,10 @@ public abstract class BaseGalleryActivity extends PermissionActivity implements 
     @Override
     public void onStartCapture(Object command) {
 
+    }
+
+    @Override
+    public boolean needFilmMode() {
+        return true;
     }
 }

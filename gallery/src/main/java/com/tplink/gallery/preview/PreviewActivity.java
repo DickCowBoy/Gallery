@@ -20,7 +20,7 @@ import com.tplink.gallery.ui.MediaDetailsView;
 import java.util.List;
 
 public class PreviewActivity extends AppCompatActivity
-        implements BigImagePreviewGLView.DataListener, PreviewContract.PreviewView,
+        implements PreviewContract.PreviewView,
         BigImagePreviewGLView.BigPreviewDelete, Toolbar.OnMenuItemClickListener,
         MediaDetailsView.MediaDetailViewListener, PreviewProxy.PreviewProxyHost {
 
@@ -72,7 +72,6 @@ public class PreviewActivity extends AppCompatActivity
         });
         mNormalToolbar.setOnMenuItemClickListener(this);
         mNormalToolbar.setTitle("");
-        bigImagePreviewGLView.setDataListener(this);
         previewPresenter.loadPreviewData();
     }
 
@@ -196,11 +195,16 @@ public class PreviewActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean needFilmMode() {
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
        return mProxy.onCreateOptionsMenu(menu);
     }
 
-    public boolean isFileMode() {
+    public boolean isFilmMode() {
         return bigImagePreviewGLView.isInFilmMode();
     }
 

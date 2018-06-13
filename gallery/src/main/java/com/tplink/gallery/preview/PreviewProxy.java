@@ -37,8 +37,9 @@ public abstract class PreviewProxy {
         boolean isActive();
         MediaBean getCurrentMedia();
         int getCurrentMediaPosition();
-        boolean isFileMode();
+        boolean isFilmMode();
         boolean isSecureActivity();
+        boolean needFilmMode();
         void popupShareMenu(Object bean);
     }
 

@@ -41,7 +41,6 @@ public class BigImagePreviewGLView implements GLHost, GLRoot.CaptureListener {
     private OrientationManager mOrientationManager;
     private PhotoViewListener photoViewListener;
     private PhotoAdapter photoAdapter;
-    private DataListener dataListener;
     private Bitmap converBitmap;
     private BigPreviewDelete mBigPreviewDelete;
 
@@ -55,10 +54,6 @@ public class BigImagePreviewGLView implements GLHost, GLRoot.CaptureListener {
         }
     };
 
-
-    public void setDataListener(DataListener dataListener) {
-        this.dataListener = dataListener;
-    }
 
     public BigImagePreviewGLView(GLRootView mGLRootView, Activity activity,BigPreviewDelete bigPreviewDelete, boolean canSwitch) {
         this.mGLRootView = mGLRootView;
@@ -204,11 +199,6 @@ public class BigImagePreviewGLView implements GLHost, GLRoot.CaptureListener {
 
         }
     }
-
-    public interface DataListener {
-        void onPhotoChanged(int index, MediaBean item);
-    }
-
 
     private class PhotoAdapter implements PhotoView.Model {
 
@@ -411,8 +401,8 @@ public class BigImagePreviewGLView implements GLHost, GLRoot.CaptureListener {
 
         public void showImageIndex(int index) {
             mCurrentIndex = index;
-            if (dataListener != null) {
-                dataListener.onPhotoChanged(mCurrentIndex, data.get(mCurrentIndex));
+            if (mBigPreviewDelete != null) {
+                mBigPreviewDelete.onPhotoChanged(mCurrentIndex, data.get(mCurrentIndex));
             }
             int fromIndex[] = new int[IMAGE_CACHE_SIZE];
             MediaBean oldMedias[] = new MediaBean[IMAGE_CACHE_SIZE];
@@ -497,11 +487,17 @@ public class BigImagePreviewGLView implements GLHost, GLRoot.CaptureListener {
         return mPhotoView.getFilmMode();
     }
 
+    public void exitFilmMode() {
+        mPhotoView.setFilmMode(false);
+    }
+
     public void enableCapture(Object command) {
         mGLRootView.enableCapture(command);
     }
 
     public interface BigPreviewDelete {
         void onStartCapture(Object command);
+        void onPhotoChanged(int index, MediaBean item);
+        boolean needFilmMode();
     }
 }

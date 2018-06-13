@@ -204,7 +204,7 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity
     @Override
     protected void showPreviewBar(MediaBean data) {
         super.showPreviewBar(data);
-        onImageChanged(data);
+        onPhotoChanged(0, data);
         mCheckBox.setVisibility(needBigImageCheckBox() ? View.VISIBLE: View.GONE);
         currentMedia = data;
     }
@@ -214,7 +214,7 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity
     }
 
     @Override
-    public void onImageChanged(MediaBean current) {
+    public void onPhotoChanged(int index, MediaBean current) {
         currentMedia = current;
         if (needBigImageCheckBox()) {
             mCheckBox.setChecked(mediaSelectorPresenter.isItemSelected(current));
@@ -245,6 +245,11 @@ public abstract class BaseSelectActivity extends BaseGalleryActivity
 
     @Override
     public boolean longClickEnter() {
+        return false;
+    }
+
+    @Override
+    public boolean needFilmMode() {
         return false;
     }
 }
