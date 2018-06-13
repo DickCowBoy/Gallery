@@ -210,7 +210,7 @@ public class RefocusEditActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(RefocusEditActivity.this,
                 R.style.AlertDialogTheme);
         builder.setMessage(R.string.refocus_canceling_dialog_title)
-                // TODO LJL .setTPMode(true)
+                .setTPMode(true)
                 .setNegativeButton(R.string.refocus_canceling_dialog_cancel,mDialogClickListener)
                 .setPositiveButton(R.string.refocus_canceling_dialog_confirm,mDialogClickListener);
         mCancelDialog = builder.create();

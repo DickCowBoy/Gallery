@@ -111,17 +111,17 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:colorAccent">@color/material_deep_teal_tp</item>
-        <!--<item name="android:alertDialogStyle">@style/AlertDialogStyleTP</item>-->
+        <item name="android:alertDialogStyle">@style/AlertDialogStyleTP</item>
         <item name="android:toolbarStyle">@style/PhotoAppTheme.Toolbar</item>
-        <!--<item name="android:popupMenuStyle">@android:style/Widget.Material.ActionModeTP</item>-->
+        <item name="android:popupMenuStyle">@android:style/Widget.Material.ActionModeTP</item>
         <item name="actionModeStyle">@style/PhotoCustomActionModeStyle</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:actionModeBackground">@color/photo_toolbar_background</item>
         <item name="android:colorControlActivated">@color/material_deep_teal_tp</item>
-        <!--<item name="actionOverflowMenuStyle">@android:style/Widget.Material.ActionModeTP</item>-->
+        <item name="actionOverflowMenuStyle">@android:style/Widget.Material.ActionModeTP</item>
         <item name="actionOverflowButtonStyle">@style/PhotoOverflowButtonStyle</item>
         <item name="android:statusBarColor">@color/transparent</item>
-        <!--<item name="android:dropDownSpinnerStyle">@*android:style/Widget.Material.SpinnerTP</item>-->
+        <item name="android:dropDownSpinnerStyle">@android:style/Widget.Material.SpinnerTP</item>
     </style>
 
     <style name="PhotoCustomActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
